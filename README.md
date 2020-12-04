@@ -7,12 +7,8 @@
 感谢：https://github.com/bast/gtest-demo
 
 - [Google Test](https://github.com/google/googletest/blob/master/googletest/docs/primer.md)
-- [Travis-CI](https://travis-ci.org/bast/gtest-demo/builds)
-- [Coveralls](https://coveralls.io/r/bast/gtest-demo).
-- [Build and test history](https://travis-ci.org/bast/gtest-demo/builds)
-- [Code coverage](https://coveralls.io/r/bast/gtest-demo)
-
-
+- [Travis-CI](https://docs.travis-ci.com/)
+- [Coveralls](https://coveralls.io/)
 
 ### 工程构建
 
