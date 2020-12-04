@@ -2,7 +2,7 @@
 
 ## 工具
 
-C/C++ unit test demo using [Google Test](https://code.google.com/p/googletest) deployed to
+C/C++ unit test demo using [Google Test](https://github.com/google/googletest/blob/master/googletest/docs/primer.md) deployed to
 [Travis-CI](https://travis-ci.org/bast/gtest-demo/builds) with test coverage
 deployed to [Coveralls](https://coveralls.io/r/bast/gtest-demo).
 
