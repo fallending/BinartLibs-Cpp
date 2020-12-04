@@ -1,15 +1,14 @@
 # Libs for Cpp
 
+> 十分抱歉，该项目代码采用iOS编码规范，与Cpper不兼容。
+
 ## 工具
 
-C/C++ unit test demo using [Google Test](https://github.com/google/googletest/blob/master/googletest/docs/primer.md) deployed to
-[Travis-CI](https://travis-ci.org/bast/gtest-demo/builds) with test coverage
-deployed to [Coveralls](https://coveralls.io/r/bast/gtest-demo).
+感谢：https://github.com/bast/gtest-demo
 
-- [Build and test history](https://travis-ci.org/bast/gtest-demo/builds)
-- [Code coverage](https://coveralls.io/r/bast/gtest-demo)
-
-- 十分抱歉，该项目代码采用iOS编码规范，与Cpper不兼容。
+- [Google Test](https://github.com/google/googletest/blob/master/googletest/docs/primer.md)
+- [Travis-CI](https://docs.travis-ci.com/)
+- [Coveralls](https://coveralls.io/)
 
 ### 工程构建
 

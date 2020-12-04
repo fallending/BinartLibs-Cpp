@@ -1,7 +1,8 @@
 .vscode/
 build*/
 CMakeFiles*/
-Makefile
+**/Makefile
+!/Makefile
 cmake_install.cmake
 CTestTestfile.cmake
 *.bak
