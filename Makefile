@@ -1,6 +1,4 @@
 
-# ????
-
 build:
 	mkdir build && cd build && cmake .. && cmake --build .
 
@@ -10,5 +8,5 @@ utest:
 clean:
 	rm -rf build
 
-purge:
+reset:
 	git clean -d -f -x
