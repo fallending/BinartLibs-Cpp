@@ -1,5 +1,5 @@
-cmake_minimum_required(VERSION 3.0.0)
-project(BitBufferProject VERSION 0.1.0)
+cmake_minimum_required(VERSION 3.6)
+project(BACppProject VERSION 0.1.0)
 
 # place binaries and libraries according to GNU standards
 include(GNUInstallDirs)
@@ -12,8 +12,16 @@ if(CMAKE_CXX_COMPILER_ID MATCHES GNU)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
 endif()
 
-add_subdirectory(src)
+# add_subdirectory(src/bitbuffer bitbuffer)
 
+# Header file only lib
+include_directories(${PROJECT_SOURCE_DIR}/src/bitbuffer)
+
+# Has source file lib
+add_subdirectory(${PROJECT_SOURCE_DIR}/src/http)
+
+
+# Unit Test stuff
 include(cmake/googletest.cmake)
 fetch_googletest(
     ${PROJECT_SOURCE_DIR}/cmake
