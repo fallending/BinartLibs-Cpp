@@ -34,5 +34,7 @@ set_target_properties(http_s PROPERTIES OUTPUT_NAME "http")
 set_target_properties(http_d PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 set_target_properties(http_s PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 
-install(TARGETS http_d http_s ARCHIVE DESTINATION lib)  # 静态库用archive关键字
+install(TARGETS http_d http_s 
+  LIBRARY DESTINATION lib
+  ARCHIVE DESTINATION lib)  # 静态库用archive关键字
 install(FILES http.hpp DESTINATION inc/http)
