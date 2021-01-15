@@ -1,13 +1,11 @@
-#ifndef __BA_BIT_UTIL_H__
-#define __BA_BIT_UTIL_H__
+#ifndef __BIT_UTIL_H__
+#define __BIT_UTIL_H__
 
 #include <stdlib.h>
 #include <unistd.h>
 #include <math.h>
-
 #include <ctype.h>
 #include <vector>
-
 #include <iostream>
 
 namespace binart {
@@ -27,4 +25,4 @@ namespace binart {
     }
 }
 
-#endif // __BA_BIT_UTIL_H__
+#endif // __BIT_UTIL_H__

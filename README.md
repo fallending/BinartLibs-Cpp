@@ -16,7 +16,7 @@ deployed to [Coveralls](https://coveralls.io/r/bast/gtest-demo).
 ```bash
 git clone https://github.com/fallending/BinartLibs-Cpp.git
 cd BinartLibs-Cpp
-mkdir build
+mkdir build // out-of-source 编译
 cd build
 cmake ..
 cmake --build .

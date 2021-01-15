@@ -1,18 +1,29 @@
+# ======= test_lib_bitbuffer
+
 add_executable(
-    unit_tests
+    test_lib_bitbuffer
     test_BitUtil.cpp
     test_BitBuffer.cpp
     )
 
 target_link_libraries(
-    unit_tests
+    test_lib_bitbuffer
     gtest_main
-    BitBuffer
     )
 
 add_test(
   NAME
-    unit
+    test_lib_bitbuffer
   COMMAND
     ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}/unit_tests
   )
+
+# ======= test_lib_http
+
+
+
+
+
+# ======= test_lib_netcore
+
+

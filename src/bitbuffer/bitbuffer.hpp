@@ -1,8 +1,8 @@
 
-#include "BitUtil.h"
+#include "bitutil.hpp"
 
-#ifndef __BA_BIT__bufferH__
-#define __BA_BIT__bufferH__
+#ifndef __BIT_BUFFER_H__
+#define __BIT_BUFFER_H__
 
 #include <stdlib.h>
 #include <unistd.h>
@@ -305,4 +305,4 @@ class BitIterator {
     };
 }
 
-#endif // __BA_BIT__bufferH__
+#endif // __BIT_BUFFER_H__

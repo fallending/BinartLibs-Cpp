@@ -1,6 +1,6 @@
 
 #include "gtest/gtest.h"
-#include "BitUtil.h"
+#include "bitutil.hpp"
 
 using namespace binart;
 
