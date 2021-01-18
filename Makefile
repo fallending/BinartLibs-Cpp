@@ -10,3 +10,12 @@ clean:
 
 reset:
 	git clean -d -f -x
+
+gen-vs2019:
+	mkdir build-vs2019
+
+gen-vs:
+	make gen-vs2019
+
+gen-xcode:
+	mkdir build-xcode
