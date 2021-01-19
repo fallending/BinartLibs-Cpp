@@ -1,7 +1,5 @@
 # Libs for Cpp
 
-> 十分抱歉，该项目代码采用iOS编码规范，与Cpper不兼容。
-
 ## 工具
 
 感谢：https://github.com/bast/gtest-demo
@@ -9,6 +7,8 @@
 - [Google Test](https://github.com/google/googletest/blob/master/googletest/docs/primer.md)
 - [Travis-CI](https://docs.travis-ci.com/)
 - [Coveralls](https://coveralls.io/)
+- [cmake必看书目](https://github.com/xiaoweiChen/CMake-Cookbook/blob/master/SUMMARY.md)
+- [cmake必翻文档](https://cmake.org/cmake/help/v3.19/command/configure_file.html)
 - 命令组合：
   - ldd <xx.so><executable> 查看链接关系
 
@@ -97,3 +97,63 @@ for (auto& byte : bb.get_bytes()) {
 - 如何通过INCLUDE_DIRECTORIES指令加入非标准的头文件搜索路径。
 - 如何通过LINK_DIRECTORIES指令加入非标准的库文件搜索路径。
 - 如果通过TARGET_LINK_LIBRARIES为库或可执行二进制加入库链接。
+
+
+
+## 为什么使用cmake？
+
+1. 工程化
+
+> 定义
+
+- 工程化即系统化、模块化、规范化的一个过程
+- 如果说计算机科学要解决的是系统的某个具体问题，或者更通俗点说是面向编码的，那么工程化要解决的是如何提高整个系统生产效率。
+- 与其说软件工程是一门科学，不如说它更偏向于管理学和方法论。
+
+> 目标
+
+- 工程化解决的问题是，如何提高编码、测试、维护阶段的生产效率。
+
+
+1. 工程化-系统化
+
+
+2. 工程化-模块化
+3. 工程化-规范化
+
+
+草，这部分概念不清晰，换个表述，表示当前要做的几件事：
+
+
+
+### 为什么使用cmake？2
+
+##### 软件开发流程模型
+
+需求分析 - 系统设计 - 软件编码 - 测试 - 运行 - 维护 （简单版本，还可以拆的更细）
+
+##### 开发规范
+
+
+1. 编码规范
+2. 版本管理规范
+3. 各种规范
+
+
+##### 模块化/组件化开发
+
+
+module侧重的是对属性的封装，重心是在设计和开发阶段，不关注runtime的逻辑。module是一个白盒；而component是一个可以独立部署的软件单元，面向的是runtime，侧重于产品的功能性。component是一个黑盒，内部的逻辑是不可见的。
+
+模块/组件化开发的必要性
+随着web应用规模越来越大，模块/组件化开发的需求就显得越来越迫切。模块/组件化开发的核心思想是分治，主要针对的是开发和维护阶段。
+
+
+###### 工程构建&编译
+
+构建的核心是资源管理。
+
+
+###### 软件部署&发布
+
+？？？？？？

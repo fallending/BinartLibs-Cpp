@@ -2,7 +2,7 @@ PROJECT(test1)
 # PROJECT(projectname [CXX] [C] [Java])
 
 
-SET(SRC_FILES main.c)
+SET(SRC_FILES main.cpp)
 
 
 # MESSAGE指令的语法是：
@@ -56,3 +56,11 @@ ADD_EXECUTABLE(hello ${SRC_FILES})
 # -- Configuring done
 # -- Generating done
 # -- Build files have been written to: /Users/lilithgames/Desktop/binarts/BinartCppLibs/temp/test1/build
+
+
+###############
+# 也可以这么写!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+# PROJECT(hello)                                             #定义整个CMake的工程名
+# FILE(GLOB SOURCE "./*.cpp")                      #告诉CMake：工程的源文件在哪里？
+# ADD_EXECUTABLE(hello ${SOURCE})         #告诉CMake：我们要生成可执行文件（hello），并且源文件是由上面定义的
