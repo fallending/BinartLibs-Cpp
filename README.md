@@ -9,6 +9,8 @@
 - [Google Test](https://github.com/google/googletest/blob/master/googletest/docs/primer.md)
 - [Travis-CI](https://docs.travis-ci.com/)
 - [Coveralls](https://coveralls.io/)
+- 命令组合：
+  - ldd <xx.so><executable> 查看链接关系
 
 ### 工程构建
 
@@ -85,6 +87,13 @@ for (auto& byte : bb.get_bytes()) {
 ```
 
 
-## References
+## 本仓库额外提供了什么？CMake作为工程构建工具的大型项目管理能力！
 
-- https://crascit.com/2015/07/25/cmake-gtest/
+- 如何通过 ADD_LIBRARY 指令构建动态库和静态库。
+- 如何通过 SET_TARGET_PROPERTIES 同时构建同名的动态库和静态库。
+- 如何通过 SET_TARGET_PROPERTIES 控制动态库版本
+- 如何通过 INSTALL 指令来安装头文件和动态、静态库
+
+- 如何通过INCLUDE_DIRECTORIES指令加入非标准的头文件搜索路径。
+- 如何通过LINK_DIRECTORIES指令加入非标准的库文件搜索路径。
+- 如果通过TARGET_LINK_LIBRARIES为库或可执行二进制加入库链接。

@@ -18,6 +18,8 @@ include_directories(${PROJECT_SOURCE_DIR}/src/bitbuffer)
 # Has source file lib
 add_subdirectory(${PROJECT_SOURCE_DIR}/src/http)
 
+# Has local dependency lib
+add_subdirectory(${PROJECT_SOURCE_DIR}/src/net)
 
 # Unit Test stuff
 include(cmake/googletest.cmake)

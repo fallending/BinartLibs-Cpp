@@ -1,0 +1,5 @@
+PROJECT(test1)
+
+SET(SRC_FILES main.c)
+
+ADD_EXECUTABLE(test1 ${SRC_FILES})
