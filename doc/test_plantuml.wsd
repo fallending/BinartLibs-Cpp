@@ -1,0 +1,25 @@
+@startuml
+
+autonumber
+
+actor "用户" as User
+participant "浏览器" as Browser
+participant "服务端" as Server #orange
+
+activate User
+
+User -> Browser: 输入 URL
+activate Browser
+
+Browser -> Server: 请求服务器
+activate Server
+
+Server -> Server: 模板渲染
+note right of Server: 这是一个注释
+
+Server -> Browser: 返回 HTML
+deactivate Server
+
+Browser --> User
+
+@enduml

@@ -1,5 +1,7 @@
 # Libs for Cpp
 
+> 简洁为主，效率至上
+
 ## 工具
 
 感谢：https://github.com/bast/gtest-demo
@@ -11,6 +13,7 @@
 - [cmake必翻文档](https://cmake.org/cmake/help/v3.19/command/configure_file.html)
 - 命令组合：
   - ldd <xx.so><executable> 查看链接关系
+- [谷歌项目风格指南-c++](https://zh-google-styleguide.readthedocs.io/en/latest/google-cpp-styleguide/naming/#macro-names)
 
 ### 工程构建
 
