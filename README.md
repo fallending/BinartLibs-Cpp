@@ -1,5 +1,5 @@
-# Libs for Cpp
-
+# mt-ccs
+> Maketea .cc libs
 > 简洁为主，效率至上
 
 ## 工具

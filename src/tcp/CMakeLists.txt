@@ -4,8 +4,10 @@ cmake_minimum_required(VERSION 3.6)
 project (tcp)
 
 set(CMAKE_CXX_STANDARD 14)
-set(SRC_FILES tcp.cpp tcpcheck.cpp tcpquery.cpp)
+# set(SRC_FILES tcp.cpp tcpcheck.cpp tcpquery.cpp)
 set(INC_FILES tcp.hpp tcpcheck.hpp tcpquery.hpp)
+
+aux_source_directory(${CMAKE_CURRENT_LIST_DIR}/ ${SRC_FILES}) # TODO: 问题是，这里包括了 cc/cpp/c 和源文件后缀有关么？？？？？
 
 add_library(tcp_shared SHARED ${SRC_FILES})
 add_library(tcp_static STATIC ${SRC_FILES})
