@@ -13,15 +13,14 @@ include_directories(../tcp) # 头文件搜索路径
 # 这里的相对路径并不是相对于源码路径(CMakeLists.txt路径)，而是相对于执行命令的路径（build目录），向上三层目录结构。
 link_directories(../tcp/outputs/)
 
-target_link_libraries(net_d libtcp.dylib)
-target_link_libraries(net_s libtcp.a)
-
-
 set(CMAKE_CXX_STANDARD 14)
 set(LIBNET_SRC netdetect.cpp)
 
 add_library(net_d SHARED ${LIBNET_SRC})
 add_library(net_s STATIC ${LIBNET_SRC})
+
+target_link_libraries(net_d libtcp.dylib)
+target_link_libraries(net_s libtcp.a)
 
 set_target_properties(net_d PROPERTIES OUTPUT_NAME "net")
 set_target_properties(net_s PROPERTIES OUTPUT_NAME "net")

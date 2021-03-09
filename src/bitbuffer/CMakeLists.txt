@@ -1,20 +1,7 @@
-# 没有源文件的库
-project (bitbuffer)
+# 注意：该库，只有头文件，，没有没有源文件
+project(bitbuffer)
 
-add_library(bitbuffer "")
+file(GLOB HEADER_FILES "*.hpp" "*.h")
 
-set_target_properties(bitbuffer PROPERTIES LINKER_LANGUAGE CXX)
-set_target_properties(bitbuffer PROPERTIES VERSION 1.0 SOVERSION 1)
-
-target_sources(
-    bitbuffer
-    PUBLIC
-        ${CMAKE_CURRENT_LIST_DIR}/bitbuffer.hpp
-        ${CMAKE_CURRENT_LIST_DIR}/bitutil.hpp
-    )
-
-target_include_directories(
-    bitbuffer
-    PUBLIC
-        ${CMAKE_CURRENT_LIST_DIR}
-    )
+# build成功，才会执行。。。
+# install(FILES ${HEADER_FILES} DESTINATION ${CMAKE_HEADERS_OUTPUT_DIRECTORY})
