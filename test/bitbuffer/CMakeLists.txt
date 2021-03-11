@@ -2,12 +2,13 @@
 # 引入库的public headers目录
 include_directories(${MT_SRC_DIR}/bitbuffer)
 
+# 归纳测试源文件
+aux_source_directory(. TEST_FILES)
+
 # test_lib_bitbuffer 单元测试 可执行文件
 add_executable(
   test_lib_bitbuffer
-  main.cpp
-  test_BitUtil.cpp
-  test_BitBuffer.cpp
+  ${TEST_FILES}
 )
 
 # test_lib_bitbuffer 源文件依赖的头文件目录
