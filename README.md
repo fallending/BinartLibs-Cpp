@@ -160,3 +160,7 @@ module侧重的是对属性的封装，重心是在设计和开发阶段，不�
 ###### 软件部署&发布
 
 ？？？？？？
+
+### 参考
+
+- [用cmake生成ios framework库](https://github.com/zhaowd2001/tvm_phone/blob/master/tvm-cmake-ios.md)
