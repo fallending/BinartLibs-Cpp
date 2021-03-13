@@ -1,17 +1,25 @@
+# https://blog.csdn.net/zhuyunier/article/details/83025615
 cmake_minimum_required(VERSION 3.17)
 
-project(queue C CXX)
+project(queue-proj VERSION 0.1.0 LANGUAGES C CXX)
+
+set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/)
 
 if (POLICY CMP0048)
   cmake_policy(SET CMP0048 NEW)
 endif (POLICY CMP0048)
 
+set (CMAKE_CXX_STANDARD 14)
+
 include_directories(${queue_SOURCE_DIR})
 
 add_library(queue SHARED concurrent_queue.cpp concurrent_queue.hpp )
 
+
 # Debug symbols set in XCode project
-set_xcode_property(queue GCC_GENERATE_DEBUGGING_SYMBOLS YES "All")
+if (IOS)
+  set_xcode_property(queue GCC_GENERATE_DEBUGGING_SYMBOLS YES "All")
+endif (IOS)
 
 set(HEADER_FILES
   concurrent_queue.hpp
@@ -22,7 +30,8 @@ set(RESOURCE_FILES
   # appresourcedir/appres.txt
 )
 
-set_target_properties(queue PROPERTIES
+set_target_properties(queue
+  PROPERTIES
   FRAMEWORK TRUE
   FRAMEWORK_VERSION A
   MACOSX_FRAMEWORK_IDENTIFIER com.mt.queue
@@ -34,5 +43,4 @@ set_target_properties(queue PROPERTIES
   PUBLIC_HEADER ${HEADER_FILES}
   RESOURCE      ${RESOURCE_FILES}
   # XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer"
-  RESOURCE "${RESOURCE_FILES}"
 )

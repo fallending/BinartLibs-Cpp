@@ -14,6 +14,7 @@
 - 命令组合：
   - ldd <xx.so><executable> 查看链接关系
 - [谷歌项目风格指南-c++](https://zh-google-styleguide.readthedocs.io/en/latest/google-cpp-styleguide/naming/#macro-names)
+- [polly](https://polly.readthedocs.io/en/latest/toolchains/android.html), 一大波可用的cmake toolchain
 
 ### 工程构建
 

@@ -42,7 +42,7 @@ rule CXX_EXECUTABLE_LINKER__test5_
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = /usr/local/Cellar/cmake/3.17.3/bin/cmake --regenerate-during-build -S/Users/lilithgames/Desktop/binarts/BinartCppLibs/temp/test5 -B/Users/lilithgames/Desktop/binarts/BinartCppLibs/temp/test5
+  command = /usr/local/Cellar/cmake/3.17.3/bin/cmake --regenerate-during-build -S/Users/<username>/Desktop/binarts/BinartCppLibs/temp/test5 -B/Users/<username>/Desktop/binarts/BinartCppLibs/temp/test5
   description = Re-running CMake...
   generator = 1
 
