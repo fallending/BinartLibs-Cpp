@@ -14,6 +14,7 @@ https://www.jianshu.com/p/7e4aa4be239a
 
 1. cmake 包含源文件好的写法
 2. cmake 配置本地相对库的头文件引用路径
+3. 这些库，如何发布到vcpkg？？？？？
 
 
 ## 一个现代化工程需要哪些东西？
