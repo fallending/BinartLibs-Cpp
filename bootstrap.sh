@@ -1,4 +1,12 @@
 curdir=${HOME}
+###
+ # @Author: your name
+ # @Date: 2021-03-09 15:56:46
+ # @LastEditTime: 2021-03-16 14:46:15
+ # @LastEditors: Please set LastEditors
+ # @Description: In User Settings Edit
+ # @FilePath: /mt-ccs/bootstrap.sh
+### 
 
 # ##########################
 # c/c++ 包管理
@@ -24,7 +32,7 @@ function install_vcpkg() {
   ./bootstrap-vcpkg.sh
 
   # vcpkg
-  # export VCPKG_HOME=/Users/lilithgames/.cmake_modules/vcpkg/
+  # export VCPKG_HOME=/Users/seven/.cmake_modules/vcpkg/
   # export PATH=$PATH:$VCPKG_HOME
 
   echo "Please insert ${vcpkg_dir} to your ~/.zshrc"
