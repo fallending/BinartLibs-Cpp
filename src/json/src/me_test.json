@@ -1,0 +1,25 @@
+{
+  "structs": 
+  [
+      {
+          "type": "metest_object_t",
+          "members": 
+          [
+              ["bool", "isStarted"],
+              ["int8_t", "mak"],
+              ["uint8_t", "fin"],
+              ["int16_t", "th"],
+              ["uint16_t", "sh"],
+              ["int32_t", "len"],
+              ["uint32_t", "count"],
+              ["int64_t", "length"],
+              ["uint64_t", "age"],
+              ["float", "amountd"],
+              ["double", "amount"],
+              ["string", "str"],
+              ["[int32_t]", "vec"],
+              ["{string}", "dict"]
+          ]
+      }
+  ]
+}
