@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-02 15:00:50
- * @LastEditTime: 2021-03-02 19:35:18
+ * @LastEditTime: 2021-03-16 18:59:53
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /slothjson/include/jsontypedefs.h
@@ -179,7 +179,7 @@ mt_macro_concat(mt_def_field_encode_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__)
 // Field decode
 
 #define mt_def_field_decode_1( a ) \
-if (!slothjson::decode_field(json_val, #a, a, __json_has_##a)) break;
+if (!slothjson::decode_field(json_val, #a, a, __has_##a)) break;
 #define mt_def_field_decode_2( a, ... ) \
 mt_macro_concat(mt_def_field_decode_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
 mt_def_field_decode_1( a )

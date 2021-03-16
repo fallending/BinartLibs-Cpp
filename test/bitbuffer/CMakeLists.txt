@@ -12,11 +12,11 @@ add_executable(
 )
 
 # test_lib_bitbuffer 源文件依赖的头文件目录
-# target_include_directories(
-#   test_lib_bitbuffer
-#   PUBLIC
-#   "${CMAKE_SOURCE_DIR}/include"
-# )
+target_include_directories(
+  test_lib_bitbuffer
+  PUBLIC
+  ${GTEST_INCLUDE_DIR}
+)
 
 # test_lib_bitbuffer 单元测试 可执行文件依赖的链接库
 target_link_libraries(
