@@ -1,6 +1,20 @@
 # 注意：该库，只有头文件，，没有没有源文件
-project(bitbuffer)
+set (LIBNAME bitbuffer)
 
-file(GLOB HEADER_FILES "*.hpp")
+file(GLOB HDRS "*.hpp")
 
-install(FILES ${HEADER_FILES} DESTINATION bitbuffer)
+# 用于本地库依赖
+file(
+    COPY
+        ${HDRS}
+    DESTINATION
+        ${PROJECT_SOURCE_DIR}/include/${LIBNAME}
+)
+
+## 用于库最终部署
+install(
+    FILES
+        ${HDRS}
+    DESTINATION 
+        ${LIBNAME}
+)
