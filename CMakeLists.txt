@@ -116,7 +116,7 @@ include(GNUInstallDirs)
 find_package(GTest MODULE REQUIRED)
 include_directories(${GTEST_INCLUDE_DIR})
 
-# 前置： brew install pkg-config
+# 前置： brew install pkg-config , vcpkg install openssl
 find_package(OpenSSL MODULE REQUIRED)
 include_directories(${OPENSSL_INCLUDE_DIR})
 

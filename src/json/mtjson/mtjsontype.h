@@ -9,6 +9,9 @@
 
 #include "slothjson.h"
 
+#ifndef __MTJSON_TYPE_H__
+#define __MTJSON_TYPE_H__
+
 // ----------------------------------
 // Meta macro
 // ----------------------------------
@@ -41,42 +44,44 @@
 #define mt_macro_cstr_(A) #A
 
 // ----------------------------------
+// Macros Customized
+// ----------------------------------
+
+#undef mt_invoke
+#define mt_invoke(block, ...)   \
+    {                           \
+        if (block)              \
+            block(__VA_ARGS__); \
+    }
+
+// ----------------------------------
 // Mutation type
 // ----------------------------------
 
-namespace mtjson
+typedef bool MtBool;
+typedef int8_t MtInt8;
+typedef int16_t MtInt16;
+typedef int32_t MtInt32;
+typedef int64_t MtInt64;
+typedef double MtDouble;
+typedef std::map<std::string, std::string> MtMap;
+typedef std::vector<int32_t> MtArray;
+typedef std::string MtString;
+
+// #define MtBoolDefault true
+// #define MtInt8Default 0
+// #define MtInt16Default 0
+// #define MtInt32Default 0
+// #define MtInt64Default 0
+// #define MtDoubleDefault 0.0f
+// #define MtMapDefault ({})
+// #define MtArrayDefault ({})
+// #define MtStringDefault ""
+
+inline bool mt_needinit(MtString type)
 {
-
-    typedef bool MtBool;
-    typedef int8_t MtInt8;
-    typedef int16_t MtInt16;
-    typedef int32_t MtInt32;
-    typedef int64_t MtInt64;
-    typedef double MtDouble;
-    typedef std::map<std::string, std::string> MtMap;
-    typedef std::vector<int32_t> MtArray;
-    typedef std::string MtString;
-
-    // #define MtBoolDefault true
-    // #define MtInt8Default 0
-    // #define MtInt16Default 0
-    // #define MtInt32Default 0
-    // #define MtInt64Default 0
-    // #define MtDoubleDefault 0.0f
-    // #define MtMapDefault ({})
-    // #define MtArrayDefault ({})
-    // #define MtStringDefault ""
-
-    inline bool mt_needinit(MtString type)
-    {
-        return false;
-    }
-
-    // template<typename T>
-    // inline T mt_initval(MtString type) {
-    // }
-
-} // namespace mtjson
+    return false;
+}
 
 // ----------------------------------
 // Json struct
@@ -91,7 +96,7 @@ public:                                                \
 private:                                               \
     bool __skip_##field;                               \
     bool __has_##field;                                \
-    MtString __typeof_##field;                         \
+    std::string __typeof_##field;                      \
     void init_##field()                                \
     {                                                  \
         __skip_##field = false;                        \
@@ -322,3 +327,5 @@ public:                                                                         
     {                                                                                                  \
         return obj_val.decode(json_val);                                                               \
     }
+
+#endif // __MTJSON_TYPE_H__

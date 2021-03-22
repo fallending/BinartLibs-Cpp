@@ -20,6 +20,8 @@ file(
   "${CMAKE_BINARY_DIR}/../include/mtjson"
 )
 
+file(COPY "./rapidjson" DESTINATION "${CMAKE_BINARY_DIR}/../include/mtjson")
+
 # 下面这么些，会导致头文件报错，找不到 rapidjson.h.......
 
 # file(GLOB rapidjson_HDRS "rapidjson/error/*.h" "rapidjson/internal/*.h" "rapidjson/*.h")
