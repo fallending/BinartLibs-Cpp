@@ -116,6 +116,10 @@ include(GNUInstallDirs)
 find_package(GTest MODULE REQUIRED)
 include_directories(${GTEST_INCLUDE_DIR})
 
+# 前置： brew install pkg-config
+find_package(OpenSSL MODULE REQUIRED)
+include_directories(${OPENSSL_INCLUDE_DIR})
+
 message(STATUS "###################################")
 message(STATUS "# 外部库依赖")
 message(STATUS "###################################")
