@@ -10,6 +10,7 @@
 
 https://azmddy.github.io/article/%E7%BC%96%E8%AF%91%E6%9E%84%E5%BB%BA/cmake-day-4.html
 https://www.jianshu.com/p/7e4aa4be239a
+https://github.com/christophe-calmejane/cmakeUtils
 
 
 1. cmake 包含源文件好的写法

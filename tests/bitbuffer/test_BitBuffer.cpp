@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "bitbuffer.hpp"
+#include "bitbuffer/bitbuffer.hpp"
 
 using namespace binart;
 

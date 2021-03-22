@@ -51,11 +51,11 @@ ADD_EXECUTABLE(hello ${SRC_FILES})
 # -- Detecting CXX compiler ABI info - done
 # -- Detecting CXX compile features
 # -- Detecting CXX compile features - done
-# -- This is BINARY dir /Users/lilithgames/Desktop/binarts/BinartCppLibs/temp/test1/build
-# -- This is SOURCE dir /Users/lilithgames/Desktop/binarts/BinartCppLibs/temp/test1
+# -- This is BINARY dir /Users/<username>/Desktop/binarts/BinartCppLibs/temp/test1/build
+# -- This is SOURCE dir /Users/<username>/Desktop/binarts/BinartCppLibs/temp/test1
 # -- Configuring done
 # -- Generating done
-# -- Build files have been written to: /Users/lilithgames/Desktop/binarts/BinartCppLibs/temp/test1/build
+# -- Build files have been written to: /Users/<username>/Desktop/binarts/BinartCppLibs/temp/test1/build
 
 
 ###############
