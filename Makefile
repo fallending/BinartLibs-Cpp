@@ -44,11 +44,34 @@ rebuild-android:
 rebuild:
 	rm -rf build && mkdir build && cd build && cmake .. -DCMAKE_TOOLCHAIN_FILE=~/.cmake_modules/vcpkg/scripts/buildsystems/vcpkg.cmake && cmake --build . && make install
 
-unittest:
+test:
 	cd build && ctest .
 
 reset:
 	git clean -d -f -x
+
+gen-macosx:
+	# 生成xcode 报错：No CMAKE_C_COMPILER could be found. No CMAKE_CXX_COMPILER could be found.
+	# 参考：https://stackoverflow.com/questions/41380900/cmake-error-no-cmake-c-compiler-could-be-found-using-xcode-and-glfw
+	# xcrun -find c++
+	# xcrun -find cc
+	rm -rf _exports && mkdir _exports && cd _exports && cmake -G Xcode -H. -B_build ..
+
+	# https://polly.readthedocs.io/en/latest/toolchains/ios.html
+	# ./polly/bin/build.py --ios-multiarch
+
+gen-xcode2:
+	# rm -rf _exports && mkdir _exports && cd _exports && cmake .. -G Xcode -DCMAKE_TOOLCHAIN_FILE=../cmake/ios.toolchain.cmake -DPLATFORM=OS64COMBINED
+	rm -rf _exports && mkdir _exports && cd _exports && cmake .. -DCMAKE_TOOLCHAIN_FILE=~/.cmake_modules/vcpkg/scripts/buildsystems/vcpkg.cmake -G Xcode -DCMAKE_SYSTEM_NAME=iOS
+
+gen-test:
+	cmake -S. -B_builds -GXcode \
+    -DCMAKE_SYSTEM_NAME=iOS \
+    "-DCMAKE_OSX_ARCHITECTURES=armv7;armv7s;arm64;i386;x86_64" \
+    -DCMAKE_OSX_DEPLOYMENT_TARGET=9.3 \
+    -DCMAKE_INSTALL_PREFIX=`pwd`/_install \
+    -DCMAKE_XCODE_ATTRIBUTE_ONLY_ACTIVE_ARCH=NO \
+    -DCMAKE_IOS_INSTALL_COMBINED=YES
 
 gen-vs:
 	mkdir build-vs2019

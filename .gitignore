@@ -9,3 +9,7 @@ CTestTestfile.cmake
 src/http/output
 src/http/outputs
 include
+_installs
+_logs
+_exports
+_builds

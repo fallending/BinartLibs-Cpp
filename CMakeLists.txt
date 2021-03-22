@@ -1,10 +1,5 @@
 cmake_minimum_required(VERSION 3.17.0)
 
-set (MTVER 0.1.0)
-set (MTPROJ mt-ccs)
-
-project(${MTPROJ} VERSION ${MTVER} LANGUAGES C CXX)
-
 if (POLICY CMP0048)
   cmake_policy(SET CMP0048 NEW)
 endif (POLICY CMP0048)
@@ -21,6 +16,30 @@ if (WIN32)
   message(STATUS "Now is windows")
 elseif (APPLE)
   message(STATUS "Now is Apple systens.")
+
+  # --toolchain xcode --config Debug --install
+  set(CMAKE_C_COMPILER /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc)
+  set(CMAKE_CXX_COMPILER /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++)
+
+  set(CMAKE_CXX_FLAGS -std=c++14)
+
+  # set (MACOSX_BUNDLE_GUI_IDENTIFIER com.maketea)
+  # set (CMAKE_MACOSX_BUNDLE YES)
+  # set (CMAKE_XCODE_ATTRIBUTE_CODE_SIGN_IDENTITY "iPhone Developer")
+
+  # set (CMAKE_OSX_SYSROOT /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk)
+  # set (IPHONEOS_ARCHS armv7;armv7s;arm64)
+  # set (IPHONESIMULATOR_ARCHS i386;x86_64)
+  # set (XCODE_DEVELOPER_ROOT /Applications/Xcode.app/Contents/Developer)
+
+  # set (IPHONESIMULATOR_ROOT /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer)
+  # set (IPHONEOS_ROOT /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer)
+
+  # # set (IPHONESIMULATOR_SDK_ROOT)
+  # # set (IPHONEOS_SDK_ROOT)
+
+  # include(./cmake/ios.toolchain.cmake)
+  # include(~/.cmake_modules/vcpkg/scripts/buildsystems/vcpkg.cmake)
 elseif (UNIX)
   message(STATUS "Now is UNIX-like OS's.")
 endif ()
@@ -39,6 +58,13 @@ message(STATUS "###################################")
 
 # 编译配置
 set (CMAKE_CXX_STANDARD 14)
+
+
+# 工程配置
+set (MTVER 0.1.0)
+set (MTPROJ mt-ccs)
+
+project(${MTPROJ} VERSION ${MTVER} LANGUAGES C CXX)
 
 # 全局环境变量
 set (CMAKE_INSTALL_BINDIR bin)
@@ -63,18 +89,13 @@ message(STATUS "###################################")
 
 # 自定义环境变量
 set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/${MTPROJ}-${MTVER})
-set(MT_HDR_OUTPUT_DIR ${CMAKE_BINARY_DIR}/${MTPROJ}-${MTVER}/inclue)
-set(MT_LIB_OUTPUT_DIR ${CMAKE_BINARY_DIR}/${MTPROJ}-${MTVER}/lib)
-set(MT_EXE_OUTPUT_DIR ${CMAKE_BINARY_DIR}/${MTPROJ}-${MTVER}/bin)
-set(MT_SRC_DIR ${PROJECT_SOURCE_DIR}/src)
+
+set(MT_LIBRARY_INCLUDE_DIRECTORY ${PROJECT_SOURCE_DIR}/src) # 单元测试依赖该文件夹
+set(MT_EXPORTED_INCLUDE_DIRECTORY ${PROJECT_SOURCE_DIR}/include) # 相互依赖的本地模块，依赖这个
 
 message(STATUS "###################################")
 message(STATUS "# 自定义环境变量")
 message(STATUS "###################################")
-message("MT_HDR_OUTPUT_DIR = \'${MT_HDR_OUTPUT_DIR}\'")
-message("MT_LIB_OUTPUT_DIR = \'${MT_LIB_OUTPUT_DIR}\'")
-message("MT_EXE_OUTPUT_DIR = \'${MT_EXE_OUTPUT_DIR}\'")
-message("MT_SRC_DIR = \'${MT_SRC_DIR}\'")
 message(STATUS "###################################")
 
 # we use this to get code coverage
@@ -115,7 +136,7 @@ find_package(Threads)
 # include_directories(${MT_SRC_DIR}/include)
 
 # 配置开发库目录
-add_subdirectory(${MT_SRC_DIR})
+add_subdirectory(src)
 
 # include(cmake/googletest.cmake)
 # fetch_googletest(
@@ -126,7 +147,7 @@ add_subdirectory(${MT_SRC_DIR})
 # 启用单元测试
 enable_testing()
 
-add_subdirectory(test)
+add_subdirectory(tests)
 
 
 # 其他库示例：

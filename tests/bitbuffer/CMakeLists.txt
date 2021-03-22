@@ -1,6 +1,6 @@
 
 # 引入库的public headers目录
-include_directories(${MT_SRC_DIR}/bitbuffer)
+include_directories(${MT_LIBRARY_INCLUDE_DIRECTORY})
 
 # 归纳测试源文件
 aux_source_directory(. TEST_FILES)
