@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-22 17:16:11
- * @LastEditTime: 2021-03-25 14:35:38
+ * @LastEditTime: 2021-03-25 18:40:21
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /mt-ccs/src/timber/mt_timber.h
@@ -19,38 +19,6 @@
 
 namespace timber
 {
-    class Timber
-    {
-    private:
-        /* data */
-        std::vector<std::shared_ptr<Tree> > _trees;
-
-        friend class LocalTree;
-    public:
-        Timber(/* args */) {};
-        ~Timber() {};
-
-    public:
-        static Timber& shared() {
-            static Timber instance;
-            return instance;
-        }
-
-    public:
-        // Tree& tag(std::string &tag) {
-        //     // for (tree in treeArray) {
-        //     //     tree.explicitTag.set(tag);
-        //     // }
-        //     return Tree();
-        // }
-
-        static void plant(std::shared_ptr<Tree> tree) {
-            // TODO: 考虑线程安全
-            shared()._trees.emplace_back(tree);
-        }
-
-    };
-
     #define TIMBER_ENUMARATE( code ) \
             for (auto tree : Timber::shared()._trees) \
             code
@@ -70,21 +38,47 @@ namespace timber
                 } \
                 va_end(args); \
             }
-    
-    class LocalTree
+
+    class Timber
     {
     private:
         std::string _tag;
-    public:
-        LocalTree(/* args */) {};
-        ~LocalTree() {};
+        std::vector<std::shared_ptr<Tree> > _trees;
 
     public:
+        Timber(const std::string &tag) { _tag = tag; };
+        ~Timber() {};
+
+    public:
+        static Timber& shared() {
+            static Timber instance("");
+            return instance;
+        }
+
+        Timber tagged(const std::string &tag) {
+            return Timber(tag);
+        }
+        
+        void plant(std::shared_ptr<Tree> tree) {
+            static std::mutex lock;
+            lock.lock();
+
+            Timber::shared()._trees.emplace_back(tree);
+            
+            lock.unlock();
+        };
+
         TIMBER_LOG_FUNC_DEF(d)
         TIMBER_LOG_FUNC_DEF(i)
         TIMBER_LOG_FUNC_DEF(w)
         TIMBER_LOG_FUNC_DEF(e)
     };
+
+    #ifndef __MT_TAG__
+    #define __MT_TAG__      ""
+    #endif // __MT_TAG__
+
+    static Timber logger = Timber::shared().tagged(__MT_TAG__);
     
 } // namespace timber
 

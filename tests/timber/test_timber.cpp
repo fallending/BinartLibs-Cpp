@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-23 20:37:37
- * @LastEditTime: 2021-03-25 17:03:11
+ * @LastEditTime: 2021-03-25 18:58:05
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /mt-ccs/tests/timber/test_timber.cpp
@@ -11,6 +11,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 #include "timber/mt_timber.h"
+#define __MT_TAG__ "Timber Unit Test"
 #include "log/log.h"
 
 int main(int argc, char **argv)
@@ -80,7 +81,6 @@ void test_print(const std::string &message) {
     if (&message != NULL) {
         std::cout << message << std::endl;
     }
-    
 }
 
 // MARK: - 测试用例
@@ -90,7 +90,7 @@ TEST(timber, all)
     // 种树
     std::shared_ptr<TestTree> tree = std::make_shared<TestTree>();
     // Timber::plant(static_pointer_cast<Tree>(tree));
-    Timber::plant(tree);
+    logger.plant(tree);
 
     std::cout << green << "hello world" << reset << std::endl;
     std::cout << white << "hello world" << reset << std::endl;
@@ -101,6 +101,10 @@ TEST(timber, all)
     const char *p = NULL;
     // test_print(p);
 
+    logger.d("");
+    logger.i("");
+    logger.w("");
+    logger.e("");
 
     enum FruitType fruitType = FruitTypeApple;
     FruitFactory *fruitFactory = new FruitFactory();
