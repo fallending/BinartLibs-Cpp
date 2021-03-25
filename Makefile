@@ -45,7 +45,10 @@ rebuild:
 	rm -rf build && mkdir build && cd build && cmake .. -DCMAKE_TOOLCHAIN_FILE=~/.cmake_modules/vcpkg/scripts/buildsystems/vcpkg.cmake && cmake --build . && make install
 
 test:
-	cd build && ctest .
+	# cd build && ctest .
+	./build/bin/test_lib_bitbuffer
+	./build/bin/test_mtjson
+	./build/bin/test_timber
 
 reset:
 	git clean -d -f -x

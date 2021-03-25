@@ -57,8 +57,16 @@ endif ()
 message(STATUS "###################################")
 
 # 编译配置
-set (CMAKE_CXX_STANDARD 14)
 
+# we use this to get code coverage
+if(CMAKE_CXX_COMPILER_ID MATCHES GNU)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
+endif()
+
+set (CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+# set (CMAKE_CXX_FLAGS “${CMAKE_CXX_FLAGS} -g”)
 
 # 工程配置
 set (MTVER 0.1.0)
@@ -118,13 +126,21 @@ include_directories(${GTEST_INCLUDE_DIR})
 
 # 前置： brew install pkg-config , vcpkg install openssl
 find_package(OpenSSL MODULE REQUIRED)
-include_directories(${OPENSSL_INCLUDE_DIR})
+include_directories(${OPENSSL_INCLUDE_DIR}) # fixme: 猜测他是关联project的。。。。！！！！！！！！！！！！！！！！！！1
+# FIXME: 头文件目录有了，但是库搜索目录，却不是这个：OPENSSL_LIBRARY
+# target_link_libraries(main PRIVATE OpenSSL::SSL OpenSSL::Crypto)
 
 message(STATUS "###################################")
 message(STATUS "# 外部库依赖")
 message(STATUS "###################################")
 message(gtest_include_dir=${GTEST_INCLUDE_DIR}) 
 message(gtest_library=${GTEST_LIBRARY})
+
+# ~/.cmake_modules/vcpkg/packages/openssl_x64-osx/include/openssl/
+message(openssl_include_dir=${OPENSSL_INCLUDE_DIR}) # openssl_include_dir=/Users/seven/.cmake_modules/vcpkg/installed/x64-osx/include
+message(openssl_library=${OPENSSL_LIBRARY})
+# target_link_libraries(${LIB_NAME} PUBLIC OpenSSL::SSL OpenSSL::Crypto)
+
 message(STATUS "###################################")
 
 find_package(Threads)

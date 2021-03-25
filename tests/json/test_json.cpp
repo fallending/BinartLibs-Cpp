@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-17 11:29:36
- * @LastEditTime: 2021-03-17 11:29:37
+ * @LastEditTime: 2021-03-23 21:42:05
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /mt-ccs/test/json/test_json.cpp
@@ -31,7 +31,6 @@ int main(int argc, char **argv)
 
 // MARK: - 测试对象自定义
 
-using namespace mtjson;
 using namespace std;
 using namespace slothjson;
 
