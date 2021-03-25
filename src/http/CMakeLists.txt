@@ -1,8 +1,5 @@
 # 有源文件的库: 动态库+静态库
-
 cmake_minimum_required(VERSION 3.17)
-
-project (http)
 
 set(CMAKE_CXX_STANDARD 14)
 

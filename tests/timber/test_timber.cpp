@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-23 20:37:37
- * @LastEditTime: 2021-03-24 23:15:34
+ * @LastEditTime: 2021-03-25 17:03:11
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /mt-ccs/tests/timber/test_timber.cpp
@@ -11,6 +11,7 @@
 #include <gtest/gtest.h>
 #include <iostream>
 #include "timber/mt_timber.h"
+#include "log/log.h"
 
 int main(int argc, char **argv)
 {
@@ -23,7 +24,24 @@ using namespace timber;
 
 // MARK: - ...
 
+int apple = 0;
 
+enum FruitType {
+    FruitTypeApple = 0,
+};
+
+const char *getFruitName() {
+    return "";
+};
+
+struct Fruit {
+    FruitType type;
+    const char *name;
+};
+
+class FruitFactory {
+    void buildFruit();
+};
 
 // MARK: - 测试tree
 
@@ -82,4 +100,9 @@ TEST(timber, all)
     // 打印日志
     const char *p = NULL;
     // test_print(p);
+
+
+    enum FruitType fruitType = FruitTypeApple;
+    FruitFactory *fruitFactory = new FruitFactory();
+
 }
