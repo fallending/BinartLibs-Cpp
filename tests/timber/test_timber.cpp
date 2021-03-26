@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-23 20:37:37
- * @LastEditTime: 2021-03-25 18:58:05
+ * @LastEditTime: 2021-03-26 17:13:33
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /mt-ccs/tests/timber/test_timber.cpp
@@ -10,8 +10,9 @@
 
 #include <gtest/gtest.h>
 #include <iostream>
-#include "timber/mt_timber.h"
+
 #define __MT_TAG__ "Timber Unit Test"
+#include "timber/mt_timber.h"
 #include "log/log.h"
 
 int main(int argc, char **argv)
@@ -22,6 +23,7 @@ int main(int argc, char **argv)
 }
 
 using namespace timber;
+using namespace std;
 
 // MARK: - ...
 
@@ -46,65 +48,55 @@ class FruitFactory {
 
 // MARK: - 测试tree
 
-class TestTree : public Tree {
-public:
-    virtual bool isLoggable() {
-        return true;
-    }
-
-    virtual void log(LogPriority priority, const std::string &tag, const std::string &message) {
-        switch (priority)
-        {
-        case LogPriorityDebug:
-            std::cout << green << "hello world" << reset << std::endl;
-            break;
-
-        case LogPriorityInfo:
-            std::cout << white << "hello world" << reset << std::endl;
-            break;
-
-        case LogPriorityWarn:
-            std::cout << yellow << "hello world" << reset << std::endl;
-            break;
-
-        case LogPriorityError:
-            std::cout << red << "hello world" << reset << std::endl;
-            break;
-
-        default:
-            break;
-        }
-    }
-};
-
 void test_print(const std::string &message) {
-    if (&message != NULL) {
-        std::cout << message << std::endl;
-    }
+    // if (&message != NULL) {
+    //     std::cout << message << std::endl;
+    // }
 }
 
 // MARK: - 测试用例
 
+//此宏展开后，类似于printf("123"),printf("456");
+#define TRACE_CMH_1 (printf("%s(%d)-<%s>: ",__FILE__, __LINE__, __FUNCTION__), printf)
+ 
+//此宏展开后，类似于printf("%d""%d", 1, 2);
+#define TRACE_CMH_2(fmt,...) \
+	printf("%s(%d)-<%s>: " # fmt, __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+
 TEST(timber, all)
 {
+    // 测试 叶子
+
+    LeafPtr defaultLeaf = create_leaf(LogPriorityDebug, "default-tag", __FILE__, __FUNCTION__, to_string(__LINE__));
+
+    cout << defaultLeaf.get()->toString() << endl;
+
+
+	TRACE_CMH_2("BASE: [%d]\n", 100);
+
     // 种树
-    std::shared_ptr<TestTree> tree = std::make_shared<TestTree>();
-    // Timber::plant(static_pointer_cast<Tree>(tree));
+    shared_ptr<DebugTree> tree = make_shared<DebugTree>();
     logger.plant(tree);
 
-    std::cout << green << "hello world" << reset << std::endl;
-    std::cout << white << "hello world" << reset << std::endl;
-    std::cout << yellow << "hello world" << reset << std::endl;
-    std::cout << red << "hello world" << reset << std::endl;
+    cout << green << "hello world" << reset << endl;
+    cout << white << "hello world" << reset << endl;
+    cout << yellow << "hello world" << reset << endl;
+    cout << red << "hello world" << reset << endl;
 
     // 打印日志
     const char *p = NULL;
     // test_print(p);
 
-    logger.d("");
-    logger.i("");
-    logger.w("");
-    logger.e("");
+    logger.d("debug message");
+    logger.i("info message");
+    logger.w("warn message");
+    logger.e("error message");
+
+    logd("debug 2 message");
+    logi("info 2 message");
+    logw("warn 2 message");
+    loge("error 2 message");
+
 
     enum FruitType fruitType = FruitTypeApple;
     FruitFactory *fruitFactory = new FruitFactory();

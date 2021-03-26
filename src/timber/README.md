@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-24 11:21:18
- * @LastEditTime: 2021-03-25 18:39:06
+ * @LastEditTime: 2021-03-26 17:16:50
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /mt-ccs/src/timber/README.md
@@ -33,3 +33,6 @@ https://zhuanlan.zhihu.com/p/21477468
 - [ ] 支持 可定义日志往磁盘刷新的方式
 - [ ] 支持 每天切换新的日志文件
 - [ ] 支持 log文件被删除时，从新建立日志文件
+- [ ] 支持 高并发场景，高性能！！
+- [ ] 支持 打印进程ID
+- [ ] 支持 打印线程ID

@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-22 18:22:11
- * @LastEditTime: 2021-03-25 18:50:45
+ * @LastEditTime: 2021-03-26 17:13:22
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /mt-ccs/src/timber/mt_tree.h
@@ -15,21 +15,20 @@
 
 namespace timber
 {
+    #define TIMBER_TREE_LOG_F( func, priority ) \
+            void func(const LeafPtr &leaf, const std::string &message, va_list args) { prepareLog(leaf, message, args); };
+
     class Tree
     {
-    private:
-        /* data */
-        std::string tag;
-        
     public:
         Tree(/* args */) {};
         ~Tree() {};
 
     public:
-        void d(const Leaf &leaf, const std::string &message, va_list args) { prepareLog(LogPriorityDebug, message, args); };
-        void i(const Leaf &leaf, const std::string &message, va_list args) { prepareLog(LogPriorityInfo, message, args); };
-        void w(const Leaf &leaf, const std::string &message, va_list args) { prepareLog(LogPriorityWarn, message, args); };
-        void e(const Leaf &leaf, const std::string &message, va_list args) { prepareLog(LogPriorityError, message, args); };
+        TIMBER_TREE_LOG_F( d, LogPriorityDebug )
+        TIMBER_TREE_LOG_F( i, LogPriorityInfo )
+        TIMBER_TREE_LOG_F( w, LogPriorityWarn )
+        TIMBER_TREE_LOG_F( e, LogPriorityError )
 
         /** Stubs */
     public:
@@ -38,8 +37,8 @@ namespace timber
         virtual void log(LogPriority priority, const std::string &tag, const std::string &message) = 0;
 
     private:
-        void prepareLog(LogPriority priority, const std::string &message, va_list args) {
-            if (!isLoggable(tag, priority)) {
+        void prepareLog(const LeafPtr &leaf, const std::string &message, va_list args) {
+            if (!isLoggable(leaf.get()->tag, leaf.get()->p)) {
                 return;
             }
 
@@ -55,8 +54,7 @@ namespace timber
             //     if (t != null) {
             //     message += "\n" + getStackTraceString(t);
             //     }
-            Leaf leaf;
-            log(priority, tag, formatMessage(getFormatString(message, args), leaf));
+            log(leaf.get()->p, leaf.get()->tag, formatMessage(getFormatString(message, args), leaf));
         }
 
         const std::string getFormatString(const std::string &message, va_list args) {
@@ -67,17 +65,52 @@ namespace timber
             return buf;
         }
 
-        const std::string formatMessage(const std::string &message, const Leaf &leaf) {
-            return message;
+        /**
+         * @description: 日志格式化
+         * @param {const} std
+         * @param {constLeaf} &leaf
+         * @return {*}
+         * 
+         * @example 
+         *  [timestamp]               [threadid]   [priority] [tag]   [file:line]                                 [func] [msg]
+         *  [2016-09-11 15:05:30.510] [4246443808] [ERROR]    [login] [/home/Github/dlog/example/LogTest.cpp:11]  [main]  Hello everyone
+         */
+        const std::string formatMessage(const std::string &message, const LeafPtr &leaf) {
+            return leaf.get()->toLoggingPrefix()+message;
         }
     }; 
 
-    class DebugTree : Tree {
+    typedef std::shared_ptr<Tree> TreePtr;
 
-    };
+    class DebugTree : public Tree {
+    public:
+        virtual bool isLoggable(const std::string &tag, LogPriority priority) {
+            return true;
+        }
 
-    class Forest : Tree {
+        virtual void log(LogPriority priority, const std::string &tag, const std::string &message) {
+            switch (priority)
+            {
+            case LogPriorityDebug:
+                std::cout << green << message << reset << std::endl;
+                break;
 
+            case LogPriorityInfo:
+                std::cout << white << message << reset << std::endl;
+                break;
+
+            case LogPriorityWarn:
+                std::cout << yellow << message << reset << std::endl;
+                break;
+
+            case LogPriorityError:
+                std::cout << red << message << reset << std::endl;
+                break;
+
+            default:
+                break;
+            }
+        }
     };
 } // namespace timber
 

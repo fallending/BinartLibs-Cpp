@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-23 20:02:45
- * @LastEditTime: 2021-03-25 11:53:00
+ * @LastEditTime: 2021-03-26 16:40:32
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /mt-ccs/src/timber/mt_type.h
@@ -11,6 +11,8 @@
 #include <vector>
 #include <string>
 #include <thread>
+#include <sstream>
+#include <unistd.h>
 
 #ifndef __MT_TYPE_H__
 #define __MT_TYPE_H__

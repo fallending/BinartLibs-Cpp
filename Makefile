@@ -49,6 +49,10 @@ test:
 	./build/bin/test_lib_bitbuffer
 	./build/bin/test_mtjson
 	./build/bin/test_timber
+	./build/bin/test_simple
+
+ctest:
+	cd build && ctest
 
 reset:
 	git clean -d -f -x
