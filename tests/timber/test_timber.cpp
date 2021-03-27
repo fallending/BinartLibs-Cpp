@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-23 20:37:37
- * @LastEditTime: 2021-03-26 17:13:33
+ * @LastEditTime: 2021-03-26 17:18:26
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /mt-ccs/tests/timber/test_timber.cpp
@@ -96,6 +96,8 @@ TEST(timber, all)
     logi("info 2 message");
     logw("warn 2 message");
     loge("error 2 message");
+
+    // 开线程测试
 
 
     enum FruitType fruitType = FruitTypeApple;
