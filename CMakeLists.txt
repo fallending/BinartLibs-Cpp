@@ -128,6 +128,7 @@ include_directories(${GTEST_INCLUDE_DIR})
 find_package(OpenSSL MODULE REQUIRED)
 include_directories(${OPENSSL_INCLUDE_DIR}) # fixme: 猜测他是关联project的。。。。！！！！！！！！！！！！！！！！！！1
 # FIXME: 头文件目录有了，但是库搜索目录，却不是这个：OPENSSL_LIBRARY
+# find_package(OpenSSL REQUIRED)
 # target_link_libraries(main PRIVATE OpenSSL::SSL OpenSSL::Crypto)
 
 message(STATUS "###################################")
