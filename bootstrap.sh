@@ -1,17 +1,18 @@
-curdir=${HOME}
 ###
- # @Author: your name
- # @Date: 2021-03-09 15:56:46
- # @LastEditTime: 2021-03-16 14:53:01
- # @LastEditors: Please set LastEditors
- # @Description: In User Settings Edit
- # @FilePath: /mt-ccs/bootstrap.sh
-### 
+# @Author: your name
+# @Date: 2021-03-09 15:56:46
+# @LastEditTime: 2021-03-16 14:53:01
+# @LastEditors: Please set LastEditors
+# @Description: In User Settings Edit
+# @FilePath: /mt-ccs/bootstrap.sh
+###
 
 # ##########################
 # c/c++ 包管理
 # vcpkg
 # ##########################
+
+curdir=${HOME}
 
 # 它可以用于安装：vcpkg install opencv
 
@@ -40,6 +41,12 @@ function install_vcpkg() {
   echo "[获取包安装列表] vcpkg list"
   echo "[搜过指定包发布列表] vcpkg search gtest"
   echo "[安装指定包列表] vcpkg install opencv gtest"
+
+  # gtest
+  # vcpkg install gtest
+  # find_package(GTest CONFIG REQUIRED)
+  # target_link_libraries(main PRIVATE GTest::gmock GTest::gtest GTest::gmock_main GTest::gtest_main)
+
   echo "[卸载指定包列表] vcpkg remove opencv gtest"
 }
 
@@ -50,13 +57,23 @@ else
 fi
 
 # ##########################
+# vcpkg 安装该工程的依赖
+# ##########################
+
+# ##########################
 # anaconda被大多数人所认为是一个python的科学计算环境，其实它也可以被用作c/c++虚拟环境的管理
 # https://zhuanlan.zhihu.com/p/103219038
 # conda
 # ##########################
 
+# ##########################
+# 构建加速器
+# ninja
+# ##########################
 
-# gtest
-# vcpkg install gtest
-# find_package(GTest CONFIG REQUIRED)
-# target_link_libraries(main PRIVATE GTest::gmock GTest::gtest GTest::gmock_main GTest::gtest_main)
+ninja_path=/usr/local/bin/ninja
+if [ ! -f "${vcpkg_path}" ]; then
+  brew install ninja
+else
+  echo "ninja installed."
+fi

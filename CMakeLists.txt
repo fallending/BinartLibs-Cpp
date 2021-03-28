@@ -121,11 +121,11 @@ include(GNUInstallDirs)
 # include_directories(${ROOT})
 
 # 外部库依赖
-find_package(GTest MODULE REQUIRED)
+find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIR})
 
 # 前置： brew install pkg-config , vcpkg install openssl
-find_package(OpenSSL MODULE REQUIRED)
+find_package(OpenSSL REQUIRED)
 include_directories(${OPENSSL_INCLUDE_DIR}) # fixme: 猜测他是关联project的。。。。！！！！！！！！！！！！！！！！！！1
 # FIXME: 头文件目录有了，但是库搜索目录，却不是这个：OPENSSL_LIBRARY
 # find_package(OpenSSL REQUIRED)
@@ -134,10 +134,12 @@ include_directories(${OPENSSL_INCLUDE_DIR}) # fixme: 猜测他是关联project�
 message(STATUS "###################################")
 message(STATUS "# 外部库依赖")
 message(STATUS "###################################")
+message(gtest_found=${GTEST_FOUND}) 
 message(gtest_include_dir=${GTEST_INCLUDE_DIR}) 
 message(gtest_library=${GTEST_LIBRARY})
 
 # ~/.cmake_modules/vcpkg/packages/openssl_x64-osx/include/openssl/
+message(openssl_found=${OPENSSL_FOUND})
 message(openssl_include_dir=${OPENSSL_INCLUDE_DIR}) # openssl_include_dir=/Users/seven/.cmake_modules/vcpkg/installed/x64-osx/include
 message(openssl_library=${OPENSSL_LIBRARY})
 # target_link_libraries(${LIB_NAME} PUBLIC OpenSSL::SSL OpenSSL::Crypto)

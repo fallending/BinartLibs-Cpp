@@ -105,6 +105,8 @@ TEST(timber, all)
     logd("float = %f", 100.0);
     logd("string = %s", "i am what i am.");
 
+    logw("ninja is online...");
+
     // 开线程测试
 
     enum FruitType fruitType = FruitTypeApple;

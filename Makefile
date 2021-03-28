@@ -89,6 +89,18 @@ gen-pod:
 gen-gradle:
 	mkdir build-gradle
 
+gen-ninja:
+	rm -rf _projects && mkdir _projects && cd _projects && cmake .. -G Ninja -DCMAKE_TOOLCHAIN_FILE=~/.cmake_modules/vcpkg/scripts/buildsystems/vcpkg.cmake
+
+run-ninja:
+	cd _projects && ninja
+
+test-ninja:
+	# cd build && ctest .
+	./_projects/bin/test_lib_bitbuffer
+	./_projects/bin/test_mtjson
+	./_projects/bin/test_timber
+	./_projects/bin/test_simple
 
 # TODO: 
 # 1. 生成 gradle 可以直接集成的库
