@@ -74,7 +74,7 @@ for (auto& byte : bb.get_bytes()) {
 > 源码：src/timber
 > 单测：tests/timber
 
-![](./doc/images/timber-sample.png)
+![timber-sample](./doc/images/timber-sample.png)
 
 **目录说明**
 
