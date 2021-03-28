@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-23 20:37:37
- * @LastEditTime: 2021-03-26 17:13:33
+ * @LastEditTime: 2021-03-27 16:06:09
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /mt-ccs/tests/timber/test_timber.cpp
@@ -100,6 +100,12 @@ TEST(timber, all)
     logi("info 2 message");
     logw("warn 2 message");
     loge("error 2 message");
+
+    logd("integer = %d", 100);
+    logd("float = %f", 100.0);
+    logd("string = %s", "i am what i am.");
+
+    // 开线程测试
 
     enum FruitType fruitType = FruitTypeApple;
     FruitFactory *fruitFactory = new FruitFactory();

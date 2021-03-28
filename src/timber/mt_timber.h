@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-22 17:16:11
- * @LastEditTime: 2021-03-26 16:44:12
+ * @LastEditTime: 2021-03-26 18:00:34
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /mt-ccs/src/timber/mt_timber.h
@@ -74,10 +74,10 @@ namespace timber
 
     static Timber logger = Timber::shared().tagged(__TAG__); // 每个引用的源文件，都会有它
 
-    #define logd( message, ... ) logger.d(create_leaf(LogPriorityDebug, __TAG__, fileNameFromPath(__FILE__), __FUNCTION__, std::to_string(__LINE__)), message, ##__VA_ARGS__);
-    #define logi( message, ... ) logger.i(create_leaf(LogPriorityInfo, __TAG__, fileNameFromPath(__FILE__), __FUNCTION__, std::to_string(__LINE__)), message, ##__VA_ARGS__);
-    #define logw( message, ... ) logger.w(create_leaf(LogPriorityWarn, __TAG__, fileNameFromPath(__FILE__), __FUNCTION__, std::to_string(__LINE__)), message, ##__VA_ARGS__);
-    #define loge( message, ... ) logger.e(create_leaf(LogPriorityError, __TAG__, fileNameFromPath(__FILE__), __FUNCTION__, std::to_string(__LINE__)), message, ##__VA_ARGS__);
+    #define logd( message, ... ) timber::logger.d(timber::create_leaf(timber::LogPriorityDebug, __TAG__, timber::fileNameFromPath(__FILE__), __FUNCTION__, std::to_string(__LINE__)), message, ##__VA_ARGS__);
+    #define logi( message, ... ) timber::logger.i(timber::create_leaf(timber::LogPriorityInfo, __TAG__, timber::fileNameFromPath(__FILE__), __FUNCTION__, std::to_string(__LINE__)), message, ##__VA_ARGS__);
+    #define logw( message, ... ) timber::logger.w(timber::create_leaf(timber::LogPriorityWarn, __TAG__, timber::fileNameFromPath(__FILE__), __FUNCTION__, std::to_string(__LINE__)), message, ##__VA_ARGS__);
+    #define loge( message, ... ) timber::logger.e(timber::create_leaf(timber::LogPriorityError, __TAG__, timber::fileNameFromPath(__FILE__), __FUNCTION__, std::to_string(__LINE__)), message, ##__VA_ARGS__);
     
 } // namespace timber
 

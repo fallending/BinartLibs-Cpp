@@ -1,7 +1,7 @@
 /*
  * @Author: your name
  * @Date: 2021-03-25 18:42:34
- * @LastEditTime: 2021-03-26 17:15:55
+ * @LastEditTime: 2021-03-27 18:00:42
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /mt-ccs/src/timber/mt_leaf.h
@@ -84,7 +84,7 @@ namespace timber
         // [timestamp]               [threadid]   [priority] [tag]   [file:line]                                 [func] [msg]
         const std::string toLoggingPrefix() {
             std::stringstream ss;
-            if (this->ts.length() > 0) ss << "[" << this->ts << "] ";
+            if (this->ts.length() > 0) ss << this->ts << " ";
             if (this->pid.length() > 0) ss << "[" << this->pid << "] ";
             if (this->tid.length() > 0) ss << "[" << this->tid << "] ";
             ss << "[" << this->getPriority() << "] ";
@@ -151,23 +151,23 @@ namespace timber
             switch (this->p)
             {
             case LogPriorityDebug:
-                priorityDesc = "DEBUG";
+                priorityDesc = "D";
                 break;
             
             case LogPriorityInfo:
-                priorityDesc = "INFO";
+                priorityDesc = "I";
                 break;
 
             case LogPriorityWarn:
-                priorityDesc = "WARN";
+                priorityDesc = "W";
                 break;
 
             case LogPriorityError:
-                priorityDesc = "ERROR";
+                priorityDesc = "E";
                 break;
 
             default:
-                priorityDesc = "MISS";
+                priorityDesc = "S";
                 break;
             }
 
