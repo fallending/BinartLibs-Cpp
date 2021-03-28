@@ -29,26 +29,31 @@ using namespace std;
 
 int apple = 0;
 
-enum FruitType {
+enum FruitType
+{
     FruitTypeApple = 0,
 };
 
-const char *getFruitName() {
+const char *getFruitName()
+{
     return "";
 };
 
-struct Fruit {
+struct Fruit
+{
     FruitType type;
     const char *name;
 };
 
-class FruitFactory {
+class FruitFactory
+{
     void buildFruit();
 };
 
 // MARK: - 测试tree
 
-void test_print(const std::string &message) {
+void test_print(const std::string &message)
+{
     // if (&message != NULL) {
     //     std::cout << message << std::endl;
     // }
@@ -57,22 +62,21 @@ void test_print(const std::string &message) {
 // MARK: - 测试用例
 
 //此宏展开后，类似于printf("123"),printf("456");
-#define TRACE_CMH_1 (printf("%s(%d)-<%s>: ",__FILE__, __LINE__, __FUNCTION__), printf)
- 
+#define TRACE_CMH_1 (printf("%s(%d)-<%s>: ", __FILE__, __LINE__, __FUNCTION__), printf)
+
 //此宏展开后，类似于printf("%d""%d", 1, 2);
-#define TRACE_CMH_2(fmt,...) \
-	printf("%s(%d)-<%s>: " # fmt, __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+#define TRACE_CMH_2(fmt, ...) \
+    printf("%s(%d)-<%s>: " #fmt, __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 
 TEST(timber, all)
 {
-    // 测试 叶子
+    // 叶子
 
     LeafPtr defaultLeaf = create_leaf(LogPriorityDebug, "default-tag", __FILE__, __FUNCTION__, to_string(__LINE__));
 
     cout << defaultLeaf.get()->toString() << endl;
 
-
-	TRACE_CMH_2("BASE: [%d]\n", 100);
+    TRACE_CMH_2("BASE: [%d]\n", 100);
 
     // 种树
     shared_ptr<DebugTree> tree = make_shared<DebugTree>();
@@ -97,8 +101,6 @@ TEST(timber, all)
     logw("warn 2 message");
     loge("error 2 message");
 
-
     enum FruitType fruitType = FruitTypeApple;
     FruitFactory *fruitFactory = new FruitFactory();
-
 }

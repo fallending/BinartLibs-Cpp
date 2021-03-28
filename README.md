@@ -1,7 +1,7 @@
 # mt-ccs
-> Maketea .cc libs
-> 简洁为主，效率至上
+
 > 【规范+工具链】模块化、单元测试、例子编写、持续集成（CI自动化，拉代码后，可以全脚本化，不需要手动安装任何组件）、增量编译、交叉编译、
+
 
 ## 工具
 
@@ -27,27 +27,6 @@ cd build
 cmake ..
 cmake --build .
 ```
-
-### 测试用例
-
-使用 `ctest`:
-```
-$ ctest
-```
-
-或者 `unit_tests`:
-```
-$ ./bin/unit_tests
-```
-
-
-### 其他指令
-
-```
-// 项目清理
-$ git clean -d -f -x
-```
-
 ## 使用指南
 
 ### BitBuffer
@@ -91,19 +70,50 @@ for (auto& byte : bb.get_bytes()) {
 }
 ```
 
+### Timber
+> 源码：src/timber
+> 单测：tests/timber
 
-## 本仓库额外提供了什么？CMake作为工程构建工具的大型项目管理能力！
+**目录说明**
 
-- 如何通过 ADD_LIBRARY 指令构建动态库和静态库。
-- 如何通过 SET_TARGET_PROPERTIES 同时构建同名的动态库和静态库。
-- 如何通过 SET_TARGET_PROPERTIES 控制动态库版本
-- 如何通过 INSTALL 指令来安装头文件和动态、静态库
+```
+.
+├── CMakeLists.txt
+├── mt_leaf.h           单条日志辅助信息
+├── mt_timber.h         日志中间层
+├── mt_tree.h           日志中间件基类，负责重定向
+└── mt_type.h
+```
 
-- 如何通过INCLUDE_DIRECTORIES指令加入非标准的头文件搜索路径。
-- 如何通过LINK_DIRECTORIES指令加入非标准的库文件搜索路径。
-- 如果通过TARGET_LINK_LIBRARIES为库或可执行二进制加入库链接。
+**使用参考**
 
+```cpp
+// [optional] 预定义标记
+#define __TAG__ "Timber Unit Test"
 
+// 引入头文件
+#include "timber/mt_timber.h"
+
+// 声明命名空间
+using namespace timber;
+using namespace std;
+
+// 种树
+shared_ptr<DebugTree> tree = make_shared<DebugTree>();
+logger.plant(tree);
+
+// 对象打印
+logger.d("debug message");
+logger.i("info message");
+logger.w("warn message");
+logger.e("error message");
+
+// 宏打印
+logd("debug 2 message");
+logi("info 2 message");
+logw("warn 2 message");
+loge("error 2 message");
+```
 
 ## 为什么使用cmake？
 
