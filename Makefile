@@ -1,8 +1,5 @@
 # 这个很可以参考：https://zhuanlan.zhihu.com/p/103696297
 
-build:
-	mkdir build && cd build && cmake .. && cmake --build .
-
 # https://docs.microsoft.com/zh-cn/cpp/build/manage-libraries-with-vcpkg?view=msvc-160&tabs=macos
 
 
@@ -25,11 +22,26 @@ build:
 # 方式1: cmakelist 直接整合到工程，通过ANDROID APPLE，工程编译时，打不同的包
 # 方式2: cmakelist 通过ANDROID APPLE，工程编译时，打不同的包，集成到工程中
 
-toolchain:
+version:
 	cmake --version
 
 clean:
-	rm -rf build
+	rm -rf _build
+
+rebuild:
+	make clean && mkdir _build && cd _build && cmake .. -DCMAKE_TOOLCHAIN_FILE=~/.cmake_modules/vcpkg/scripts/buildsystems/vcpkg.cmake && cmake --build .
+
+build:
+	cd _build && ninja
+
+test:
+	# cd build && ctest .
+	./_build/bin/test_lib_bitbuffer
+	./_build/bin/test_mtjson
+	./_build/bin/test_timber
+	./_build/bin/test_simple
+
+##############################################
 
 rebuild-ios:
 	make clean && mkdir build && cd build
@@ -41,15 +53,6 @@ rebuild-ios:
 rebuild-android:
 	rm -rf build && mkdir build && cd build && cmake .. -DMT_TARGET_PLATFORM=android -DCMAKE_TOOLCHAIN_FILE=~/.cmake_modules/vcpkg/scripts/buildsystems/vcpkg.cmake && cmake --build .
 
-rebuild:
-	rm -rf build && mkdir build && cd build && cmake .. -DCMAKE_TOOLCHAIN_FILE=~/.cmake_modules/vcpkg/scripts/buildsystems/vcpkg.cmake && cmake --build . && make install
-
-test:
-	# cd build && ctest .
-	./build/bin/test_lib_bitbuffer
-	./build/bin/test_mtjson
-	./build/bin/test_timber
-	./build/bin/test_simple
 
 ctest:
 	cd build && ctest
@@ -88,19 +91,6 @@ gen-pod:
 
 gen-gradle:
 	mkdir build-gradle
-
-gen-ninja:
-	rm -rf _projects && mkdir _projects && cd _projects && cmake .. -G Ninja -DCMAKE_TOOLCHAIN_FILE=~/.cmake_modules/vcpkg/scripts/buildsystems/vcpkg.cmake
-
-run-ninja:
-	cd _projects && ninja
-
-test-ninja:
-	# cd build && ctest .
-	./_projects/bin/test_lib_bitbuffer
-	./_projects/bin/test_mtjson
-	./_projects/bin/test_timber
-	./_projects/bin/test_simple
 
 # TODO: 
 # 1. 生成 gradle 可以直接集成的库

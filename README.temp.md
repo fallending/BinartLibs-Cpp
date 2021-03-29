@@ -142,3 +142,9 @@ module侧重的是对属性的封装，重心是在设计和开发阶段，不�
 ### 参考
 
 - [用cmake生成ios framework库](https://github.com/zhaowd2001/tvm_phone/blob/master/tvm-cmake-ios.md)
+
+
+## 近期需要关注
+
+
+https://jiangshibo.cn/index.php/2020/12/19/2020%E5%B9%B4%E6%B1%BD%E8%BD%A6%E7%94%B5%E5%AD%90%E8%BD%AF%E4%BB%B6%E4%B8%BB%E6%B5%81%E6%9E%84%E5%BB%BA%E6%96%B9%E6%A1%88%E8%AE%B2%E8%A7%A3-cmake/

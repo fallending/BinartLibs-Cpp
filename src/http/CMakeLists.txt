@@ -31,10 +31,10 @@ set_target_properties(http-static
     CLEAN_DIRECT_OUTPUT 1
   )
 
-install(TARGETS http-shared http-static 
-  LIBRARY DESTINATION http
-  ARCHIVE DESTINATION http)  # 静态库用archive关键字
-install(FILES http.hpp DESTINATION http)
+# install(TARGETS http-shared http-static 
+#   LIBRARY DESTINATION http
+#   ARCHIVE DESTINATION http)  # 静态库用archive关键字
+# install(FILES http.hpp DESTINATION http)
 
 
   ############################### @seven 以下需要消化

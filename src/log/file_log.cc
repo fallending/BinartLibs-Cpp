@@ -15,22 +15,27 @@ namespace mt
     {
         int apple = 0;
 
-        enum FruitType {
+        enum FruitType
+        {
             FruitTypeApple = 0,
         };
 
-        const char *getFruitName() {
+        const char *getFruitName()
+        {
             return "";
         };
 
-        struct Fruit {
+        struct Fruit
+
+        {
+
             FruitType type;
             const char *name;
         };
 
-        void FruitFactory::buildFruit () {
-
+        void FruitFactory::buildFruit()
+        {
         }
     } // namespace log
-    
+
 } // namespace mt
