@@ -18,42 +18,43 @@
 // using ::testing::StrictMock;
 // using ::testing::StartsWith;
 
-
 // The fixture for testing class Project1. From google test primer.
-class AsyncIOTests : public ::testing::Test {
+class AsyncIOTests : public ::testing::Test
+{
 protected:
-	// You can remove any or all of the following functions if its body
-	// is empty.
+    // You can remove any or all of the following functions if its body
+    // is empty.
 
     // AsyncIOService *aioService;
 
-	AsyncIOTests()
+    AsyncIOTests()
 
     {
-		// You can do set-up work for each test here.
-        // aioService = AsyncIOService::getInstance();        
-	}
+        // You can do set-up work for each test here.
+        // aioService = AsyncIOService::getInstance();
+    }
 
-	virtual ~AsyncIOTests() {
-		// You can do clean-up work that doesn't throw exceptions here.
-	}
+    virtual ~AsyncIOTests()
+    {
+        // You can do clean-up work that doesn't throw exceptions here.
+    }
 
-	// If the constructor and destructor are not enough for setting up
-	// and cleaning up each test, you can define the following methods:
-	virtual void SetUp() {
-		// Code here will be called immediately after the constructor (right
-		// before each test).
-	}
+    // If the constructor and destructor are not enough for setting up
+    // and cleaning up each test, you can define the following methods:
+    virtual void SetUp()
+    {
+        // Code here will be called immediately after the constructor (right
+        // before each test).
+    }
 
-	virtual void TearDown() {
-		// Code here will be called immediately after each test (right
-		// before the destructor).
-	}
+    virtual void TearDown()
+    {
+        // Code here will be called immediately after each test (right
+        // before the destructor).
+    }
 
-	// Objects declared here can be used by all tests in the test case for Project1.
-
+    // Objects declared here can be used by all tests in the test case for Project1.
 };
-
 
 // class AsyncIOHttpCallback {
 // public:
@@ -105,10 +106,42 @@ protected:
 //     // aioService->waitRequestEmpty(5);
 // }
 
-
-void helloFunction(const std::string& s) {
+void helloFunction(const std::string &s)
+{
     std::cout << "Hello C++11 from " + s + ".";
 }
+
+template <class T>
+class Stack
+{
+private:
+    std::vector<T> elems; // 元素
+    mutable int id;
+
+public:
+    Stack()
+    {
+        id = 1;
+    };                      //只有声明
+    void push(T const &){}; // 入栈
+    void pop(){};           // 出栈
+    T top() const;          // 返回栈顶元素
+    bool empty() const
+    { // 如果为空则返回真。
+        return elems.empty();
+    }
+
+    int count()
+    {
+        ++id;
+        return 1;
+    }
+
+    // 禁用对象拷贝
+    // private:
+    //     Stack(const Stack &rhs){};
+    //     Stack &operator=(const Stack &rhs){};
+};
 
 TEST(timber, async)
 {
@@ -125,8 +158,7 @@ TEST(timber, async)
 
     logd("async debug message");
 
-    std::async([](){
-
+    std::async([]() {
         logd("async debug 3 message");
         logi("async info  3 message");
         logw("async warn  3 message");
@@ -135,27 +167,46 @@ TEST(timber, async)
 
     std::async(helloFunction, "function object");
 
+    std::unique_ptr<std::thread> pthread;
 
-    std::future<int> f1 = std::async(std::launch::async, [](){ 
-        return 8;  
-    }); 
+    std::future<int> f1 = std::async(std::launch::async, [&]() {
+        std::shared_ptr<int> pint;
+        logd("use count 1 = %lld", &pint);
 
-    std::cout<<f1.get()<< std::endl; //output: 8
+        // pthread = std::make_unique<std::thread>([]() {
+        //     //     // logd("use count 3 = %lld", &pint);
+        //     //     // logd("use count = %d", pint.use_count());
+        // });
 
-    std::future<int> f2 = std::async(std::launch::async, [](){ 
+        // const Stack<int> stack; // 如果这里有const，下面的stack.count()会报错。。
+        Stack<int> stack;
 
+        std::async(std::launch::async, [=]() mutable {
+            logd("use count 3 = %lld", &pint);
+            logd("use count = %d", pint.use_count());
+            stack.count();
+            // logd("stack ele count = %d", );
+        });
+
+        return 8;
+    });
+
+    std::cout << f1.get() << std::endl; //output: 8
+
+    std::future<int> f2 = std::async(std::launch::async, []() {
         logd("async debug 4 message");
         logi("async info  4 message");
         logw("async warn  4 message");
         loge("async error 4 message");
 
-        std::cout<<8<< std::endl;
+        std::cout << 8 << std::endl;
 
         return 1;
-    }); 
+    });
 
     std::chrono::milliseconds span(2000);
-    if (f2.wait_for(span) == std::future_status::timeout) {
+    if (f2.wait_for(span) == std::future_status::timeout)
+    {
         loge("timeout here");
     }
 
