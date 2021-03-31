@@ -4,18 +4,20 @@ if (POLICY CMP0048)
   cmake_policy(SET CMP0048 NEW)
 endif (POLICY CMP0048)
 
+
+#################
+# 选项卡
+option (FORCE_COLORED_OUTPUT "Always produce ANSI-colored output (GNU/Clang only)." ON)
+
 # 判断cmake的运行平台
 message(STATUS "###################################")
 message(STATUS "# 当前平台")
 message(STATUS "###################################")
 
-message(STATUS "operation system is ${CMAKE_SYSTEM}")
-message(STATUS "operation system is ${CMAKE_SYSTEM_NAME}")
-
 if (WIN32)
   message(STATUS "Now is windows")
 elseif (APPLE)
-  message(STATUS "Now is Apple systens.")
+  message(STATUS "Now is Apple systems.")
 
   # --toolchain xcode --config Debug --install
   set(CMAKE_C_COMPILER /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc)
@@ -43,24 +45,15 @@ elseif (APPLE)
 elseif (UNIX)
   message(STATUS "Now is UNIX-like OS's.")
 endif ()
- 
-if (CMAKE_SYSTEM_NAME MATCHES "Linux")
-  message(STATUS "current platform: Linux ")
-elseif (CMAKE_SYSTEM_NAME MATCHES "Windows")
-  message(STATUS "current platform: Windows")
-elseif (CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
-  message(STATUS "current platform: FreeBSD")
-else ()
-  message(STATUS "other platform: ${CMAKE_SYSTEM_NAME}")
-endif ()
- 
+
+message(STATUS "CMAKE_CXX_COMPILER_ID             = ${CMAKE_CXX_COMPILER_ID}")
 message(STATUS "###################################")
 
 # 编译配置
 
 # we use this to get code coverage
 if(CMAKE_CXX_COMPILER_ID MATCHES GNU)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
 endif()
 
 set (CMAKE_CXX_STANDARD 14)
@@ -68,6 +61,20 @@ set (CMAKE_CXX_STANDARD_REQUIRED ON)
 set (CMAKE_CXX_EXTENSIONS OFF)
 set (CMAKE_BUILD_TYPE "debug")
 # set (CMAKE_CXX_FLAGS “${CMAKE_CXX_FLAGS} -g”)
+
+if (${FORCE_COLORED_OUTPUT})
+  if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    add_compile_options (-fdiagnostics-color=always)
+  elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    add_compile_options (-fcolor-diagnostics)
+  endif ()
+endif ()
+
+if (CMAKE_GENERATOR STREQUAL "Ninja")
+    # Turn on colored output. https://github.com/ninja-build/ninja/wiki/FAQ
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=always -Wno-unused-parameter -Wno-deprecated-declarations -Wno-format")
+    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fdiagnostics-color=always -Wno-unused-parameter -Wno-deprecated-declarations -Wno-format")
+endif ()
 
 # 工程配置
 set (MTVER 0.1.0)
@@ -107,19 +114,8 @@ message(STATUS "# 自定义环境变量")
 message(STATUS "###################################")
 message(STATUS "###################################")
 
-# we use this to get code coverage
-if(CMAKE_CXX_COMPILER_ID MATCHES GNU)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
-endif()
-
 # place binaries and libraries according to GNU standards
 include(GNUInstallDirs)
-
-# 内部依赖
-
-# set(ROOT /blah/blah/root)
-
-# include_directories(${ROOT})
 
 # 外部库依赖
 find_package(GTest REQUIRED)
@@ -152,45 +148,10 @@ find_package(Threads)
 # 准备全局配置头文件
 # configure_file(tutorialConfig.h.in tutorialConfig.h)
 
-# 配置需要引入的头文件基础目录
-# include_directories(${MT_SRC_DIR}/include)
-
 # 配置开发库目录
 add_subdirectory(src)
-
-# include(cmake/googletest.cmake)
-# fetch_googletest(
-#   ${PROJECT_SOURCE_DIR}/cmake
-#   ${PROJECT_BINARY_DIR}/googletest
-# )
+include_directories(src)
 
 # 启用单元测试
 enable_testing()
-
 add_subdirectory(tests)
-
-
-# 其他库示例：
-# enable_testing()
-# find_package(GTest MODULE REQUIRED)#查找GTest
-# find_package(Threads)#查找Threads
-
-# #一些调试信息
-# message(gtest_include_dir=${GTEST_INCLUDE_DIR})
-# message(gtest_library=${GTEST_LIBRARY})
-# message(threads=${CMAKE_THREAD_LIBS_INIT})
-
-# #包含GTest的库文件
-# include_directories(${GTEST_INCLUDE_DIR})
-
-# #包含src的项目文件
-# include_directories(../src)
-
-# add_executable(gtest_simple_test main.cpp okkk-test.cpp)
-
-# #链接gtest_simple_lib,这个是src项目生成的静态库
-# #链接${GTEST_LIBRARY},这个是gtest的库文件
-# #链接${CMAKE_THREAD_LIBS_INIT},即-lpthread
-# target_link_libraries(gtest_simple_test PUBLIC gtest_simple_lib ${GTEST_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
-
-# add_test(NAME gtest_simple_test COMMAND gtest_simple_test)

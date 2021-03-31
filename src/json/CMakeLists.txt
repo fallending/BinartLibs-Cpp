@@ -8,8 +8,7 @@ target_include_directories(
   json
   PUBLIC
     "./mtjson/"
-    "./rapidjson/"
-    "./rapidjson/"      
+    "./rapidjson/"     
 )
 
 # 用于本地库依赖

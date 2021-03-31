@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <iostream>
 #include <sstream>
 #include <fstream>
 #include <rapidjson.h>
