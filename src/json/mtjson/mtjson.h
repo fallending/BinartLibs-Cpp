@@ -49,9 +49,11 @@ namespace mt
         bool encode(const uint64_t &obj_val, allocator_t &alloc, rapidjson::Value &json_val);
         bool decode(const rapidjson::Value &json_val, uint64_t &obj_val);
 
+        // as 字符
         bool encode(const int8_t &obj_val, allocator_t &alloc, rapidjson::Value &json_val);
         bool decode(const rapidjson::Value &json_val, int8_t &obj_val);
 
+        // as 字符
         bool encode(const uint8_t &obj_val, allocator_t &alloc, rapidjson::Value &json_val);
         bool decode(const rapidjson::Value &json_val, uint8_t &obj_val);
 
@@ -142,6 +144,7 @@ namespace mt
             }
             return true;
         }
+
         template <typename T>
         bool decode(const rapidjson::Value &json_val, std::vector<T> &obj_val)
         {
@@ -244,6 +247,7 @@ namespace mt
             }
             return encode<pretty>(doc, json_val);
         }
+
         template <typename T>
         bool decode(const char *json_val, T &obj_val)
         {
@@ -256,6 +260,7 @@ namespace mt
             }
             return decode(value, obj_val);
         }
+
         template <typename T>
         bool decode(const std::string &json_val, T &obj_val)
         {
@@ -305,7 +310,8 @@ namespace mt
             return decode(loader.c_str(), obj_val);
         }
     }; // namespace json
-};     // namespace mt
+
+}; // namespace mt
 
 #include "mtjsontype.h"
 

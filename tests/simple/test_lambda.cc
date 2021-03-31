@@ -80,5 +80,5 @@ TEST(lambda, recursion) // 测试引用返回值
   // 异步递归调用
   test_lambda_async_recursion();
 
-  sleep(5);
+  sleep(3);
 }

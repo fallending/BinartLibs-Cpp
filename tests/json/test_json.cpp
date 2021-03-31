@@ -7,15 +7,6 @@
  * @FilePath: /mt-ccs/test/json/test_json.cpp
  */
 
-/*
- * @Author: your name
- * @Date: 2021-03-16 19:00:46
- * @LastEditTime: 2021-03-17 11:25:48
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: /lilithnext-sdk/sdk/core/test/mtjson/test_mtjson.cc
- */
-
 // MARK: - UT 入口
 
 #include <gtest/gtest.h>
@@ -44,21 +35,30 @@ mt_field(int32_t, len);
 mt_field(int64_t, length);
 mt_field(double_t, amount);
 mt_field(MtString, str_val);
-mt_field(MtArray, vec);
+mt_field(MtArray<int32_t>, vec);
 mt_field(MtMap, dict);
 mt_struct_end(metest_object_t, isStarted, mak, th, len, length, amount, str_val, vec, dict);
 
 // MARK: - 嵌套示例
 mt_struct_begin(metest_child_t);
-mt_field(int8_t, val);
+mt_field(int32_t, val);
 mt_struct_end(metest_child_t, val);
 
 mt_struct_begin(metest_parent_t);
-mt_field(int8_t, val);
+mt_field(int32_t, val);
 mt_field(metest_child_t, child);
 mt_struct_end(metest_parent_t, val, child);
 
 // MARK: - 容器示例
+
+mt_struct_begin(metest_element_t);
+mt_field(int32_t, val);
+mt_struct_end(metest_element_t, val);
+
+mt_struct_begin(metest_container_t);
+mt_field(int32_t, val);
+mt_field(MtArray<metest_element_t>, elements);
+mt_struct_end(metest_container_t, val, elements);
 
 // MARK: - 测试用例
 
@@ -91,4 +91,17 @@ TEST(mtjson, all)
     decode(parentJson, parentObj);
 
     ASSERT_EQ(parentObj.child.val, 3);
+
+    cout << "[mtjson][all] parentObj.child.val = " << parentObj.child.val << endl;
+
+    // 容器
+    const char *containerJson = "{\"val\":2,\"elements\":[{\"val\":3},{\"val\":3}]}";
+
+    metest_container_t containerObj;
+
+    decode(containerJson, containerObj);
+
+    ASSERT_EQ(containerObj.elements.size(), 2);
+
+    cout << "[mtjson][all] containerObj.elements.size() = " << containerObj.elements.size() << endl;
 }

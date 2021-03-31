@@ -1,5 +1,5 @@
-#ifndef __MTJSON_TYPE_H__
-#define __MTJSON_TYPE_H__
+#ifndef __MT_JSON_TYPE_H__
+#define __MT_JSON_TYPE_H__
 
 // ----------------------------------
 // Meta macro
@@ -54,18 +54,9 @@ typedef int32_t MtInt32;
 typedef int64_t MtInt64;
 typedef double MtDouble;
 typedef std::map<std::string, std::string> MtMap;
-typedef std::vector<int32_t> MtArray;
+template <class T>
+using MtArray = std::vector<T>;
 typedef std::string MtString;
-
-// #define MtBoolDefault true
-// #define MtInt8Default 0
-// #define MtInt16Default 0
-// #define MtInt32Default 0
-// #define MtInt64Default 0
-// #define MtDoubleDefault 0.0f
-// #define MtMapDefault ({})
-// #define MtArrayDefault ({})
-// #define MtStringDefault ""
 
 inline bool mt_needinit(MtString type)
 {
@@ -124,6 +115,24 @@ private:                                               \
 #define mt_field_init_10(a, ...)                                              \
     mt_macro_concat(mt_field_init_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
         mt_field_init_1(a)
+#define mt_field_init_11(a, ...)                                              \
+    mt_macro_concat(mt_field_init_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_field_init_1(a)
+#define mt_field_init_12(a, ...)                                              \
+    mt_macro_concat(mt_field_init_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_field_init_1(a)
+#define mt_field_init_13(a, ...)                                              \
+    mt_macro_concat(mt_field_init_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_field_init_1(a)
+#define mt_field_init_14(a, ...)                                              \
+    mt_macro_concat(mt_field_init_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_field_init_1(a)
+#define mt_field_init_15(a, ...)                                              \
+    mt_macro_concat(mt_field_init_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_field_init_1(a)
+#define mt_field_init_16(a, ...)                                              \
+    mt_macro_concat(mt_field_init_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_field_init_1(a)
 
 #define mt_field_init(...) \
     mt_macro_concat(mt_field_init_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__)
@@ -158,6 +167,24 @@ private:                                               \
     mt_macro_concat(mt_def_field_encode_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
         mt_def_field_encode_1(a)
 #define mt_def_field_encode_10(a, ...)                                              \
+    mt_macro_concat(mt_def_field_encode_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_encode_1(a)
+#define mt_def_field_encode_11(a, ...)                                              \
+    mt_macro_concat(mt_def_field_encode_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_encode_1(a)
+#define mt_def_field_encode_12(a, ...)                                              \
+    mt_macro_concat(mt_def_field_encode_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_encode_1(a)
+#define mt_def_field_encode_13(a, ...)                                              \
+    mt_macro_concat(mt_def_field_encode_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_encode_1(a)
+#define mt_def_field_encode_14(a, ...)                                              \
+    mt_macro_concat(mt_def_field_encode_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_encode_1(a)
+#define mt_def_field_encode_15(a, ...)                                              \
+    mt_macro_concat(mt_def_field_encode_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_encode_1(a)
+#define mt_def_field_encode_16(a, ...)                                              \
     mt_macro_concat(mt_def_field_encode_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
         mt_def_field_encode_1(a)
 
@@ -196,6 +223,24 @@ private:                                               \
 #define mt_def_field_decode_10(a, ...)                                              \
     mt_macro_concat(mt_def_field_decode_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
         mt_def_field_decode_1(a)
+#define mt_def_field_decode_11(a, ...)                                              \
+    mt_macro_concat(mt_def_field_decode_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_decode_1(a)
+#define mt_def_field_decode_12(a, ...)                                              \
+    mt_macro_concat(mt_def_field_decode_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_decode_1(a)
+#define mt_def_field_decode_13(a, ...)                                              \
+    mt_macro_concat(mt_def_field_decode_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_decode_1(a)
+#define mt_def_field_decode_14(a, ...)                                              \
+    mt_macro_concat(mt_def_field_decode_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_decode_1(a)
+#define mt_def_field_decode_15(a, ...)                                              \
+    mt_macro_concat(mt_def_field_decode_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_decode_1(a)
+#define mt_def_field_decode_16(a, ...)                                              \
+    mt_macro_concat(mt_def_field_decode_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_decode_1(a)
 
 #define mt_def_field_decode(...) \
     mt_macro_concat(mt_def_field_decode_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__)
@@ -229,6 +274,24 @@ private:                                               \
     mt_macro_concat(mt_def_field_assign_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
         mt_def_field_assign_1(a)
 #define mt_def_field_assign_10(a, ...)                                              \
+    mt_macro_concat(mt_def_field_assign_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_assign_1(a)
+#define mt_def_field_assign_11(a, ...)                                              \
+    mt_macro_concat(mt_def_field_assign_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_assign_1(a)
+#define mt_def_field_assign_12(a, ...)                                              \
+    mt_macro_concat(mt_def_field_assign_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_assign_1(a)
+#define mt_def_field_assign_13(a, ...)                                              \
+    mt_macro_concat(mt_def_field_assign_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_assign_1(a)
+#define mt_def_field_assign_14(a, ...)                                              \
+    mt_macro_concat(mt_def_field_assign_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_assign_1(a)
+#define mt_def_field_assign_15(a, ...)                                              \
+    mt_macro_concat(mt_def_field_assign_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_assign_1(a)
+#define mt_def_field_assign_16(a, ...)                                              \
     mt_macro_concat(mt_def_field_assign_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
         mt_def_field_assign_1(a)
 
@@ -267,6 +330,24 @@ private:                                               \
     mt_macro_concat(mt_def_field_equal_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
         mt_def_field_equal_1(a)
 #define mt_def_field_equal_10(a, ...)                                              \
+    mt_macro_concat(mt_def_field_equal_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_equal_1(a)
+#define mt_def_field_equal_11(a, ...)                                              \
+    mt_macro_concat(mt_def_field_equal_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_equal_1(a)
+#define mt_def_field_equal_12(a, ...)                                              \
+    mt_macro_concat(mt_def_field_equal_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_equal_1(a)
+#define mt_def_field_equal_13(a, ...)                                              \
+    mt_macro_concat(mt_def_field_equal_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_equal_1(a)
+#define mt_def_field_equal_14(a, ...)                                              \
+    mt_macro_concat(mt_def_field_equal_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_equal_1(a)
+#define mt_def_field_equal_15(a, ...)                                              \
+    mt_macro_concat(mt_def_field_equal_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
+        mt_def_field_equal_1(a)
+#define mt_def_field_equal_16(a, ...)                                              \
     mt_macro_concat(mt_def_field_equal_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
         mt_def_field_equal_1(a)
 
@@ -317,4 +398,4 @@ public:                                                                         
         return obj_val.decode(json_val);                                                              \
     }
 
-#endif // __MTJSON_TYPE_H__
+#endif // __MT_JSON_TYPE_H__

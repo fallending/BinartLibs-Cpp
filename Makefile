@@ -26,20 +26,22 @@ version:
 	cmake --version
 
 clean:
-	rm -rf _build
+	rm -rf _builds
+
+gen:
+	rm -rf _exports && mkdir _exports && cd _exports && cmake -G Xcode -H. -B_build -DCMAKE_TOOLCHAIN_FILE=~/.cmake_modules/vcpkg/scripts/buildsystems/vcpkg.cmake ..
 
 rebuild:
-	make clean && mkdir _build && cd _build && cmake .. -DCMAKE_TOOLCHAIN_FILE=~/.cmake_modules/vcpkg/scripts/buildsystems/vcpkg.cmake && cmake --build .
+	make clean && mkdir _builds && cd _builds && cmake .. -G Ninja -DCMAKE_TOOLCHAIN_FILE=~/.cmake_modules/vcpkg/scripts/buildsystems/vcpkg.cmake && cmake --build .
 
 build:
-	cd _build && ninja
+	cd _builds && ninja
 
 test:
-	# cd build && ctest .
-	./_build/bin/test_lib_bitbuffer
-	./_build/bin/test_mtjson
-	./_build/bin/test_timber
-	./_build/bin/test_simple
+	./_builds/bin/test_lib_bitbuffer
+	./_builds/bin/test_mtjson
+	./_builds/bin/test_timber
+	./_builds/bin/test_simple
 
 ##############################################
 
