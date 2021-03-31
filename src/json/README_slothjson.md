@@ -1,12 +1,3 @@
-# slothjson - 为懒人打造的json对象序列化神器 #
-![slothjson logo](res/logo.png)
-
-`slothjson` 是基于 [`rapidjson`](https://github.com/miloyip/rapidjson) 之上打造的一款 **全自动化** 的对象序列化神器。  
-这玩意儿可以帮助你少写很多代码，少加很多班 ^_^
-
-以下是 `slothjson` 的设计图：
-![design](res/design.png)
-
 ## slothjson是什么？ ##
 
 你是否想要这样一个基础组件，它可以用一行代码完成 **任意类型** 的 `C++` 对象到 `json` 的序列化/反序列化操作？就像这样：
@@ -157,15 +148,6 @@ OS X     | Mac OS X EI Capitan, GCC 4.2.1, Apple LLVM version 7.3.0
 * [设计方法](doc/zh/design.md)
 * [数据描述文件](doc/zh/schema.md)
 * [FAQ](doc/zh/FAQ.md)
-
-## License ##
-
-`slothjson` is licensed under [New BSD License](https://opensource.org/licenses/BSD-3-Clause), a very flexible license to use.
-
-## 作者 ##
-
-* 程卓 (jobs, yao050421103@163.com)  
-
 ## 更多 ##
 
 - Yet Another Schema - [yas](https://github.com/jobs-github/yas)  

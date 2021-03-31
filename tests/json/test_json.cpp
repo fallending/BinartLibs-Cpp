@@ -20,7 +20,7 @@
 
 #include <gtest/gtest.h>
 #include <iostream>
-#include "mtjson/mtjson.h"
+#include <json/json.h>
 
 int main(int argc, char **argv)
 {
@@ -34,7 +34,7 @@ int main(int argc, char **argv)
 using namespace std;
 using namespace slothjson;
 
-// MARK: -
+// MARK: - 普通示例
 mt_struct_begin(metest_object_t);
 mt_field(bool, isStarted);
 mt_field(int8_t, mak);
@@ -46,6 +46,18 @@ mt_field(MtString, str_val);
 mt_field(MtArray, vec);
 mt_field(MtMap, dict);
 mt_struct_end(metest_object_t, isStarted, mak, th, len, length, amount, str_val, vec, dict);
+
+// MARK: - 嵌套示例
+mt_struct_begin(metest_child_t);
+mt_field(int8_t, val);
+mt_struct_end(metest_child_t, val);
+
+mt_struct_begin(metest_parent_t);
+mt_field(int8_t, val);
+mt_field(metest_child_t, child);
+mt_struct_end(metest_parent_t, val, child);
+
+// MARK: - 容器示例
 
 // MARK: - 测试用例
 
@@ -69,4 +81,13 @@ TEST(mtjson, all)
 
     // ASSERT_EQ(outStr, inStr);
     cout << "[mtjson][all] outStr = " << outStr << endl;
+
+    // ------ 嵌套
+    const char *parentJson = "{\"val\":2,\"child\":{\"val\":3}}";
+
+    metest_parent_t parentObj;
+
+    decode(parentJson, parentObj);
+
+    ASSERT_EQ(parentObj.child.val, 3);
 }
