@@ -32,7 +32,8 @@ int main(int argc, char **argv)
 // MARK: - 测试对象自定义
 
 using namespace std;
-using namespace slothjson;
+using namespace mt;
+using namespace json;
 
 // MARK: - 普通示例
 mt_struct_begin(metest_object_t);

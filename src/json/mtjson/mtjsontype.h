@@ -1,14 +1,3 @@
-/*
- * @Author: your name
- * @Date: 2021-03-02 15:00:50
- * @LastEditTime: 2021-03-16 18:59:53
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: /slothjson/include/jsontypedefs.h
- */
-
-#include "slothjson.h"
-
 #ifndef __MTJSON_TYPE_H__
 #define __MTJSON_TYPE_H__
 
@@ -141,8 +130,8 @@ private:                                               \
 
 // Field encode
 
-#define mt_def_field_encode_1(a)                                         \
-    if (!__skip_##a && !slothjson::encode_field(a, #a, alloc, json_val)) \
+#define mt_def_field_encode_1(a)                                        \
+    if (!__skip_##a && !mt::json::encode_field(a, #a, alloc, json_val)) \
         break;
 #define mt_def_field_encode_2(a, ...)                                               \
     mt_macro_concat(mt_def_field_encode_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
@@ -177,8 +166,8 @@ private:                                               \
 
 // Field decode
 
-#define mt_def_field_decode_1(a)                              \
-    if (!slothjson::decode_field(json_val, #a, a, __has_##a)) \
+#define mt_def_field_decode_1(a)                             \
+    if (!mt::json::decode_field(json_val, #a, a, __has_##a)) \
         break;
 #define mt_def_field_decode_2(a, ...)                                               \
     mt_macro_concat(mt_def_field_decode_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__) \
@@ -288,44 +277,44 @@ private:                                               \
     struct name               \
     {
 
-#define mt_struct_end(name, ...)                                                                       \
-public:                                                                                                \
-    name(){                                                                                            \
-        mt_field_init(__VA_ARGS__)} name &                                                             \
-    operator=(const name &obj_val)                                                                     \
-    {                                                                                                  \
-        mt_def_field_assign(__VA_ARGS__) return *this;                                                 \
-    }                                                                                                  \
-    bool operator==(const name &obj_val) const                                                         \
-    {                                                                                                  \
-        mt_def_field_equal(__VA_ARGS__) return true;                                                   \
-    }                                                                                                  \
-    bool encode(slothjson::allocator_t &alloc, rapidjson::Value &json_val) const                       \
-    {                                                                                                  \
-        do                                                                                             \
-        {                                                                                              \
-            json_val.SetObject();                                                                      \
-            mt_def_field_encode(__VA_ARGS__) return true;                                              \
-        } while (0);                                                                                   \
-        return false;                                                                                  \
-    }                                                                                                  \
-    bool decode(const rapidjson::Value &json_val)                                                      \
-    {                                                                                                  \
-        do                                                                                             \
-        {                                                                                              \
-            mt_def_field_decode(__VA_ARGS__) return true;                                              \
-        } while (0);                                                                                   \
-        return false;                                                                                  \
-    }                                                                                                  \
-    }                                                                                                  \
-    ;                                                                                                  \
-    static bool encode(const name &obj_val, slothjson::allocator_t &alloc, rapidjson::Value &json_val) \
-    {                                                                                                  \
-        return obj_val.encode(alloc, json_val);                                                        \
-    }                                                                                                  \
-    static bool decode(const rapidjson::Value &json_val, name &obj_val)                                \
-    {                                                                                                  \
-        return obj_val.decode(json_val);                                                               \
+#define mt_struct_end(name, ...)                                                                      \
+public:                                                                                               \
+    name(){                                                                                           \
+        mt_field_init(__VA_ARGS__)} name &                                                            \
+    operator=(const name &obj_val)                                                                    \
+    {                                                                                                 \
+        mt_def_field_assign(__VA_ARGS__) return *this;                                                \
+    }                                                                                                 \
+    bool operator==(const name &obj_val) const                                                        \
+    {                                                                                                 \
+        mt_def_field_equal(__VA_ARGS__) return true;                                                  \
+    }                                                                                                 \
+    bool encode(mt::json::allocator_t &alloc, rapidjson::Value &json_val) const                       \
+    {                                                                                                 \
+        do                                                                                            \
+        {                                                                                             \
+            json_val.SetObject();                                                                     \
+            mt_def_field_encode(__VA_ARGS__) return true;                                             \
+        } while (0);                                                                                  \
+        return false;                                                                                 \
+    }                                                                                                 \
+    bool decode(const rapidjson::Value &json_val)                                                     \
+    {                                                                                                 \
+        do                                                                                            \
+        {                                                                                             \
+            mt_def_field_decode(__VA_ARGS__) return true;                                             \
+        } while (0);                                                                                  \
+        return false;                                                                                 \
+    }                                                                                                 \
+    }                                                                                                 \
+    ;                                                                                                 \
+    static bool encode(const name &obj_val, mt::json::allocator_t &alloc, rapidjson::Value &json_val) \
+    {                                                                                                 \
+        return obj_val.encode(alloc, json_val);                                                       \
+    }                                                                                                 \
+    static bool decode(const rapidjson::Value &json_val, name &obj_val)                               \
+    {                                                                                                 \
+        return obj_val.decode(json_val);                                                              \
     }
 
 #endif // __MTJSON_TYPE_H__
