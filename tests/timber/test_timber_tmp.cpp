@@ -8,11 +8,12 @@
  */
 
 #include <gtest/gtest.h>
-#include "log/file_log.h"
+// #include "log/file_log.h"
 
 // int apple = 0;
 
-enum FruitType {
+enum FruitType
+{
     FruitTypeApple = 0,
 };
 
@@ -20,12 +21,14 @@ enum FruitType {
 //     return "";
 // };
 
-struct Fruit {
+struct Fruit
+{
     FruitType type;
     const char *name;
 };
 
-class FruitFactory {
+class FruitFactory
+{
     void buildFruit();
 };
 

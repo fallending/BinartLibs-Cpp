@@ -45,6 +45,18 @@ TEST(lambda, recursion) // 测试引用返回值
 
   function<void(int, int)> merge;
 
+  // 空转一次
+  try
+  {
+    /* code */
+    merge(1, 2);
+  }
+  catch (const std::exception &e)
+  {
+    std::cerr << e.what() << '\n';
+  }
+
+  // 正式测试
   merge = [&merge](int a, int b) {
     cout << a << ", " << b << endl;
 
@@ -68,5 +80,5 @@ TEST(lambda, recursion) // 测试引用返回值
   // 异步递归调用
   test_lambda_async_recursion();
 
-  sleep(10);
+  sleep(5);
 }
