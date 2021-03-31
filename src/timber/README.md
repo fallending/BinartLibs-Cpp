@@ -1,7 +1,7 @@
 <!--
  * @Author: your name
  * @Date: 2021-03-24 11:21:18
- * @LastEditTime: 2021-03-26 17:16:50
+ * @LastEditTime: 2021-03-29 18:12:04
  * @LastEditors: Please set LastEditors
  * @Description: In User Settings Edit
  * @FilePath: /mt-ccs/src/timber/README.md
@@ -21,6 +21,8 @@ https://www.google.com.hk/search?q=c%2B%2B+%E6%97%A5%E5%BF%97+%E7%BA%BF%E7%A8%8B
 http://armsword.com/2016/09/10/a-high-performace-and-thread-safe-cpp-log-lib/
 https://zhuanlan.zhihu.com/p/21477468
 
+
+http://www.cclk.cc/2017/04/17/c++/c++_mlog/
 
 - [ ] 支持 logger << val << val2 << endl
 - [ ] 支持 tag
