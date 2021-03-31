@@ -1,22 +1,15 @@
-<!--
- * @Author: your name
- * @Date: 2021-02-20 18:42:11
- * @LastEditTime: 2021-03-02 19:33:25
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: /slothjson/README.md
--->
-
 # mt_json - 为懒人打造的json对象序列化神器 #
+
 > 从 slothjson 改造而成，移除中间文件的维护，用最简洁的代码维护DTO
 
 TODO:
-1. 更丰富的类型支持
-2. 模型嵌套
-3. 字段黑名单
-4. 模型容器直接解析 std::vector<MtLoginDTO>
-5. ?????????还有什么？
-6. 默认值？？？？？比如json中有几个字段没有，如何告知外部？现在用的 has_<field_name>，比如 `has_isStarted()`
+1. [支持] 更丰富的类型支持
+2. [支持] 模型嵌套
+3. [支持] 字段映射
+4. [准备支持] 字段黑名单
+5. 模型容器直接解析 std::vector<MtLoginDTO>
+6. ?????????还有什么？
+7. 默认值？？？？？比如json中有几个字段没有，如何告知外部？现在用的 has_<field_name>，比如 `has_isStarted()`
 
 ## mtjson怎么用？ ##
 

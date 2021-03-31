@@ -74,11 +74,12 @@ namespace mt
         struct mt_struct_t
         {
         protected:
+            // 字段映射
             std::map<std::string, std::string> __fields_mapping;
             virtual const std::map<std::string, std::string> &get_fields_mapping() const { return __fields_mapping; };
             const char *fields_mapping(const char *init_field) const
             {
-                if (this->get_fields_mapping().count(init_field)) /* init_field 映射到 out_field */
+                if (this->get_fields_mapping().count(init_field) > 0) /* init_field 映射到 out_field */
                 {
                     try
                     {
@@ -94,6 +95,19 @@ namespace mt
                 }
                 // std::cout << "fewrtrew = " << init_field << std::endl;
                 return init_field;
+            }
+
+            // 字段黑名单
+            std::vector<std::string> __fields_blacklist;
+            virtual const std::vector<std::string> &get_fields_blacklist() const { return __fields_blacklist; };
+            bool is_field_blocked(const char *init_field) const
+            {
+                const std::vector<std::string> &blacklist = this->get_fields_blacklist();
+                if (std::count(blacklist.begin(), blacklist.end(), init_field) > 0)
+                {
+                    return true;
+                }
+                return false;
             }
 
         public:
@@ -133,6 +147,14 @@ private:                                               \
 #define mt_fields_mapping \
 private:                  \
     std::map<std::string, std::string> __fields_mapping
+
+/**
+ * @brief 字段黑名单
+ * @example mt_fields_blacklist = {"string", "val"};
+ */
+#define mt_fields_blacklist \
+private:                    \
+    std::vector<std::string> __fields_blacklist
 
 // Field init
 
