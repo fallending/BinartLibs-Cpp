@@ -113,7 +113,7 @@ test:
 ##########################################################################
 # call the Clang-Format on all source files
 format:
-	for FILE in tests/simple/*.cpp ; do echo $$FILE; clang-format -style=google -i $$FILE; done
+	for FILE in tests/simple/*.cc ; do echo $$FILE; clang-format -style=google -i $$FILE; done
 
 # // 格式化最新的commit，并直接在原文件上修改
 format-diff:

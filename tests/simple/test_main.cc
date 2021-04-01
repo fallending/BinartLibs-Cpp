@@ -9,7 +9,21 @@
 #include <gtest/gtest.h>
 
 int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
+  ::testing::InitGoogleTest(&argc, argv);
 
-    return RUN_ALL_TESTS();
+  return RUN_ALL_TESTS();
 }
+
+class WarnMe {
+ private:
+  /* data */
+  int _age;
+
+ public:
+  WarnMe(/* args */);
+  ~WarnMe();
+};
+
+WarnMe::WarnMe(/* args */) {}
+
+WarnMe::~WarnMe() {}
