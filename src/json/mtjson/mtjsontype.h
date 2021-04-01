@@ -123,6 +123,26 @@ namespace mt
 // Json struct
 // ----------------------------------
 
+/**
+ * @brief 字段映射
+ * @example mt_fields_mapping = {{"string", "val"}, {"sec", "val"}, {"trd", "val"}};
+ */
+#define mt_fields_mapping \
+private:                  \
+    std::map<std::string, std::string> __fields_mapping
+
+/**
+ * @brief 字段黑名单
+ * @example mt_fields_blacklist = {"string", "val"};
+ */
+#define mt_fields_blacklist \
+private:                    \
+    std::vector<std::string> __fields_blacklist
+
+/**
+ * @brief 字段定义
+ * 
+ */
 #define mt_field(type, field)                          \
 public:                                                \
     type field;                                        \
@@ -139,22 +159,6 @@ private:                                               \
         __has_##field = true;                          \
         __typeof_##field = #type;                      \
     }
-
-/**
- * @brief 字段映射
- * @example mt_fields_mapping = {{"string", "val"}, {"sec", "val"}, {"trd", "val"}};
- */
-#define mt_fields_mapping \
-private:                  \
-    std::map<std::string, std::string> __fields_mapping
-
-/**
- * @brief 字段黑名单
- * @example mt_fields_blacklist = {"string", "val"};
- */
-#define mt_fields_blacklist \
-private:                    \
-    std::vector<std::string> __fields_blacklist
 
 // Field init
 
@@ -425,6 +429,18 @@ private:                    \
 
 #define mt_def_field_equal(...) \
     mt_macro_concat(mt_def_field_equal_, mt_macro_count(__VA_ARGS__))(__VA_ARGS__)
+
+#define mt_json_strcut(...)                                                                                    \
+public:                                                                                                        \
+    virtual const std::map<std::string, std::string> &get_fields_mapping() const { return __fields_mapping; }; \
+    operator=(const name &obj_val)                                                                             \
+    {                                                                                                          \
+        mt_def_field_assign(__VA_ARGS__) return *this;                                                         \
+    }                                                                                                          \
+    bool operator==(const name &obj_val) const                                                                 \
+    {                                                                                                          \
+        mt_def_field_equal(__VA_ARGS__) return true;                                                           \
+    }
 
 #define mt_struct_begin(name)                  \
     struct name : public mt::json::mt_struct_t \

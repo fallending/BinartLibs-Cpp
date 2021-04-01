@@ -32,34 +32,6 @@ namespace mt
 {
   namespace json
   {
-    // bool
-    bool encode(const bool &obj_val, allocator_t &alloc, rapidjson::Value &json_val)
-    {
-      json_val.SetBool(obj_val);
-      return true;
-    }
-    bool decode(const rapidjson::Value &json_val, bool &obj_val)
-    {
-      if (json_val.IsBool())
-      {
-        obj_val = json_val.GetBool();
-        return true;
-      }
-      else if (json_val.IsInt())
-      {
-        int tmp = json_val.GetInt();
-        if (!tmp)
-        {
-          obj_val = false;
-        }
-        else
-        {
-          obj_val = true;
-        }
-        return true;
-      }
-      return false;
-    }
     // std::string
     bool encode(const std::string &obj_val, allocator_t &alloc, rapidjson::Value &json_val)
     {

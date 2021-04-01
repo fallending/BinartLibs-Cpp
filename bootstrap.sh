@@ -77,3 +77,63 @@ if [ ! -f "${vcpkg_path}" ]; then
 else
   echo "ninja installed."
 fi
+
+# ##########################
+# C++ 静态分析工具
+# cppcheck
+# http://cppcheck.sourceforge.net
+# ##########################
+cppcheck_path=/usr/local/bin/cppcheck
+if [ ! -f "${cppcheck_path}" ]; then
+  brew install cppcheck
+else
+  echo "cppcheck installed."
+fi
+
+# ##########################
+# C++ lint工具
+# cpplint
+# ##########################
+cpplint_path=./bin/cpplint.py
+if [ ! -f "${cpplint_path}" ]; then
+  # pip install cpplint
+  chmod 777 ./bin/cpplint.py
+else
+  echo "cpplint installed."
+fi
+
+# ##########################
+# C++ 性能测试工具
+# benchmark
+# https://github.com/google/benchmark
+# ##########################
+
+# ##########################
+# C++ ??
+# codacy
+# https://www.codacy.com/
+# ##########################
+
+# ##########################
+# C++ ????
+# Artistic Style
+# https://sourceforge.net/projects/astyle/
+# ##########################
+
+# ##########################
+# Clang 代码格式化, 规范代码的工具
+# clang-format
+# https://my.oschina.net/u/4369588/blog/4401497
+# https://blog.csdn.net/weixin_39609623/article/details/102080465
+# ##########################
+clangformat_path=/usr/local/bin/clang-format
+if [ ! -f "${clangformat_path}" ]; then
+  brew install clang-format
+else
+  echo "clang-format installed."
+fi
+
+# call OCLint <http://oclint.org> static analyzer
+# oclint:
+# 	oclint $(SRCS) -report-type html -enable-global-analysis -o oclint_report.html -max-priority-1=10000 -max-priority-2=10000 -max-priority-3=10000 -- -std=c++11 -Iinclude
+# 	open oclint_report.html

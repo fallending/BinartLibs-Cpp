@@ -29,41 +29,77 @@ namespace mt
 
         typedef rapidjson::Document::AllocatorType allocator_t;
 
-        bool encode(const bool &obj_val, allocator_t &alloc, rapidjson::Value &json_val);
-        bool decode(const rapidjson::Value &json_val, bool &obj_val);
+        // MARK: - bool
 
+        inline bool encode(const bool &obj_val, allocator_t &alloc, rapidjson::Value &json_val)
+        {
+            json_val.SetBool(obj_val);
+            return true;
+        };
+        inline bool decode(const rapidjson::Value &json_val, bool &obj_val)
+        {
+            if (json_val.IsBool())
+            {
+                obj_val = json_val.GetBool();
+                return true;
+            }
+            else if (json_val.IsInt())
+            {
+                int tmp = json_val.GetInt();
+                if (!tmp)
+                {
+                    obj_val = false;
+                }
+                else
+                {
+                    obj_val = true;
+                }
+                return true;
+            }
+            return false;
+        };
+
+        // MARK: - std::string
         bool encode(const std::string &obj_val, allocator_t &alloc, rapidjson::Value &json_val);
         bool decode(const rapidjson::Value &json_val, std::string &obj_val);
 
+        // MARK: - int32_t
         bool encode(const int32_t &obj_val, allocator_t &alloc, rapidjson::Value &json_val);
         bool decode(const rapidjson::Value &json_val, int32_t &obj_val);
 
+        // MARK: - uint32_t
         bool encode(const uint32_t &obj_val, allocator_t &alloc, rapidjson::Value &json_val);
         bool decode(const rapidjson::Value &json_val, uint32_t &obj_val);
 
+        // MARK: - double
         bool encode(const double &obj_val, allocator_t &alloc, rapidjson::Value &json_val);
         bool decode(const rapidjson::Value &json_val, double &obj_val);
 
+        // MARK: - int64_t
         bool encode(const int64_t &obj_val, allocator_t &alloc, rapidjson::Value &json_val);
         bool decode(const rapidjson::Value &json_val, int64_t &obj_val);
 
+        // MARK: - uint64_t
         bool encode(const uint64_t &obj_val, allocator_t &alloc, rapidjson::Value &json_val);
         bool decode(const rapidjson::Value &json_val, uint64_t &obj_val);
 
-        // as 字符
+        // MARK: - int8_t as 字符
         bool encode(const int8_t &obj_val, allocator_t &alloc, rapidjson::Value &json_val);
         bool decode(const rapidjson::Value &json_val, int8_t &obj_val);
 
-        // as 字符
+        // MARK: - uint8_t as 字符
         bool encode(const uint8_t &obj_val, allocator_t &alloc, rapidjson::Value &json_val);
         bool decode(const rapidjson::Value &json_val, uint8_t &obj_val);
 
+        // MARK: - int16_t
         bool encode(const int16_t &obj_val, allocator_t &alloc, rapidjson::Value &json_val);
         bool decode(const rapidjson::Value &json_val, int16_t &obj_val);
 
+        // MARK: - uint16_t
         bool encode(const uint16_t &obj_val, allocator_t &alloc, rapidjson::Value &json_val);
         bool decode(const rapidjson::Value &json_val, uint16_t &obj_val);
 
+        // MARK: - float
         bool encode(const float &obj_val, allocator_t &alloc, rapidjson::Value &json_val);
         bool decode(const rapidjson::Value &json_val, float &obj_val);
 
