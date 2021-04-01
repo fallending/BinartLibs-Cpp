@@ -90,17 +90,40 @@ analyze:
 	open cmake-build-clang-analyze/report/*/index.html
 
 ##########################################################################
-# lint
+# lint 代码风格检查，解决代码审查噪音
 # call cpplint <https://github.com/cpplint/cpplint>
+# https://blog.csdn.net/fengbingchun/article/details/47341765
+# http://qiushao.net/2020/03/15/c++/c++%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83%E6%A3%80%E6%9F%A5/
 ##########################################################################
 
 # the list of sources in the include folder
 SRCS=$(shell find src -type f | sort)
 
 lint:
-	bin/cpplint.py \
-		--filter=-whitespace,-legal,-readability/alt_tokens,-runtime/references,-runtime/explicit \
-		--quiet --recursive $(SRCS)
+	bin/cpplint.py --extensions=h,hpp,cc,cpp --linelength=120 $(SRCS2)
+
+# 控制输出警告的级别【1=5】： cpplint.py --verbose=3 test.cpp
+# 控制过滤置信度
+# 对于发现的每一个问题，cpplint都会给出一个位于区间[1, 5]之间的置信度评分，分数越高就代表问题越肯定，能够通过verbose选项控制输出哪些级别。例如以下。置信度评分为1、2的将不会再输出：
+# 支持对hpp的检测： cpplint.py --extensions=hpp test.cpp
+# 输出日志到文件： cpplint.py --output test.cpp 2>log.txt
+# 使用filter 过滤某些可忽略的警告： cpplint.py --filter=-whitespace test.cpp
+# 将错误按照不同类型进行统计： cpplint.py --counting=detailed test.cpp
+# 检测一行长度是否超出指定字符： cpplint.py --linelength=120 test.cpp
+# 帮助 cpplint.py --help
+# https://stackoverflow.com/questions/51582604/how-to-use-cpplint-code-style-checking-with-cmake
+
+# cpplint的缺陷！！！不太行啊
+# 我们只需要参考现有的规则添加即可。基本上都是对正则表达式的使用而已。也因为 cpplint 只是使用了模式匹配的方法来做检查，
+# 并没有进行语法分析，所以有很多规则没法检查。比如，命名规则等。这也是一个非常大的缺陷。不过目前也没有其他更优秀的开源工具了，就将就着用先了。
+tidy-rules:
+	clang-tidy -list-checks
+
+# call Clang-Tidy <https://clang.llvm.org/extra/clang-tidy/>
+SRCS2=$(shell find src/timber -type f | sort)
+tidy:
+	# clang-tidy $(SRCS2) -- -extra-arg=-std=c++14
+	clang-tidy tests/simple/test_main.cc --
 
 test:
 	./_builds/bin/test_lib_bitbuffer

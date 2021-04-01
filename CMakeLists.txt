@@ -8,6 +8,7 @@ endif (POLICY CMP0048)
 #################
 # 选项卡
 option (FORCE_COLORED_OUTPUT "Always produce ANSI-colored output (GNU/Clang only)." ON)
+# set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # 判断cmake的运行平台
 message(STATUS "###################################")

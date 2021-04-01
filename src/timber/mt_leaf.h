@@ -1,16 +1,10 @@
-/*
- * @Author: your name
- * @Date: 2021-03-25 18:42:34
- * @LastEditTime: 2021-03-27 18:00:42
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: /mt-ccs/src/timber/mt_leaf.h
- */
+/* 
+#Copyright (c) 2021 Sevenli. All rights reserved.
+*/
+#include <pthread.h>
+#include <unistd.h>
 
 #include "mt_type.h"
-
-#include <unistd.h>
-#include <pthread.h>
 
 #ifndef __MT_LEAF_H__
 #define __MT_LEAF_H__
@@ -27,6 +21,9 @@ namespace timber
      */
     typedef struct Leaf
     {
+    private:
+        int _ver;
+
     public:
         LogPriority p;
         std::string tag;  // 标记
@@ -52,12 +49,8 @@ namespace timber
             this->pid = getProcessID();
 #endif // __MT_TIMBER_PID__
         };
-        Leaf(
-            LogPriority p,
-            const std::string &tag,
-            const std::string &file,
-            const std::string &func,
-            const std::string &line)
+        Leaf(LogPriority p, const std::string &tag, const std::string &file,
+             const std::string &func, const std::string &line)
         {
             this->p = p;
             this->tag = tag;
@@ -77,13 +70,16 @@ namespace timber
         {
             std::stringstream ss;
             ss << "Leaf(";
-            ss << "tag=" << this->tag << ",ts=" << this->ts << ",file=" << this->file << ",func=" << this->func << ",line=" << this->line << ",tid=" << this->tid;
+            ss << "tag=" << this->tag << ",ts=" << this->ts << ",file=" << this->file
+               << ",func=" << this->func << ",line=" << this->line
+               << ",tid=" << this->tid;
             ss << ")";
 
             return ss.str();
         }
 
-        // [timestamp]               [threadid]   [priority] [tag]   [file:line]                                 [func] [msg]
+        // [timestamp]               [threadid]   [priority] [tag]   [file:line]
+        // [func] [msg]
         const std::string toLoggingPrefix()
         {
             std::stringstream ss;
@@ -230,7 +226,12 @@ namespace timber
             return cpath;
         }
     }
-    inline LeafPtr create_leaf(LogPriority p, const std::string &tag, const std::string &file, const std::string &func, const std::string &line) { return std::make_shared<Leaf>(p, tag, file, func, line); };
+    inline LeafPtr create_leaf(LogPriority p, const std::string &tag,
+                               const std::string &file, const std::string &func,
+                               const std::string &line)
+    {
+        return std::make_shared<Leaf>(p, tag, file, func, line);
+    };
     inline LeafPtr create_leaf(LogPriority p) { return std::make_shared<Leaf>(p); };
     inline LeafPtr create_leaf() { return std::make_shared<Leaf>(); };
 
@@ -239,7 +240,8 @@ namespace timber
     //  * @param {*}
     //  * @return {*}
     //  */
-    // inline LeafPtr make_leaf(const std::string &tag, const std::string &file, const std::string &func, const std::string &line) {
+    // inline LeafPtr make_leaf(const std::string &tag, const std::string &file,
+    // const std::string &func, const std::string &line) {
     //     LeafPtr leaf = create_leaf(tag, file, func, file);
 
     //     return leaf;

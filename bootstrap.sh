@@ -91,16 +91,11 @@ else
 fi
 
 # ##########################
-# C++ lint工具
+# C++ lint工具 (只是个正则工具，不构建语法树，能力有限)
 # cpplint
 # ##########################
-cpplint_path=./bin/cpplint.py
-if [ ! -f "${cpplint_path}" ]; then
-  # pip install cpplint
-  chmod 777 ./bin/cpplint.py
-else
-  echo "cpplint installed."
-fi
+cd bin && chmod a+x update-cpplint.sh && ./update-cpplint.sh && chmod a+x cpplint.py
+echo "cpplint updated."
 
 # ##########################
 # C++ 性能测试工具
@@ -133,7 +128,27 @@ else
   echo "clang-format installed."
 fi
 
+# ##########################
+# Clang 代码规范检查工具 （解析语法树，稍微厉害一些）
+# clang-tidy
+# 联合 FileCheck????LLVM 中的工具？？？
+# 下载llvm：https://releases.llvm.org/download.html
+# ##########################
+clangtidy_path=/usr/local/opt/llvm/bin/clang-tidy
+if [ ! -f "${clangtidy_path}" ]; then
+  # xcode-select --install
+  # brew install --build-from-source python@3.9
+  # brew install --build-from-source llvm
+  brew install llvm@7
+  ln -s "$(brew --prefix llvm)/bin/clang-tidy" "/usr/local/bin/clang-tidy"
+  ln -s "$(brew --prefix llvm)/share/clang/run-clang-tidy.py" "/usr/local/bin/run-clang-tidy.py"
+else
+  echo "clang-tidy installed."
+fi
+
 # call OCLint <http://oclint.org> static analyzer
 # oclint:
 # 	oclint $(SRCS) -report-type html -enable-global-analysis -o oclint_report.html -max-priority-1=10000 -max-priority-2=10000 -max-priority-3=10000 -- -std=c++11 -Iinclude
 # 	open oclint_report.html
+
+# http://bit2tib.com/2018/07/11/format-tools-for-cpp/

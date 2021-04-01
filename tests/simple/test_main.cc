@@ -8,18 +8,20 @@
  */
 #include <gtest/gtest.h>
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
   ::testing::InitGoogleTest(&argc, argv);
 
   return RUN_ALL_TESTS();
 }
 
-class WarnMe {
- private:
+class WarnMe
+{
+private:
   /* data */
   int _age;
 
- public:
+public:
   WarnMe(/* args */);
   ~WarnMe();
 };
