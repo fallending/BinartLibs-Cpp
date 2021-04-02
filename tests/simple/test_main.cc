@@ -6,16 +6,28 @@ int main(int argc, char **argv) {
     return RUN_ALL_TESTS();
 }
 
-class WarnMe {
+class WarnMeBefore {
 private:
     /* data */
-    int age;
+    int _age;
 
 public:
-    WarnMe(/* args */);
-    ~WarnMe();
+    WarnMeBefore(/* args */);
+    ~WarnMeBefore();
 };
 
-WarnMe::WarnMe(/* args */){} = default;
+WarnMeBefore::WarnMeBefore(/* args */) {}
 
-WarnMe::~WarnMe() {}
+WarnMeBefore::~WarnMeBefore() {}
+
+// 修改后：
+
+class WarnMeAfter {
+private:
+    /* data */
+    int age_ = 1;
+
+public:
+    WarnMeAfter(/* args */) = default;
+    ~WarnMeAfter() = default;
+};

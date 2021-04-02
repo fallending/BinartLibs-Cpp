@@ -28,344 +28,274 @@
 // }
 
 // impl
-namespace mt
-{
-  namespace json
-  {
-    // std::string
-    bool encode(const std::string &obj_val, allocator_t &alloc, rapidjson::Value &json_val)
-    {
-      json_val.SetString(rapidjson::StringRef(obj_val.c_str()));
-      return true;
-    }
-    bool decode(const rapidjson::Value &json_val, std::string &obj_val)
-    {
-      if (json_val.IsString())
-      {
+namespace mt {
+namespace json {
+// std::string
+bool encode(const std::string &obj_val, allocator_t &alloc,
+            rapidjson::Value &json_val) {
+    json_val.SetString(rapidjson::StringRef(obj_val.c_str()));
+    return true;
+}
+bool decode(const rapidjson::Value &json_val, std::string &obj_val) {
+    if (json_val.IsString()) {
         obj_val = json_val.GetString();
         return true;
-      }
-      return false;
     }
-    // int32_t
-    bool encode(const int32_t &obj_val, allocator_t &alloc, rapidjson::Value &json_val)
-    {
-      json_val.SetInt(obj_val);
-      return true;
-    }
-    bool decode(const rapidjson::Value &json_val, int32_t &obj_val)
-    {
-      if (json_val.IsInt())
-      {
+    return false;
+}
+// int32_t
+bool encode(const int32_t &obj_val, allocator_t &alloc,
+            rapidjson::Value &json_val) {
+    json_val.SetInt(obj_val);
+    return true;
+}
+bool decode(const rapidjson::Value &json_val, int32_t &obj_val) {
+    if (json_val.IsInt()) {
         obj_val = json_val.GetInt();
         return true;
-      }
-      return false;
     }
-    // uint32_t
-    bool encode(const uint32_t &obj_val, allocator_t &alloc, rapidjson::Value &json_val)
-    {
-      json_val.SetUint(obj_val);
-      return true;
-    }
-    bool decode(const rapidjson::Value &json_val, uint32_t &obj_val)
-    {
-      if (json_val.IsInt())
-      {
+    return false;
+}
+// uint32_t
+bool encode(const uint32_t &obj_val, allocator_t &alloc,
+            rapidjson::Value &json_val) {
+    json_val.SetUint(obj_val);
+    return true;
+}
+bool decode(const rapidjson::Value &json_val, uint32_t &obj_val) {
+    bool ret_val = false;
+    if (json_val.IsInt()) {
         obj_val = json_val.GetInt();
-        return true;
-      }
-      else if (json_val.IsUint())
-      {
+        ret_val = true;
+    } else if (json_val.IsUint()) {
         obj_val = json_val.GetUint();
-        return true;
-      }
-      return false;
+        ret_val = true;
     }
-    // double
-    bool encode(const double &obj_val, allocator_t &alloc, rapidjson::Value &json_val)
-    {
-      json_val.SetDouble(obj_val);
-      return true;
-    }
-    bool decode(const rapidjson::Value &json_val, double &obj_val)
-    {
-      if (json_val.IsNumber())
-      {
+    return ret_val;
+}
+// double
+bool encode(const double &obj_val, allocator_t &alloc,
+            rapidjson::Value &json_val) {
+    json_val.SetDouble(obj_val);
+    return true;
+}
+bool decode(const rapidjson::Value &json_val, double &obj_val) {
+    if (json_val.IsNumber()) {
         obj_val = json_val.GetDouble();
         return true;
-      }
-      return false;
     }
+    return false;
+}
 
-    // int64_t & uint64_t
-    bool encode(const int64_t &obj_val, allocator_t &alloc, rapidjson::Value &json_val)
-    {
-      json_val.SetInt64(obj_val);
-      return true;
-    }
-    bool decode(const rapidjson::Value &json_val, int64_t &obj_val)
-    {
-      if (json_val.IsInt64())
-      {
+// int64_t & uint64_t
+bool encode(const int64_t &obj_val, allocator_t &alloc,
+            rapidjson::Value &json_val) {
+    json_val.SetInt64(obj_val);
+    return true;
+}
+bool decode(const rapidjson::Value &json_val, int64_t &obj_val) {
+    bool ret_val = false;
+    if (json_val.IsInt64()) {
         obj_val = json_val.GetInt64();
-        return true;
-      }
-      else if (json_val.IsInt())
-      {
+        ret_val = true;
+    } else if (json_val.IsInt()) {
         obj_val = json_val.GetInt();
-        return true;
-      }
-      else if (json_val.IsUint())
-      {
+        ret_val = true;
+    } else if (json_val.IsUint()) {
         obj_val = json_val.GetUint();
-        return true;
-      }
-      return false;
+        ret_val = true;
     }
-    bool encode(const uint64_t &obj_val, allocator_t &alloc, rapidjson::Value &json_val)
-    {
-      json_val.SetUint64(obj_val);
-      return true;
-    }
-    bool decode(const rapidjson::Value &json_val, uint64_t &obj_val)
-    {
-      if (json_val.IsUint64())
-      {
+    return ret_val;
+}
+bool encode(const uint64_t &obj_val, allocator_t &alloc,
+            rapidjson::Value &json_val) {
+    json_val.SetUint64(obj_val);
+    return true;
+}
+bool decode(const rapidjson::Value &json_val, uint64_t &obj_val) {
+    bool ret_val = false;
+    if (json_val.IsUint64()) {
         obj_val = json_val.GetUint64();
-        return true;
-      }
-      else if (json_val.IsInt())
-      {
+        ret_val = true;
+    } else if (json_val.IsInt()) {
         obj_val = json_val.GetInt();
-        return true;
-      }
-      else if (json_val.IsUint())
-      {
+        ret_val = true;
+    } else if (json_val.IsUint()) {
         obj_val = json_val.GetUint();
-        return true;
-      }
-      return false;
+        ret_val = true;
     }
-  }
+    return ret_val;
+}
+}  // namespace json
 
-  namespace json
-  {
-    // int8_t & uint8_t
-    bool encode(const int8_t &obj_val, allocator_t &alloc, rapidjson::Value &json_val)
-    {
-      int32_t tmp_obj_val = static_cast<int32_t>(obj_val);
-      return encode(tmp_obj_val, alloc, json_val);
-    }
-    bool decode(const rapidjson::Value &json_val, int8_t &obj_val)
-    {
-      int32_t tmp_obj_val = 0;
-      if (!decode(json_val, tmp_obj_val))
-      {
+namespace json {
+// int8_t & uint8_t
+bool encode(const int8_t &obj_val, allocator_t &alloc,
+            rapidjson::Value &json_val) {
+    int32_t tmp_obj_val = static_cast<int32_t>(obj_val);
+    return encode(tmp_obj_val, alloc, json_val);
+}
+bool decode(const rapidjson::Value &json_val, int8_t &obj_val) {
+    int32_t tmp_obj_val = 0;
+    if (!decode(json_val, tmp_obj_val)) {
         return false;
-      }
-      obj_val = static_cast<int8_t>(tmp_obj_val);
-      return true;
     }
+    obj_val = static_cast<int8_t>(tmp_obj_val);
+    return true;
+}
 
-    bool encode(const uint8_t &obj_val, allocator_t &alloc, rapidjson::Value &json_val)
-    {
-      uint32_t tmp_obj_val = static_cast<uint32_t>(obj_val);
-      return encode(tmp_obj_val, alloc, json_val);
-    }
-    bool decode(const rapidjson::Value &json_val, uint8_t &obj_val)
-    {
-      uint32_t tmp_obj_val = 0;
-      if (!decode(json_val, tmp_obj_val))
-      {
+bool encode(const uint8_t &obj_val, allocator_t &alloc,
+            rapidjson::Value &json_val) {
+    uint32_t tmp_obj_val = static_cast<uint32_t>(obj_val);
+    return encode(tmp_obj_val, alloc, json_val);
+}
+bool decode(const rapidjson::Value &json_val, uint8_t &obj_val) {
+    uint32_t tmp_obj_val = 0;
+    if (!decode(json_val, tmp_obj_val)) {
         return false;
-      }
-      obj_val = static_cast<uint8_t>(tmp_obj_val);
-      return true;
     }
-    // int16_t & uint16_t
-    bool encode(const int16_t &obj_val, allocator_t &alloc, rapidjson::Value &json_val)
-    {
-      int32_t tmp_obj_val = static_cast<int32_t>(obj_val);
-      return encode(tmp_obj_val, alloc, json_val);
-    }
-    bool decode(const rapidjson::Value &json_val, int16_t &obj_val)
-    {
-      int32_t tmp_obj_val = 0;
-      if (!decode(json_val, tmp_obj_val))
-      {
+    obj_val = static_cast<uint8_t>(tmp_obj_val);
+    return true;
+}
+// int16_t & uint16_t
+bool encode(const int16_t &obj_val, allocator_t &alloc,
+            rapidjson::Value &json_val) {
+    int32_t tmp_obj_val = static_cast<int32_t>(obj_val);
+    return encode(tmp_obj_val, alloc, json_val);
+}
+bool decode(const rapidjson::Value &json_val, int16_t &obj_val) {
+    int32_t tmp_obj_val = 0;
+    if (!decode(json_val, tmp_obj_val)) {
         return false;
-      }
-      obj_val = static_cast<int16_t>(tmp_obj_val);
-      return true;
     }
+    obj_val = static_cast<int16_t>(tmp_obj_val);
+    return true;
+}
 
-    bool encode(const uint16_t &obj_val, allocator_t &alloc, rapidjson::Value &json_val)
-    {
-      uint32_t tmp_obj_val = static_cast<uint32_t>(obj_val);
-      return encode(tmp_obj_val, alloc, json_val);
-    }
-    bool decode(const rapidjson::Value &json_val, uint16_t &obj_val)
-    {
-      uint32_t tmp_obj_val = 0;
-      if (!decode(json_val, tmp_obj_val))
-      {
+bool encode(const uint16_t &obj_val, allocator_t &alloc,
+            rapidjson::Value &json_val) {
+    uint32_t tmp_obj_val = static_cast<uint32_t>(obj_val);
+    return encode(tmp_obj_val, alloc, json_val);
+}
+bool decode(const rapidjson::Value &json_val, uint16_t &obj_val) {
+    uint32_t tmp_obj_val = 0;
+    if (!decode(json_val, tmp_obj_val)) {
         return false;
-      }
-      obj_val = static_cast<uint16_t>(tmp_obj_val);
-      return true;
     }
+    obj_val = static_cast<uint16_t>(tmp_obj_val);
+    return true;
+}
 
-    // float
-    bool encode(const float &obj_val, allocator_t &alloc, rapidjson::Value &json_val)
-    {
-      double tmp_obj_val = obj_val;
-      return encode(tmp_obj_val, alloc, json_val);
-    }
-    bool decode(const rapidjson::Value &json_val, float &obj_val)
-    {
-      double tmp_obj_val = 0;
-      if (!decode(json_val, tmp_obj_val))
-      {
+// float
+bool encode(const float &obj_val, allocator_t &alloc,
+            rapidjson::Value &json_val) {
+    double tmp_obj_val = obj_val;
+    return encode(tmp_obj_val, alloc, json_val);
+}
+bool decode(const rapidjson::Value &json_val, float &obj_val) {
+    double tmp_obj_val = 0;
+    if (!decode(json_val, tmp_obj_val)) {
         return false;
-      }
-      obj_val = static_cast<float>(tmp_obj_val);
-      return true;
     }
+    obj_val = static_cast<float>(tmp_obj_val);
+    return true;
+}
 
-  } // json
+}  // namespace json
 
-  namespace json
-  {
-    template <typename src_t, typename dst_t>
-    bool __convert(const src_t &src, dst_t &dst)
-    {
-      if (src.IsBool())
-      {
+namespace json {
+template <typename src_t, typename dst_t>
+bool __convert(const src_t &src, dst_t &dst) {
+    if (src.IsBool()) {
         dst.SetBool(src.GetBool());
-      }
-      else if (src.IsInt())
-      {
+    } else if (src.IsInt()) {
         dst.SetInt(src.GetInt());
-      }
-      else if (src.IsUint())
-      {
+    } else if (src.IsUint()) {
         dst.SetUint(src.GetUint());
-      }
-      else if (src.IsInt64())
-      {
+    } else if (src.IsInt64()) {
         dst.SetInt64(src.GetInt64());
-      }
-      else if (src.IsUint64())
-      {
+    } else if (src.IsUint64()) {
         dst.SetUint64(src.GetUint64());
-      }
-      else if (src.IsDouble())
-      {
+    } else if (src.IsDouble()) {
         dst.SetDouble(src.GetDouble());
-      }
-      else if (src.IsString())
-      {
+    } else if (src.IsString()) {
         dst.SetString(rapidjson::StringRef(src.GetString()));
-      }
-      else if (src.IsNull())
-      {
+    } else if (src.IsNull()) {
         dst.SetNull();
-      }
-      else
-      {
+    } else {
         return false;
-      }
-      return true;
     }
+    return true;
+}
 
-    bool encode_document(rapidjson::Value &src, rapidjson::Document &dst)
-    {
-      rapidjson::Document::AllocatorType &allocator = dst.GetAllocator();
-      if (src.IsArray())
-      {
+bool encode_document(rapidjson::Value &src, rapidjson::Document &dst) {
+    rapidjson::Document::AllocatorType &allocator = dst.GetAllocator();
+    if (src.IsArray()) {
         dst.SetArray();
         rapidjson::SizeType size = src.Size();
-        for (rapidjson::SizeType i = 0; i < size; ++i)
-        {
-          dst.PushBack(src[i].Move(), allocator);
+        for (rapidjson::SizeType i = 0; i < size; ++i) {
+            dst.PushBack(src[i].Move(), allocator);
         }
         return true;
-      }
-      else if (src.IsObject())
-      {
+    } else if (src.IsObject()) {
         dst.SetObject();
-        for (rapidjson::Value::MemberIterator it = src.MemberBegin(); it != src.MemberEnd(); ++it)
-        {
-          dst.AddMember(rapidjson::StringRef(it->name.GetString()), it->value.Move(), allocator);
+        for (rapidjson::Value::MemberIterator it = src.MemberBegin();
+             it != src.MemberEnd(); ++it) {
+            dst.AddMember(rapidjson::StringRef(it->name.GetString()),
+                          it->value.Move(), allocator);
         }
         return true;
-      }
-      return __convert(src, dst);
     }
-    bool decode_document(rapidjson::Document &src, rapidjson::Value &dst)
-    {
-      rapidjson::Document::AllocatorType &allocator = src.GetAllocator();
-      if (src.IsArray())
-      {
+    return __convert(src, dst);
+}
+bool decode_document(rapidjson::Document &src, rapidjson::Value &dst) {
+    rapidjson::Document::AllocatorType &allocator = src.GetAllocator();
+    if (src.IsArray()) {
         dst.SetArray();
         rapidjson::SizeType size = src.Size();
-        for (rapidjson::SizeType i = 0; i < size; ++i)
-        {
-          dst.PushBack(src[i].Move(), allocator);
+        for (rapidjson::SizeType i = 0; i < size; ++i) {
+            dst.PushBack(src[i].Move(), allocator);
         }
         return true;
-      }
-      else if (src.IsObject())
-      {
+    } else if (src.IsObject()) {
         dst.SetObject();
-        for (rapidjson::Document::MemberIterator it = src.MemberBegin(); it != src.MemberEnd(); ++it)
-        {
-          dst.AddMember(rapidjson::StringRef(it->name.GetString()), it->value.Move(), allocator);
+        for (rapidjson::Document::MemberIterator it = src.MemberBegin();
+             it != src.MemberEnd(); ++it) {
+            dst.AddMember(rapidjson::StringRef(it->name.GetString()),
+                          it->value.Move(), allocator);
         }
         return true;
-      }
-      return __convert(src, dst);
     }
+    return __convert(src, dst);
+}
 
-    char *__load(const char *path)
-    {
-      if (!path)
-      {
+char *__load(const char *path) {
+    if (!path) {
         return NULL;
-      }
-      FILE *f = fopen(path, "rb");
-      if (!f)
-      {
-        return NULL;
-      }
-      fseek(f, 0, SEEK_END);
-      long len = ftell(f);
-      fseek(f, 0, SEEK_SET);
-      char *data = (char *)malloc(len + 1);
-      fread(data, 1, len, f);
-      data[len] = '\0';
-      fclose(f);
-      return data;
     }
+    FILE *f = fopen(path, "rb");
+    if (!f) {
+        return NULL;
+    }
+    fseek(f, 0, SEEK_END);
+    long len = ftell(f);
+    fseek(f, 0, SEEK_SET);
+    char *data = (char *)malloc(len + 1);
+    fread(data, 1, len, f);
+    data[len] = '\0';
+    fclose(f);
+    return data;
+}
 
-    json_loader_t::json_loader_t(const char *path)
-    {
-      data_ = __load(path);
-    }
-    json_loader_t::~json_loader_t()
-    {
-      if (data_)
-      {
+json_loader_t::json_loader_t(const char *path) { data_ = __load(path); }
+json_loader_t::~json_loader_t() {
+    if (data_) {
         free(data_);
         data_ = NULL;
-      }
     }
-    const char *json_loader_t::c_str()
-    {
-      return data_;
-    }
-
-  }
-
 }
+const char *json_loader_t::c_str() { return data_; }
+
+}  // namespace json
+
+}  // namespace mt
