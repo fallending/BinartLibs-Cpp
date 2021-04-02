@@ -1,0 +1,1482 @@
+---
+MainSourceFile:  '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+Diagnostics:
+  - DiagnosticName:  bugprone-reserved-identifier
+    DiagnosticMessage:
+      Message:         'declaration uses identifier ''__MT_LEAF_H__'', which is a reserved identifier'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      151
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          151
+          Length:          13
+          ReplacementText: MT_LEAF_H_
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  modernize-use-using
+    DiagnosticMessage:
+      Message:         'use ''using'' instead of ''typedef'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      333
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          333
+          Length:          4561
+          ReplacementText: "using Leaf = struct Leaf\n    {\n    private:\n        int _ver;\n\n    public:\n        LogPriority p;\n        std::string tag;  // 标记\n        std::string ts;   // 时间戳\n        std::string file; // 文件名\n        std::string func; // 函数名\n        std::string line; // 文件行数\n\n#ifndef __MT_TIMBER_PID__\n        std::string pid; // 进程ID\n#endif                   // __MT_TIMBER_PID__\n\n        std::string tid; // 线程ID\n\n        Leaf(){};\n        Leaf(LogPriority p)\n        {\n            this->p = p;\n\n            this->ts = getCurTime();\n            this->tid = getThreadID();\n#ifdef __MT_TIMBER_PID__\n            this->pid = getProcessID();\n#endif // __MT_TIMBER_PID__\n        };\n        Leaf(LogPriority p, const std::string &tag, const std::string &file,\n             const std::string &func, const std::string &line)\n        {\n            this->p = p;\n            this->tag = tag;\n            this->file = file;\n            this->func = func;\n            this->line = line;\n\n            this->ts = getCurTime();\n            this->tid = getThreadID();\n#ifdef __MT_TIMBER_PID__\n            this->pid = getProcessID();\n#endif // __MT_TIMBER_PID__\n        };\n        ~Leaf(){};\n\n        const std::string toString()\n        {\n            std::stringstream ss;\n            ss << \"Leaf(\";\n            ss << \"tag=\" << this->tag << \",ts=\" << this->ts << \",file=\" << this->file\n               << \",func=\" << this->func << \",line=\" << this->line\n               << \",tid=\" << this->tid;\n            ss << \")\";\n\n            return ss.str();\n        }\n\n        // [timestamp]               [threadid]   [priority] [tag]   [file:line]\n        // [func] [msg]\n        const std::string toLoggingPrefix()\n        {\n            std::stringstream ss;\n            if (this->ts.length() > 0)\n                ss << this->ts << \" \";\n            if (this->pid.length() > 0)\n                ss << \"[\" << this->pid << \"] \";\n            if (this->tid.length() > 0)\n                ss << \"[\" << this->tid << \"] \";\n            ss << \"[\" << this->getPriority() << \"] \";\n            if (this->tag.length() > 0)\n                ss << \"[\" << this->tag << \"] \";\n            if (this->file.length() > 0)\n                ss << \"[\" << this->file << \":\" << this->line << \"] \";\n            if (this->func.length() > 0)\n                ss << \"[\" << this->func << \"] \";\n\n            return ss.str();\n        }\n\n    private:\n        std::string getCurTime()\n        {\n            time_t now = time(0);\n            struct tm tstruct;\n            char buf[80];\n            tstruct = *localtime(&now);\n            strftime(buf, sizeof(buf), \"%Y-%m-%d %X\", &tstruct);\n\n            return buf;\n        }\n\n        std::string getProcessID()\n        {\n            static __thread int __pid = 0;\n\n            if (__pid == 0)\n            {\n                __pid = getpid();\n            }\n            return std::to_string(__pid);\n        }\n\n        std::string getThreadID()\n        {\n            // int id = syscall(SYS_thread_selfid);\n            // return std::to_string(id);\n\n            // Windows : GetCurrentThreadId()\n\n            // Linux :\n            // #include <unistd.h>       // for syscall()\n            // #include <sys/syscall.h>  // for SYS_xxx definitions\n            // int id = syscall(SYS_gettid);\n\n            // Mac :\n            // #include <unistd.h>       // for syscall()\n            // #include <sys/syscall.h>  // for SYS_xxx definitions\n            // int id = syscall(SYS_thread_selfid); // for mac os x\n\n            static __thread pid_t __tid = 0;\n\n            if (__tid == 0)\n            {\n#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_12\n                uint64_t tid64;\n                pthread_threadid_np(NULL, &tid64);\n                __tid = (pid_t)tid64;\n#else\n                __tid = syscall(SYS_gettid);\n#endif\n            }\n\n            return std::to_string(__tid);\n        }\n\n        const std::string getPriority()\n        {\n            std::string priorityDesc;\n            switch (this->p)\n            {\n            case LogPriorityDebug:\n                priorityDesc = \"D\";\n                break;\n\n            case LogPriorityInfo:\n                priorityDesc = \"I\";\n                break;\n\n            case LogPriorityWarn:\n                priorityDesc = \"W\";\n                break;\n\n            case LogPriorityError:\n                priorityDesc = \"E\";\n                break;\n\n            default:\n                priorityDesc = \"S\";\n                break;\n            }\n\n            return priorityDesc;\n        }\n    }"
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-special-member-functions
+    DiagnosticMessage:
+      Message:         'class ''Leaf'' defines a non-default destructor but does not define a copy constructor, a copy assignment operator, a move constructor or a move assignment operator'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      348
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for member ''_ver'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      384
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  misc-non-private-member-variables-in-classes
+    DiagnosticMessage:
+      Message:         'member variable ''p'' has public visibility'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      423
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for member ''p'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      423
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  misc-non-private-member-variables-in-classes
+    DiagnosticMessage:
+      Message:         'member variable ''tag'' has public visibility'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      446
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for member ''tag'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      446
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  misc-non-private-member-variables-in-classes
+    DiagnosticMessage:
+      Message:         'member variable ''ts'' has public visibility'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      482
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for member ''ts'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      482
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  misc-non-private-member-variables-in-classes
+    DiagnosticMessage:
+      Message:         'member variable ''file'' has public visibility'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      521
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for member ''file'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      521
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  misc-non-private-member-variables-in-classes
+    DiagnosticMessage:
+      Message:         'member variable ''func'' has public visibility'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      560
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for member ''func'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      560
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  misc-non-private-member-variables-in-classes
+    DiagnosticMessage:
+      Message:         'member variable ''line'' has public visibility'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      599
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for member ''line'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      599
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  misc-non-private-member-variables-in-classes
+    DiagnosticMessage:
+      Message:         'member variable ''pid'' has public visibility'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      668
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for member ''pid'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      668
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  misc-non-private-member-variables-in-classes
+    DiagnosticMessage:
+      Message:         'member variable ''tid'' has public visibility'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      752
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for member ''tid'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      752
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-member-init
+    DiagnosticMessage:
+      Message:         'constructor does not initialize these fields: _ver, p'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      778
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          388
+          Length:          0
+          ReplacementText: '{}'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-use-equals-default
+    DiagnosticMessage:
+      Message:         'use ''= default'' to define a trivial default constructor'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      778
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  google-explicit-constructor
+    DiagnosticMessage:
+      Message:         single-argument constructors must be marked explicit to avoid unintentional implicit conversions
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      796
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          796
+          Length:          0
+          ReplacementText: 'explicit '
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-member-init
+    DiagnosticMessage:
+      Message:         'constructor does not initialize these fields: _ver'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      796
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          388
+          Length:          0
+          ReplacementText: '{}'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-member-init
+    DiagnosticMessage:
+      Message:         'constructor does not initialize these fields: _ver'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      1040
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          388
+          Length:          0
+          ReplacementText: '{}'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-use-equals-default
+    DiagnosticMessage:
+      Message:         'use ''= default'' to define a trivial destructor'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      1518
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-const-return-type
+    DiagnosticMessage:
+      Message:         'return type ''const std::string'' (aka ''const basic_string<char, char_traits<char>, allocator<char>>'') is ''const''-qualified at the top level, which may reduce code readability without improving const correctness'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      1538
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+    Ranges:
+      - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+        FileOffset:      1538
+        Length:          5
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for function ''toString'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      1556
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-make-member-function-const
+    DiagnosticMessage:
+      Message:         'method ''toString'' can be made const'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      1556
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          1566
+          Length:          0
+          ReplacementText: ' const'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-const-return-type
+    DiagnosticMessage:
+      Message:         'return type ''const std::string'' (aka ''const basic_string<char, char_traits<char>, allocator<char>>'') is ''const''-qualified at the top level, which may reduce code readability without improving const correctness'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      2008
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+    Ranges:
+      - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+        FileOffset:      2008
+        Length:          5
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for function ''toLoggingPrefix'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      2026
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-braces-around-statements
+    DiagnosticMessage:
+      Message:         statement should be inside braces
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      2126
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          2126
+          Length:          0
+          ReplacementText: ' {'
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          2165
+          Length:          0
+          ReplacementText: "\n}"
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-braces-around-statements
+    DiagnosticMessage:
+      Message:         statement should be inside braces
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      2205
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          2205
+          Length:          0
+          ReplacementText: ' {'
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          2253
+          Length:          0
+          ReplacementText: "\n}"
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-braces-around-statements
+    DiagnosticMessage:
+      Message:         statement should be inside braces
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      2293
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          2293
+          Length:          0
+          ReplacementText: ' {'
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          2341
+          Length:          0
+          ReplacementText: "\n}"
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-braces-around-statements
+    DiagnosticMessage:
+      Message:         statement should be inside braces
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      2435
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          2435
+          Length:          0
+          ReplacementText: ' {'
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          2483
+          Length:          0
+          ReplacementText: "\n}"
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-braces-around-statements
+    DiagnosticMessage:
+      Message:         statement should be inside braces
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      2524
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          2524
+          Length:          0
+          ReplacementText: ' {'
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          2594
+          Length:          0
+          ReplacementText: "\n}"
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-braces-around-statements
+    DiagnosticMessage:
+      Message:         statement should be inside braces
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      2635
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          2635
+          Length:          0
+          ReplacementText: ' {'
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          2684
+          Length:          0
+          ReplacementText: "\n}"
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-convert-member-functions-to-static
+    DiagnosticMessage:
+      Message:         'method ''getCurTime'' can be made static'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      2759
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          2747
+          Length:          0
+          ReplacementText: 'static '
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for function ''getCurTime'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      2759
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-use-nullptr
+    DiagnosticMessage:
+      Message:         use nullptr
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      2812
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-member-init
+    DiagnosticMessage:
+      Message:         'uninitialized record type: ''tstruct'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      2828
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          2845
+          Length:          0
+          ReplacementText: '{}'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-avoid-c-arrays
+    DiagnosticMessage:
+      Message:         'do not declare C-style arrays, use std::array<> instead'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      2859
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-magic-numbers
+    DiagnosticMessage:
+      Message:         '80 is a magic number; consider replacing it with a named constant'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      2868
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-no-array-decay
+    DiagnosticMessage:
+      Message:         'do not implicitly decay an array into a pointer; consider using gsl::array_view or an explicit cast instead'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      2934
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-no-array-decay
+    DiagnosticMessage:
+      Message:         'do not implicitly decay an array into a pointer; consider using gsl::array_view or an explicit cast instead'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      2998
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-convert-member-functions-to-static
+    DiagnosticMessage:
+      Message:         'method ''getProcessID'' can be made static'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      3034
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          3022
+          Length:          0
+          ReplacementText: 'static '
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for function ''getProcessID'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      3034
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  bugprone-reserved-identifier
+    DiagnosticMessage:
+      Message:         'declaration uses identifier ''__pid'', which is a reserved identifier'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      3091
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for variable ''__pid'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      3091
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-convert-member-functions-to-static
+    DiagnosticMessage:
+      Message:         'method ''getThreadID'' can be made static'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      3266
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          3254
+          Length:          0
+          ReplacementText: 'static '
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for function ''getThreadID'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      3266
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  bugprone-reserved-identifier
+    DiagnosticMessage:
+      Message:         'declaration uses identifier ''__tid'', which is a reserved identifier'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      3877
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for variable ''__tid'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      3877
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  clang-diagnostic-error
+    DiagnosticMessage:
+      Message:         'use of undeclared identifier ''SYS_gettid'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      4149
+      Replacements:    []
+    Level:           Error
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-const-return-type
+    DiagnosticMessage:
+      Message:         'return type ''const std::string'' (aka ''const basic_string<char, char_traits<char>, allocator<char>>'') is ''const''-qualified at the top level, which may reduce code readability without improving const correctness'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      4245
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+    Ranges:
+      - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+        FileOffset:      4245
+        Length:          5
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for function ''getPriority'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      4263
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-make-member-function-const
+    DiagnosticMessage:
+      Message:         'method ''getPriority'' can be made const'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      4263
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          4276
+          Length:          0
+          ReplacementText: ' const'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for variable ''priorityDesc'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      4311
+      Replacements:    []
+    Notes:
+      - Message:         this fix will not be applied because it overlaps with another fix
+        FilePath:        ''
+        FileOffset:      0
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  modernize-use-using
+    DiagnosticMessage:
+      Message:         'use ''using'' instead of ''typedef'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      4901
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          4901
+          Length:          37
+          ReplacementText: 'using LeafPtr = std::shared_ptr<Leaf>'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for function ''LogPriorityFromShort'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      4964
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          4964
+          Length:          20
+          ReplacementText: log_priority_from_short
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-const-return-type
+    DiagnosticMessage:
+      Message:         'return type ''const std::string'' (aka ''const basic_string<char, char_traits<char>, allocator<char>>'') is ''const''-qualified at the top level, which may reduce code readability without improving const correctness'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      5440
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          5447
+          Length:          6
+          ReplacementText: ''
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+    Ranges:
+      - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+        FileOffset:      5447
+        Length:          5
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for function ''fileNameFromPath'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      5465
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          5465
+          Length:          16
+          ReplacementText: file_name_from_path
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-else-after-return
+    DiagnosticMessage:
+      Message:         'do not use ''else'' after ''return'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+      FileOffset:      5704
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          5704
+          Length:          4
+          ReplacementText: ''
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_leaf.h'
+          Offset:          5717
+          Length:          37
+          ReplacementText: "            return cpath;\n       "
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  bugprone-reserved-identifier
+    DiagnosticMessage:
+      Message:         'declaration uses identifier ''__MT_TIMBER_H__'', which is a reserved identifier'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+      FileOffset:      297
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+          Offset:          297
+          Length:          15
+          ReplacementText: MT_TIMBER_H_
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-special-member-functions
+    DiagnosticMessage:
+      Message:         'class ''Timber'' defines a non-default destructor but does not define a copy constructor, a copy assignment operator, a move constructor or a move assignment operator'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+      FileOffset:      1281
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for member ''_tag'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+      FileOffset:      1327
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+          Offset:          1327
+          Length:          4
+          ReplacementText: tag_
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+          Offset:          1439
+          Length:          4
+          ReplacementText: tag_
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  google-explicit-constructor
+    DiagnosticMessage:
+      Message:         single-argument constructors must be marked explicit to avoid unintentional implicit conversions
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+      FileOffset:      1406
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+          Offset:          1406
+          Length:          0
+          ReplacementText: 'explicit '
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-use-equals-default
+    DiagnosticMessage:
+      Message:         'use ''= default'' to define a trivial destructor'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+      FileOffset:      1462
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+          Offset:          1472
+          Length:          2
+          ReplacementText: '= default;'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-redundant-access-specifiers
+    DiagnosticMessage:
+      Message:         redundant access specifier has the same accessibility as the previous access specifier
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+      FileOffset:      1481
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+          Offset:          1481
+          Length:          7
+          ReplacementText: ''
+    Notes:
+      - Message:         previously declared here
+        FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+        FileOffset:      1390
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-convert-member-functions-to-static
+    DiagnosticMessage:
+      Message:         'method ''tagged'' can be made static'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+      FileOffset:      1618
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+          Offset:          1611
+          Length:          0
+          ReplacementText: 'static '
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-convert-member-functions-to-static
+    DiagnosticMessage:
+      Message:         'method ''plant'' can be made static'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+      FileOffset:      1715
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+          Offset:          1710
+          Length:          0
+          ReplacementText: 'static '
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  performance-unnecessary-value-param
+    DiagnosticMessage:
+      Message:         'the parameter ''tree'' is copied for each invocation but only used as a const reference; consider making it a const reference'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+      FileOffset:      1743
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+          Offset:          1721
+          Length:          0
+          ReplacementText: 'const '
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+          Offset:          1742
+          Length:          0
+          ReplacementText: '&'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-no-array-decay
+    DiagnosticMessage:
+      Message:         'do not implicitly decay an array into a pointer; consider using gsl::array_view or an explicit cast instead'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+      FileOffset:      1917
+      Replacements:    []
+    Notes:
+      - Message:         'expanded from macro ''TIMBER_LOG_FUNC_DEF'''
+        FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+        FileOffset:      791
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-use-auto
+    DiagnosticMessage:
+      Message:         use auto when declaring iterators
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+      FileOffset:      1917
+      Replacements:    []
+    Notes:
+      - Message:         'expanded from macro ''TIMBER_LOG_FUNC_DEF'''
+        FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+        FileOffset:      544
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-no-array-decay
+    DiagnosticMessage:
+      Message:         'do not implicitly decay an array into a pointer; consider using gsl::array_view or an explicit cast instead'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+      FileOffset:      1948
+      Replacements:    []
+    Notes:
+      - Message:         'expanded from macro ''TIMBER_LOG_FUNC_DEF'''
+        FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+        FileOffset:      791
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-use-auto
+    DiagnosticMessage:
+      Message:         use auto when declaring iterators
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+      FileOffset:      1948
+      Replacements:    []
+    Notes:
+      - Message:         'expanded from macro ''TIMBER_LOG_FUNC_DEF'''
+        FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+        FileOffset:      964
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-no-array-decay
+    DiagnosticMessage:
+      Message:         'do not implicitly decay an array into a pointer; consider using gsl::array_view or an explicit cast instead'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+      FileOffset:      1979
+      Replacements:    []
+    Notes:
+      - Message:         'expanded from macro ''TIMBER_LOG_FUNC_DEF'''
+        FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+        FileOffset:      791
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-use-auto
+    DiagnosticMessage:
+      Message:         use auto when declaring iterators
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+      FileOffset:      1979
+      Replacements:    []
+    Notes:
+      - Message:         'expanded from macro ''TIMBER_LOG_FUNC_DEF'''
+        FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+        FileOffset:      964
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-no-array-decay
+    DiagnosticMessage:
+      Message:         'do not implicitly decay an array into a pointer; consider using gsl::array_view or an explicit cast instead'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+      FileOffset:      2010
+      Replacements:    []
+    Notes:
+      - Message:         'expanded from macro ''TIMBER_LOG_FUNC_DEF'''
+        FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+        FileOffset:      791
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-use-auto
+    DiagnosticMessage:
+      Message:         use auto when declaring iterators
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+      FileOffset:      2010
+      Replacements:    []
+    Notes:
+      - Message:         'expanded from macro ''TIMBER_LOG_FUNC_DEF'''
+        FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+        FileOffset:      544
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  bugprone-reserved-identifier
+    DiagnosticMessage:
+      Message:         'declaration uses identifier ''__TAG__'', which is a reserved identifier'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+      FileOffset:      2073
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+          Offset:          2073
+          Length:          7
+          ReplacementText: TAG_
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber.h'
+          Offset:          2163
+          Length:          7
+          ReplacementText: TAG_
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  bugprone-reserved-identifier
+    DiagnosticMessage:
+      Message:         'declaration uses identifier ''__MT_TIMBER_BASE_H__'', which is a reserved identifier'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber_base.h'
+      FileOffset:      265
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber_base.h'
+          Offset:          265
+          Length:          20
+          ReplacementText: MT_TIMBER_BASE_H_
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-special-member-functions
+    DiagnosticMessage:
+      Message:         'class ''TimberBase'' defines a non-default destructor but does not define a copy constructor, a copy assignment operator, a move constructor or a move assignment operator'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber_base.h'
+      FileOffset:      317
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-use-equals-default
+    DiagnosticMessage:
+      Message:         'use ''= default'' to define a trivial default constructor'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber_base.h'
+      FileOffset:      386
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber_base.h'
+          Offset:          409
+          Length:          2
+          ReplacementText: '= default;'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-use-equals-default
+    DiagnosticMessage:
+      Message:         'use ''= default'' to define a trivial destructor'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber_base.h'
+      FileOffset:      421
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber_base.h'
+          Offset:          435
+          Length:          2
+          ReplacementText: '= default;'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-redundant-access-specifiers
+    DiagnosticMessage:
+      Message:         redundant access specifier has the same accessibility as the previous access specifier
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber_base.h'
+      FileOffset:      444
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber_base.h'
+          Offset:          444
+          Length:          7
+          ReplacementText: ''
+    Notes:
+      - Message:         previously declared here
+        FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_timber_base.h'
+        FileOffset:      370
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  bugprone-reserved-identifier
+    DiagnosticMessage:
+      Message:         'declaration uses identifier ''__MT_TREE_H__'', which is a reserved identifier'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      293
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          293
+          Length:          13
+          ReplacementText: MT_TREE_H_
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-special-member-functions
+    DiagnosticMessage:
+      Message:         'class ''Tree'' defines a non-default destructor but does not define a copy constructor, a copy assignment operator, a move constructor or a move assignment operator'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      511
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-use-equals-default
+    DiagnosticMessage:
+      Message:         'use ''= default'' to define a trivial default constructor'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      542
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          559
+          Length:          2
+          ReplacementText: '= default;'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-use-equals-default
+    DiagnosticMessage:
+      Message:         'use ''= default'' to define a trivial destructor'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      571
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          579
+          Length:          2
+          ReplacementText: '= default;'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-redundant-access-specifiers
+    DiagnosticMessage:
+      Message:         redundant access specifier has the same accessibility as the previous access specifier
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      588
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          588
+          Length:          7
+          ReplacementText: ''
+    Notes:
+      - Message:         previously declared here
+        FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+        FileOffset:      526
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-redundant-access-specifiers
+    DiagnosticMessage:
+      Message:         redundant access specifier has the same accessibility as the previous access specifier
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      816
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          816
+          Length:          7
+          ReplacementText: ''
+    Notes:
+      - Message:         previously declared here
+        FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+        FileOffset:      526
+        Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for function ''isLoggable'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      845
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          845
+          Length:          10
+          ReplacementText: is_loggable
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          1145
+          Length:          10
+          ReplacementText: is_loggable
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  misc-unused-parameters
+    DiagnosticMessage:
+      Message:         'parameter ''tag'' is unused'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      875
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          875
+          Length:          3
+          ReplacementText: ' /*tag*/'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  misc-unused-parameters
+    DiagnosticMessage:
+      Message:         'parameter ''priority'' is unused'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      892
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          892
+          Length:          8
+          ReplacementText: ' /*priority*/'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for function ''prepareLog'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      1052
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          464
+          Length:          10
+          ReplacementText: prepare_log
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          1052
+          Length:          10
+          ReplacementText: prepare_log
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-const-return-type
+    DiagnosticMessage:
+      Message:         'return type ''const std::string'' (aka ''const basic_string<char, char_traits<char>, allocator<char>>'') is ''const''-qualified at the top level, which may reduce code readability without improving const correctness'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      1751
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          1751
+          Length:          6
+          ReplacementText: ''
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+    Ranges:
+      - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+        FileOffset:      1751
+        Length:          5
+  - DiagnosticName:  readability-convert-member-functions-to-static
+    DiagnosticMessage:
+      Message:         'method ''getFormatString'' can be made static'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      1769
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          1751
+          Length:          0
+          ReplacementText: 'static '
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for function ''getFormatString'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      1769
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          1692
+          Length:          15
+          ReplacementText: get_format_string
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          1769
+          Length:          15
+          ReplacementText: get_format_string
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-avoid-c-arrays
+    DiagnosticMessage:
+      Message:         'do not declare C-style arrays, use std::array<> instead'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      1841
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-magic-numbers
+    DiagnosticMessage:
+      Message:         '4096 is a magic number; consider replacing it with a named constant'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      1850
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-no-array-decay
+    DiagnosticMessage:
+      Message:         'do not implicitly decay an array into a pointer; consider using gsl::array_view or an explicit cast instead'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      1876
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-no-array-decay
+    DiagnosticMessage:
+      Message:         'do not implicitly decay an array into a pointer; consider using gsl::array_view or an explicit cast instead'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      1919
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-no-array-decay
+    DiagnosticMessage:
+      Message:         'do not implicitly decay an array into a pointer; consider using gsl::array_view or an explicit cast instead'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      1968
+      Replacements:    []
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-const-return-type
+    DiagnosticMessage:
+      Message:         'return type ''const std::string'' (aka ''const basic_string<char, char_traits<char>, allocator<char>>'') is ''const''-qualified at the top level, which may reduce code readability without improving const correctness'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      2443
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          2443
+          Length:          6
+          ReplacementText: ''
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+    Ranges:
+      - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+        FileOffset:      2443
+        Length:          5
+  - DiagnosticName:  readability-convert-member-functions-to-static
+    DiagnosticMessage:
+      Message:         'method ''formatMessage'' can be made static'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      2461
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          2443
+          Length:          0
+          ReplacementText: 'static '
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for function ''formatMessage'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      2461
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          1678
+          Length:          13
+          ReplacementText: format_message
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          2461
+          Length:          13
+          ReplacementText: format_message
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  modernize-use-using
+    DiagnosticMessage:
+      Message:         'use ''using'' instead of ''typedef'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      2607
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          2607
+          Length:          37
+          ReplacementText: 'using TreePtr = std::shared_ptr<Tree>'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-use-override
+    DiagnosticMessage:
+      Message:         'prefer using ''override'' or (rarely) ''final'' instead of ''virtual'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      2716
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          2703
+          Length:          8
+          ReplacementText: ''
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          2772
+          Length:          0
+          ReplacementText: ' override'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  misc-unused-parameters
+    DiagnosticMessage:
+      Message:         'parameter ''tag'' is unused'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      2746
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          2746
+          Length:          3
+          ReplacementText: ' /*tag*/'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  misc-unused-parameters
+    DiagnosticMessage:
+      Message:         'parameter ''priority'' is unused'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      2763
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          2763
+          Length:          8
+          ReplacementText: ' /*priority*/'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  hicpp-use-override
+    DiagnosticMessage:
+      Message:         'prefer using ''override'' or (rarely) ''final'' instead of ''virtual'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      2832
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          2819
+          Length:          8
+          ReplacementText: ''
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          2909
+          Length:          0
+          ReplacementText: ' override'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  misc-unused-parameters
+    DiagnosticMessage:
+      Message:         'parameter ''tag'' is unused'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+      FileOffset:      2877
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_tree.h'
+          Offset:          2877
+          Length:          3
+          ReplacementText: ' /*tag*/'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  bugprone-reserved-identifier
+    DiagnosticMessage:
+      Message:         'declaration uses identifier ''__MT_TYPE_H__'', which is a reserved identifier'
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_type.h'
+      FileOffset:      365
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_type.h'
+          Offset:          365
+          Length:          13
+          ReplacementText: MT_TYPE_H_
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  modernize-use-using
+    DiagnosticMessage:
+      Message:         'use ''using'' instead of ''typedef'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_type.h'
+      FileOffset:      424
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_type.h'
+          Offset:          424
+          Length:          283
+          ReplacementText: "using LogPriority = enum LogPriority {\n    LogPriorityBegin = 0,\n\n    // LogPriorityVerbose      = 1, // useless\n    LogPriorityDebug = 2,\n    LogPriorityInfo = 3,\n    LogPriorityWarn = 4,\n    LogPriorityError = 5,\n    // LogPriorityAssert       = 6, // useless\n\n    LogPriorityEnd\n}"
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  bugprone-macro-parentheses
+    DiagnosticMessage:
+      Message:         macro argument should be enclosed in parentheses
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_type.h'
+      FileOffset:      742
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_type.h'
+          Offset:          742
+          Length:          0
+          ReplacementText: '('
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_type.h'
+          Offset:          743
+          Length:          0
+          ReplacementText: ')'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  bugprone-macro-parentheses
+    DiagnosticMessage:
+      Message:         macro argument should be enclosed in parentheses
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_type.h'
+      FileOffset:      766
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_type.h'
+          Offset:          766
+          Length:          0
+          ReplacementText: '('
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_type.h'
+          Offset:          767
+          Length:          0
+          ReplacementText: ')'
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+  - DiagnosticName:  readability-identifier-naming
+    DiagnosticMessage:
+      Message:         'invalid case style for variable ''TERMINAL_CONTROL'''
+      FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_type.h'
+      FileOffset:      2352
+      Replacements:
+        - FilePath:        '/Users/lilithgames/Desktop/selfs/mt-ccs/src/timber/mt_type.h'
+          Offset:          2352
+          Length:          16
+          ReplacementText: terminal_control
+    Level:           Warning
+    BuildDirectory:  '/Users/lilithgames/Desktop/selfs/mt-ccs/_builds'
+...

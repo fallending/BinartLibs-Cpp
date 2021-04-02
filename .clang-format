@@ -1,0 +1,33 @@
+
+# Complete list of style options can be found at: 
+# http://clang.llvm.org/docs/ClangFormatStyleOptions.html
+---
+BasedOnStyle: Google
+---
+Language: Cpp
+AccessModifierOffset: -4
+# AlignEscapedNewlines: DontAlign
+# AllowShortIfStatementsOnASingleLine: true
+# AllowShortLoopsOnASingleLine: true
+# BreakBeforeBraces: Custom
+# BraceWrapping:
+# AfterFunction: true
+# ColumnLimit: 0
+# ConstructorInitializerAllOnOneLineOrOnePerLine: true
+# IncludeCategories:
+# - Regex:    '^<ext/.*\.h>'
+# Priority: 2
+# - Regex:    '^<.*\.h>'
+# Priority: 1
+# - Regex:    '^<.*'
+# Priority: 2
+# - Regex:    '.*'
+# Priority: 3
+# IndentCaseLabels: true
+IndentWidth: 4
+# SortIncludes: false
+# SortUsingDeclarations: false
+# SpaceAfterCStyleCast: false
+# SpacesBeforeTrailingComments: 2
+UseTab: Never
+TabWidth: 4

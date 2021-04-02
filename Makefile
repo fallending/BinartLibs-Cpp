@@ -53,7 +53,7 @@ gen:
 	rm -rf _exports && mkdir _exports && cd _exports && cmake -G Xcode -H. -B_build -DCMAKE_TOOLCHAIN_FILE=~/.cmake_modules/vcpkg/scripts/buildsystems/vcpkg.cmake ..
 
 rebuild:
-	make clean && mkdir _builds && cd _builds && cmake .. -G Ninja -DCMAKE_TOOLCHAIN_FILE=~/.cmake_modules/vcpkg/scripts/buildsystems/vcpkg.cmake && cmake --build .
+	make clean && mkdir _builds && cd _builds && cmake .. -GNinja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_TOOLCHAIN_FILE=~/.cmake_modules/vcpkg/scripts/buildsystems/vcpkg.cmake && cmake --build .
 
 build:
 	cd _builds && ninja
@@ -75,7 +75,7 @@ checkwhat:
 
 check:
 	cppcheck --enable=all --inline-suppr --inconclusive --force --std=c++14 $(AMALGAMATED_FILE) 2> check-result.txt
-	# --error-exitcode=1
+# --error-exitcode=1
 
 COMPILER_DIR=/usr/local/opt/llvm/bin
 # call Clang Static Analyzer <https://clang-analyzer.llvm.org>
@@ -120,10 +120,17 @@ tidy-rules:
 	clang-tidy -list-checks
 
 # call Clang-Tidy <https://clang.llvm.org/extra/clang-tidy/>
-SRCS2=$(shell find src/timber -type f | sort)
+SRCS2=$(shell find src/timber -type f | sort | egrep "\.(hpp|h|cpp|cc)$\")
+src2:
+	@echo ${SRCS2}
 tidy:
-	# clang-tidy $(SRCS2) -- -extra-arg=-std=c++14
-	clang-tidy tests/simple/test_main.cc --
+# 静态检查单个可编译文件
+# clang-tidy tests/simple/test_main.cc -- 
+#	clang-tidy $(SRCS) -- -Iinclude -std=c++14
+# 静态检查整个项目
+	clang-tidy --use-color -p=_builds ${SRCS2} --export-fixes=_temp/clang-tidy-results.yml 
+	
+# 后面的--表示这个文件不在compilation database里面，可以直接单独编译
 
 test:
 	./_builds/bin/test_lib_bitbuffer

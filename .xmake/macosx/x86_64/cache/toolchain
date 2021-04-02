@@ -1,0 +1,20 @@
+{
+    xcode_arch_x86_64_plat_macosx = {
+        __global = true,
+        arch = "x86_64",
+        xcode = "/Applications/Xcode.app",
+        xcode_sdkver = "11.0",
+        target_minver = "10.15",
+        plat = "macosx"
+    },
+    ["tool_target_test-sim_macosx_x86_64_cxx"] = {
+        toolname = "clang",
+        toolchain_info = {
+            plat = "macosx",
+            cachekey = "xcode_arch_x86_64_plat_macosx",
+            arch = "x86_64",
+            name = "xcode"
+        },
+        program = "/usr/bin/xcrun -sdk macosx clang"
+    }
+}

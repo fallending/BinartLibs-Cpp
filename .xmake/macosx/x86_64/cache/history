@@ -1,0 +1,10 @@
+{
+    cmdlines = {
+        "xmake ",
+        "xmake lua /Users/lilithgames/.local/share/xmake/actions/build/statistics.lua",
+        "xmake lua /Users/lilithgames/.local/share/xmake/actions/build/cleaner.lua",
+        "xmake ",
+        "xmake ",
+        "xmake "
+    }
+}

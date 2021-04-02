@@ -36,6 +36,8 @@ function install_vcpkg() {
   # export VCPKG_HOME=/Users/seven/.cmake_modules/vcpkg/
   # export PATH=$PATH:$VCPKG_HOME
 
+  # brew install pkg-config
+
   echo "Please insert ${vcpkg_dir} to your ~/.zshrc"
   echo "Then you can install packages like : "
   echo "[获取包安装列表] vcpkg list"
@@ -83,12 +85,12 @@ fi
 # cppcheck
 # http://cppcheck.sourceforge.net
 # ##########################
-cppcheck_path=/usr/local/bin/cppcheck
-if [ ! -f "${cppcheck_path}" ]; then
-  brew install cppcheck
-else
-  echo "cppcheck installed."
-fi
+# cppcheck_path=/usr/local/bin/cppcheck
+# if [ ! -f "${cppcheck_path}" ]; then
+#   brew install cppcheck
+# else
+#   echo "cppcheck installed."
+# fi
 
 # ##########################
 # C++ lint工具 (只是个正则工具，不构建语法树，能力有限)
@@ -121,25 +123,26 @@ echo "cpplint updated."
 # https://my.oschina.net/u/4369588/blog/4401497
 # https://blog.csdn.net/weixin_39609623/article/details/102080465
 # ##########################
-clangformat_path=/usr/local/bin/clang-format
-if [ ! -f "${clangformat_path}" ]; then
-  brew install clang-format
-else
-  echo "clang-format installed."
-fi
+# clangformat_path=/usr/local/bin/clang-format
+# if [ ! -f "${clangformat_path}" ]; then
+#   brew install clang-format
+# else
+#   echo "clang-format installed."
+# fi
 
 # ##########################
 # Clang 代码规范检查工具 （解析语法树，稍微厉害一些）
 # clang-tidy
 # 联合 FileCheck????LLVM 中的工具？？？
 # 下载llvm：https://releases.llvm.org/download.html
+# vscode 插件：https://github.com/notskm/vscode-clang-tidy/issues/40
 # ##########################
 clangtidy_path=/usr/local/opt/llvm/bin/clang-tidy
 if [ ! -f "${clangtidy_path}" ]; then
   # xcode-select --install
   # brew install --build-from-source python@3.9
   # brew install --build-from-source llvm
-  brew install llvm@7
+  brew install llvm
   ln -s "$(brew --prefix llvm)/bin/clang-tidy" "/usr/local/bin/clang-tidy"
   ln -s "$(brew --prefix llvm)/share/clang/run-clang-tidy.py" "/usr/local/bin/run-clang-tidy.py"
 else
@@ -152,3 +155,20 @@ fi
 # 	open oclint_report.html
 
 # http://bit2tib.com/2018/07/11/format-tools-for-cpp/
+
+# ##########################
+# 高级 cmake 工具
+# xmake
+# https://github.com/maketea-tech/xmake
+# https://xmake.io/#/home
+# ##########################
+xmake_path=/usr/local/bin/xmake
+if [ ! -f "${xmake_path}" ]; then
+  # curl -fsSL https://xmake.io/shget.text -o install_xmake.sh
+  # chmod a+x install_xmake.sh
+  # ./install_xmake.sh
+  # rm -rf install_xmake.sh
+  brew install xmake
+else
+  echo "xmake installed."
+fi

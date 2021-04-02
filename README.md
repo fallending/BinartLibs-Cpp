@@ -3,6 +3,13 @@
 > 【规范+工具链】模块化、单元测试、例子编写、持续集成（CI自动化，拉代码后，可以全脚本化，不需要手动安装任何组件）、增量编译、交叉编译、
 
 
+TODO:
+
+- [x] clang-tidy 【lint tool + vscode plugin】已完成 https://github.com/Microsoft/clang-tools-extra/blob/master/test/clang-tidy/readability-identifier-naming.cpp
+- [ ] CodeChecker...https://github.com/Ericsson/codechecker/blob/master/docs/install_macosx.md
+- [ ] xmake 用于交叉编译 https://github.com/xmake-io/awesome-xmake
+- [ ] cmake 深耕 https://searchcode.com/file/107122485/CMakeLists.txt/
+
 ## 工具
 
 感谢：https://github.com/bast/gtest-demo

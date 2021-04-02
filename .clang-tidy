@@ -1,23 +1,48 @@
-Checks: '*,
-         -cppcoreguidelines-avoid-goto,
-         -cppcoreguidelines-avoid-magic-numbers,
-         -cppcoreguidelines-macro-usage,
-         -fuchsia-default-arguments-calls,
-         -fuchsia-default-arguments-declarations,
-         -fuchsia-overloaded-operator,
-         -google-explicit-constructor,
-         -google-runtime-references,
-         -hicpp-avoid-goto,
-         -hicpp-explicit-conversions,
-         -hicpp-no-array-decay,
-         -hicpp-uppercase-literal-suffix,
-         -llvm-header-guard,
-         -llvm-include-order,
-         -misc-non-private-member-variables-in-classes,
-         -modernize-use-trailing-return-type,
-         -readability-magic-numbers,
-         -readability-uppercase-literal-suffix'
-
+Checks: '
+  -*,
+  bugprone-*,
+  cert-,
+  clang-analyzer-
+  cppcoreguidelines-*,
+  -cppcoreguidelines-macro-usage,
+  -cppcoreguidelines-pro-type-reinterpret-cast,
+  -cppcoreguidelines-pro-type-union-access,
+  -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+  -cppcoreguidelines-pro-type-vararg,
+  llvm-,
+  -llvm-include-order,
+  google-build-using-namespace,
+  google-explicit-constructor,
+  google-global-names-in-headers,
+  google-readability-casting,
+  google-runtime-int,
+  google-runtime-operator,
+  hicpp-*,
+  -hicpp-vararg,
+  misc-*,
+  modernize-*,
+  -modernize-use-trailing-return-type,
+  -modernize-concat-nested-namespaces,
+  performance-*,
+  readability-*,
+  -readability-named-parameter'
+  
 CheckOptions:
+  - key: bugprone-argument-comment.StrictMode
+    value: 1
+  - key: bugprone-exception-escape.FunctionsThatShouldNotThrow
+    value: WinMain,SDL_main
+  - key: misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic
+    value: 1
   - key: hicpp-special-member-functions.AllowSoleDefaultDtor
     value: 1
+  - { key: readability-identifier-naming.ClassCase,     value: CamelCase  }
+  - { key: readability-identifier-naming.VariableCase,  value: lower_case }
+  - { key: readability-identifier-naming.FunctionCase,  value: lower_case }
+  - { key: readability-identifier-naming.MemberSuffix,  value: _         }
+  - { key: readability-identifier-naming.ParameterCase, value: lower_case }
+
+WarningsAsErrors:    ''
+HeaderFilterRegex:   ''
+FormatStyle:         google
+  
