@@ -75,7 +75,7 @@ struct MeTestSimplifyT
 };
 
 // MARK: - 测试map成员变量初始化
-struct TestMapInitClass : public MtStruct
+struct TestMapInitClass : public mt::json::MtStruct
 {
 private:
     /* data */

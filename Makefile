@@ -53,7 +53,7 @@ gen:
 	rm -rf _exports && mkdir _exports && cd _exports && cmake -G Xcode -H. -B_build -DCMAKE_TOOLCHAIN_FILE=~/.cmake_modules/vcpkg/scripts/buildsystems/vcpkg.cmake ..
 
 rebuild:
-	make clean && mkdir _builds && cd _builds && cmake .. -GNinja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DCMAKE_TOOLCHAIN_FILE=~/.cmake_modules/vcpkg/scripts/buildsystems/vcpkg.cmake && cmake --build .
+	make clean && mkdir _builds && cd _builds && cmake .. -GNinja -DCMAKE_TOOLCHAIN_FILE=~/.cmake_modules/vcpkg/scripts/buildsystems/vcpkg.cmake && cmake --build .
 
 build:
 	cd _builds && ninja

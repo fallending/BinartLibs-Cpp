@@ -7,7 +7,6 @@ endif (POLICY CMP0048)
 #################
 # 选项卡
 option (FORCE_COLORED_OUTPUT "Always produce ANSI-colored output (GNU/Clang only)." ON)
-# set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # 判断cmake的运行平台
 message(STATUS "###################################")
@@ -31,12 +30,6 @@ message(STATUS "CMAKE_CXX_COMPILER_ID             = ${CMAKE_CXX_COMPILER_ID}")
 message(STATUS "###################################")
 
 # 编译配置
-
-# we use this to get code coverage
-if(CMAKE_CXX_COMPILER_ID MATCHES GNU)
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
-endif()
-
 set (CMAKE_CXX_STANDARD 14)
 set (CMAKE_CXX_STANDARD_REQUIRED ON)
 set (CMAKE_CXX_EXTENSIONS ON)
@@ -45,10 +38,15 @@ set (CMAKE_BUILD_TYPE "debug")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # 导出 compiliation database，给 clang-tidy 用
 # set(CMAKE_CXX_CLANG_TIDY "clang-tidy")
 
+# we use this to get code coverage
+if(CMAKE_CXX_COMPILER_ID MATCHES GNU)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
+endif()
+
 if (CMAKE_GENERATOR STREQUAL "Ninja")
-    # Turn on colored output. https://github.com/ninja-build/ninja/wiki/FAQ
-    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=always -Wno-unused-parameter -Wno-deprecated-declarations -Wno-format")
-    set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fdiagnostics-color=always -Wno-unused-parameter -Wno-deprecated-declarations -Wno-format")
+  # Turn on colored output. https://github.com/ninja-build/ninja/wiki/FAQ
+  set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=always -Wno-unused-parameter -Wno-deprecated-declarations -Wno-format")
+  set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fdiagnostics-color=always -Wno-unused-parameter -Wno-deprecated-declarations -Wno-format")
 endif ()
 
 # 工程配置
@@ -94,7 +92,7 @@ include(GNUInstallDirs)
 include(cmake/CPM.cmake)
 # CPMAddPackage("gh:catchorg/Catch2@2.5.0")
 
-set (CMAKE_LIBRARY_PATH /Users/lilithgames/.cmake_modules/vcpkg/installed/x64-osx/debug/lib/manual-link)
+# set (CMAKE_LIBRARY_PATH /Users/lilithgames/.cmake_modules/vcpkg/installed/x64-osx/debug/lib/manual-link)
 
 # CPMAddPackage(
 #   NAME googletest
@@ -109,7 +107,7 @@ set (CMAKE_LIBRARY_PATH /Users/lilithgames/.cmake_modules/vcpkg/installed/x64-os
 # set(GTEST_LIBRARY GTest::gmock GTest::gtest GTest::gmock_main GTest::gtest_main)
 
 # 外部库依赖
-find_package(GTest REQUIRED)
+find_package(GTest MODULE REQUIRED)
 include_directories(${GTEST_INCLUDE_DIR})
 # find_package(GTest CONFIG REQUIRED)
 # target_link_libraries(main PRIVATE GTest::gmock GTest::gtest GTest::gmock_main GTest::gtest_main)
