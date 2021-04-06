@@ -7,9 +7,9 @@ TODO:
 2. [支持] 模型嵌套
 3. [支持] 字段映射
 4. [准备支持] 字段黑名单
-5. 模型容器直接解析 std::vector<MtLoginDTO>
-6. ?????????还有什么？
-7. 默认值？？？？？比如json中有几个字段没有，如何告知外部？现在用的 has_<field_name>，比如 `has_isStarted()`
+5. [准备支持] 模型容器直接解析 std::vector<MtLoginDTO>
+6. [准备支持] 默认值？？？？？比如json中有几个字段没有，如何告知外部？现在用的 has_<field_name>，比如 `has_isStarted()`
+7. [准备支持] 对象方法 string serialize(); 类方法 struct deserialize(string json);
 
 ## mtjson怎么用？ ##
 

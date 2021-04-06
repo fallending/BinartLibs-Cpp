@@ -613,7 +613,7 @@ public:                                                                   \
     {                                                                     \
         return obj_val.decode(json_val);                                  \
     }                                                                     \
-    static void mt_noop()                                                 \
+    static void mt_##name##_noop()                                        \
     {
 //
 #define mt_struct_begin(name)               \
