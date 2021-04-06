@@ -29,15 +29,25 @@ Checks: '
   -surelogic-readability-using'
   
 CheckOptions:
-  - { key: bugprone-argument-comment.StrictMode,                  value: 1 }
-  - { key: bugprone-exception-escape.FunctionsThatShouldNotThrow, value: 'WinMain,SDL_main' }
-  - { key: misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic, value: 1 }
-  - { key: hicpp-special-member-functions.AllowSoleDefaultDtor, value: 1 }
-  - { key: readability-identifier-naming.ClassCase,             value: CamelCase  }
-  - { key: readability-identifier-naming.VariableCase,          value: lower_case }
-  - { key: readability-identifier-naming.FunctionCase,          value: lower_case }
-  - { key: readability-identifier-naming.MemberSuffix,          value: _         }
-  - { key: readability-identifier-naming.ParameterCase,         value: lower_case }
+  - { key: bugprone-argument-comment.StrictMode,                                                              value: 1 }
+  - { key: bugprone-exception-escape.FunctionsThatShouldNotThrow,                                             value: 'WinMain,SDL_main' }
+
+  # Allows to completely ignore classes if all the member variables in that class have public visibility.
+  - { key: misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic,       value: 1 }
+
+  # Allows to ignore (not diagnose) all the member variables with public visibility scope.
+  - { key: misc-non-private-member-variables-in-classes.IgnorePublicMemberVariables,                          value: 0 }
+  - { key: hicpp-special-member-functions.AllowSoleDefaultDtor,                                               value: 1 }
+
+  # https://clang.llvm.org/extra/clang-tidy/checks/readability-identifier-naming.html
+  - { key: readability-identifier-naming.ClassCase,                                                           value: CamelCase  }
+  - { key: readability-identifier-naming.VariableCase,                                                        value: lower_case }
+  - { key: readability-identifier-naming.FunctionCase,                                                        value: lower_case }
+  # 类成员后缀
+  - { key: readability-identifier-naming.ClassMemberSuffix,                                                   value: _         }
+  # 私有成员后缀
+  - { key: readability-identifier-naming.PrivateMemberPrefix,                                                 value: _         }
+  - { key: readability-identifier-naming.ParameterCase,                                                       value: lower_case }
 
 WarningsAsErrors:    ''
 HeaderFilterRegex:   ''
