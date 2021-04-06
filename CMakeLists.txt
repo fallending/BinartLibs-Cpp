@@ -18,10 +18,10 @@ if (WIN32)
 elseif (APPLE)
   message(STATUS "Now is Apple systems.")
 
-  set(CMAKE_C_COMPILER /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc)
-  set(CMAKE_CXX_COMPILER /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++)
+  set (CMAKE_C_COMPILER /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc)
+  set (CMAKE_CXX_COMPILER /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++)
 
-  set(CMAKE_CXX_FLAGS -std=c++14)
+  set (CMAKE_CXX_FLAGS -std=c++14)
 elseif (UNIX)
   message(STATUS "Now is UNIX-like OS's.")
 endif ()

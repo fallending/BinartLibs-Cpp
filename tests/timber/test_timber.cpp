@@ -34,14 +34,11 @@ enum FruitType
     FruitTypeApple = 0,
 };
 
-const char *getFruitName()
-{
-    return "";
-};
+const char *getFruitName() { return ""; };
 
 struct Fruit
 {
-    FruitType type;
+    FruitType   type;
     const char *name;
 };
 
@@ -62,17 +59,23 @@ void test_print(const std::string &message)
 // MARK: - 测试用例
 
 //此宏展开后，类似于printf("123"),printf("456");
-#define TRACE_CMH_1 (printf("%s(%d)-<%s>: ", __FILE__, __LINE__, __FUNCTION__), printf)
+#define TRACE_CMH_1 \
+    (printf("%s(%d)-<%s>: ", __FILE__, __LINE__, __FUNCTION__), printf)
 
 //此宏展开后，类似于printf("%d""%d", 1, 2);
 #define TRACE_CMH_2(fmt, ...) \
-    printf("%s(%d)-<%s>: " #fmt, __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
+    printf(                   \
+        "%s(%d)-<%s>: " #fmt, __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__)
 
 TEST(timber, all)
 {
     // 叶子
 
-    LeafPtr defaultLeaf = create_leaf(LogPriorityDebug, "default-tag", __FILE__, __FUNCTION__, to_string(__LINE__));
+    LeafPtr defaultLeaf = create_leaf(LogPriorityDebug,
+                                      "default-tag",
+                                      __FILE__,
+                                      __FUNCTION__,
+                                      to_string(__LINE__));
 
     cout << defaultLeaf.get()->toString() << endl;
 
@@ -109,6 +112,6 @@ TEST(timber, all)
 
     // 开线程测试
 
-    enum FruitType fruitType = FruitTypeApple;
-    FruitFactory *fruitFactory = new FruitFactory();
+    enum FruitType fruitType    = FruitTypeApple;
+    FruitFactory * fruitFactory = new FruitFactory();
 }
