@@ -1,4 +1,7 @@
 #include <iostream>
+#include <array>
+#include <vector>
+#include <map>
 
 #ifndef MT_JSON_TYPE_H__
 #define MT_JSON_TYPE_H__
@@ -14,17 +17,49 @@
 #define mt_macro_concat(A, B) mt_macro_concat_(A, B)
 
 // 偏移取数
-#define mt_macro_at16(_0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, \
-                      _13, _14, _15, ...)                                    \
+#define mt_macro_at16(                                                         \
+    _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, ...) \
     mt_macro_first(__VA_ARGS__)
 #define mt_macro_at(N, ...) mt_macro_concat(mt_macro_at, N)(__VA_ARGS__)
 
-#define mt_macro_count(...)                                                    \
-    mt_macro_at(16, __VA_ARGS__, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, \
-                3, 2, 1)
-#define mt_macro_count_dec(...)                                               \
-    mt_macro_at(16, __VA_ARGS__, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, \
-                2, 1, 0)  // 总参数个数减一
+#define mt_macro_count(...)  \
+    mt_macro_at(16,          \
+                __VA_ARGS__, \
+                16,          \
+                15,          \
+                14,          \
+                13,          \
+                12,          \
+                11,          \
+                10,          \
+                9,           \
+                8,           \
+                7,           \
+                6,           \
+                5,           \
+                4,           \
+                3,           \
+                2,           \
+                1)
+#define mt_macro_count_dec(...) \
+    mt_macro_at(16,             \
+                __VA_ARGS__,    \
+                15,             \
+                14,             \
+                13,             \
+                12,             \
+                11,             \
+                10,             \
+                9,              \
+                8,              \
+                7,              \
+                6,              \
+                5,              \
+                4,              \
+                3,              \
+                2,              \
+                1,              \
+                0)  // 总参数个数减一
 
 #define mt_macro_join0(...)
 #define mt_macro_join1(A) A
@@ -49,51 +84,59 @@
 // ----------------------------------
 
 #undef mt_invoke
-#define mt_invoke(block, ...)          \
-    {                                  \
-        if (block) block(__VA_ARGS__); \
+#define mt_invoke(block, ...)   \
+    {                           \
+        if (block)              \
+            block(__VA_ARGS__); \
     }
 
 // ----------------------------------
 // Mutation type
 // ----------------------------------
 
-using MtBool = bool;
-using MtInt8 = int8_t;
-using MtInt16 = int16_t;
-using MtInt32 = int32_t;
-using MtInt64 = int64_t;
+using MtBool   = bool;
+using MtInt8   = int8_t;
+using MtInt16  = int16_t;
+using MtInt32  = int32_t;
+using MtInt64  = int64_t;
 using MtDouble = double;
-using MtMap = std::map<std::string, std::string>;
+using MtMap    = std::map<std::string, std::string>;
 template <class T>
-using MtArray = std::vector<T>;
+using MtArray  = std::vector<T>;
 using MtString = std::string;
 
 // ----------------------------------
 // Json base struct
 // ----------------------------------
 
-namespace mt {
-namespace json {
-struct mt_struct_t {
+namespace mt
+{
+namespace json
+{
+struct MtStruct
+{
 protected:
     // 字段映射
-    std::map<std::string, std::string> __fields_mapping;
-    virtual const std::map<std::string, std::string> &get_fields_mapping()
-        const {
-        return __fields_mapping;
+    std::map<std::string, std::string>                fields_mapping_;
+    virtual const std::map<std::string, std::string> &get_fields_mapping() const
+    {
+        return fields_mapping_;
     };
-    const char *fields_mapping(const char *init_field) const {
+    const char *fields_mapping(const char *init_field) const
+    {
         if (this->get_fields_mapping().count(init_field) >
             0) /* init_field 映射到 out_field */
         {
-            try {
+            try
+            {
                 const std::string &out_field_str =
                     (this->get_fields_mapping()).at(init_field);
 
                 // std::cout << "sfasfasfa = " << out_field_str << std::endl;
                 return out_field_str.c_str();
-            } catch (const std::exception &e) {
+            }
+            catch (const std::exception &e)
+            {
                 // std::cerr << e.what() << '\n';
             }
         }
@@ -102,23 +145,26 @@ protected:
     }
 
     // 字段黑名单
-    std::vector<std::string> __fields_blacklist;
-    virtual const std::vector<std::string> &get_fields_blacklist() const {
-        return __fields_blacklist;
+    std::vector<std::string>                fields_blacklist_;
+    virtual const std::vector<std::string> &get_fields_blacklist() const
+    {
+        return fields_blacklist_;
     };
-    bool is_field_blocked(const char *init_field) const {
-        bool ret_val = false;
+    bool is_field_blocked(const char *init_field) const
+    {
+        bool                            ret_val = false;
         const std::vector<std::string> &blacklist =
             this->get_fields_blacklist();
-        if (std::count(blacklist.begin(), blacklist.end(), init_field) > 0) {
+        if (std::count(blacklist.begin(), blacklist.end(), init_field) > 0)
+        {
             ret_val = true;
         }
         return ret_val;
     }
 
 public:
-    mt_struct_t(/* args */) = default;
-    ~mt_struct_t() = default;
+    MtStruct(/* args */) = default;
+    ~MtStruct()          = default;
 };
 
 }  // namespace json
@@ -136,7 +182,7 @@ public:
  */
 #define mt_fields_mapping \
 private:                  \
-    std::map<std::string, std::string> __fields_mapping
+    std::map<std::string, std::string> fields_mapping_
 
 /**
  * @brief 字段黑名单
@@ -144,7 +190,7 @@ private:                  \
  */
 #define mt_fields_blacklist \
 private:                    \
-    std::vector<std::string> __fields_blacklist
+    std::vector<std::string> fields_blacklist_
 
 /**
  * @brief 字段定义
@@ -157,12 +203,13 @@ public:                                                \
     bool has_##field() const { return __has_##field; } \
                                                        \
 private:                                               \
-    bool __skip_##field;                               \
-    bool __has_##field;                                \
+    bool        __skip_##field;                        \
+    bool        __has_##field;                         \
     std::string __typeof_##field;                      \
-    void init_##field() {                              \
-        __skip_##field = false;                        \
-        __has_##field = true;                          \
+    void        init_##field()                         \
+    {                                                  \
+        __skip_##field   = false;                      \
+        __has_##field    = true;                       \
         __typeof_##field = #type;                      \
     }
 
@@ -172,12 +219,13 @@ public:                                                           \
     bool has_##field() const { return __has_##field; }            \
                                                                   \
 private:                                                          \
-    bool __skip_##field;                                          \
-    bool __has_##field;                                           \
+    bool        __skip_##field;                                   \
+    bool        __has_##field;                                    \
     std::string __typeof_##field /*shell模式不支持动态类型识别*/; \
-    void init_##field() {                                         \
+    void        init_##field()                                    \
+    {                                                             \
         __skip_##field = false;                                   \
-        __has_##field = true;                                     \
+        __has_##field  = true;                                    \
     }
 
 #define mt_field_shell_2(a, ...)                                               \
@@ -447,9 +495,10 @@ private:                                                          \
 
 // Field equal
 
-#define mt_def_field_equal_1(a)                                           \
-    if (!(this->a == obj_val.a)) { /*printf("%s is not equally\n", #a);*/ \
-        return false;                                                     \
+#define mt_def_field_equal_1(a)              \
+    if (!(this->a == obj_val.a))             \
+    { /*printf("%s is not equally\n", #a);*/ \
+        return false;                        \
     }
 #define mt_def_field_equal_2(a, ...)                           \
     mt_macro_concat(mt_def_field_equal_,                       \
@@ -522,75 +571,98 @@ private:                                                          \
     mt_field_shell(__VA_ARGS__);                                          \
                                                                           \
 public:                                                                   \
-    const char *fields_mapping(const char *init_field) const {            \
+    const char *fields_mapping(const char *init_field) const              \
+    {                                                                     \
         return init_field;                                                \
     }                                                                     \
-    name &operator=(const name &obj_val) {                                \
+    name &operator=(const name &obj_val)                                  \
+    {                                                                     \
         mt_def_field_assign(__VA_ARGS__) return *this;                    \
     }                                                                     \
-    bool operator==(const name &obj_val) const {                          \
+    bool operator==(const name &obj_val) const                            \
+    {                                                                     \
         mt_def_field_equal(__VA_ARGS__) return true;                      \
     }                                                                     \
     bool encode(mt::json::allocator_t &alloc, rapidjson::Value &json_val) \
-        const {                                                           \
-        do {                                                              \
+        const                                                             \
+    {                                                                     \
+        do                                                                \
+        {                                                                 \
             json_val.SetObject();                                         \
             mt_def_field_encode(__VA_ARGS__) return true;                 \
         } while (0);                                                      \
         return false;                                                     \
     }                                                                     \
-    bool decode(const rapidjson::Value &json_val) {                       \
-        do {                                                              \
+    bool decode(const rapidjson::Value &json_val)                         \
+    {                                                                     \
+        do                                                                \
+        {                                                                 \
             mt_def_field_decode(__VA_ARGS__) return true;                 \
         } while (0);                                                      \
         return false;                                                     \
     }                                                                     \
     }                                                                     \
     ;                                                                     \
-    static bool encode(const name &obj_val, mt::json::allocator_t &alloc, \
-                       rapidjson::Value &json_val) {                      \
+    static bool encode(const name &           obj_val,                    \
+                       mt::json::allocator_t &alloc,                      \
+                       rapidjson::Value &     json_val)                   \
+    {                                                                     \
         return obj_val.encode(alloc, json_val);                           \
     }                                                                     \
-    static bool decode(const rapidjson::Value &json_val, name &obj_val) { \
+    static bool decode(const rapidjson::Value &json_val, name &obj_val)   \
+    {                                                                     \
         return obj_val.decode(json_val);                                  \
     }                                                                     \
-    static void mt_noop() {
+    static void mt_noop()                                                 \
+    {
 //
-#define mt_struct_begin(name) struct name : public mt::json::mt_struct_t {
-#define mt_struct_end(name, ...)                                              \
-public:                                                                       \
-    name(){mt_field_init(__VA_ARGS__)} name &operator=(const name &obj_val) { \
-        mt_def_field_assign(__VA_ARGS__) return *this;                        \
-    }                                                                         \
-    bool operator==(const name &obj_val) const {                              \
-        mt_def_field_equal(__VA_ARGS__) return true;                          \
-    }                                                                         \
-    virtual const std::map<std::string, std::string> &get_fields_mapping()    \
-        const {                                                               \
-        return __fields_mapping;                                              \
-    };                                                                        \
-    bool encode(mt::json::allocator_t &alloc, rapidjson::Value &json_val)     \
-        const {                                                               \
-        do {                                                                  \
-            json_val.SetObject();                                             \
-            mt_def_field_encode(__VA_ARGS__) return true;                     \
-        } while (0);                                                          \
-        return false;                                                         \
-    }                                                                         \
-    bool decode(const rapidjson::Value &json_val) {                           \
-        do {                                                                  \
-            mt_def_field_decode(__VA_ARGS__) return true;                     \
-        } while (0);                                                          \
-        return false;                                                         \
-    }                                                                         \
-    }                                                                         \
-    ;                                                                         \
-    static bool encode(const name &obj_val, mt::json::allocator_t &alloc,     \
-                       rapidjson::Value &json_val) {                          \
-        return obj_val.encode(alloc, json_val);                               \
-    }                                                                         \
-    static bool decode(const rapidjson::Value &json_val, name &obj_val) {     \
-        return obj_val.decode(json_val);                                      \
+#define mt_struct_begin(name)               \
+    struct name : public mt::json::MtStruct \
+    {
+#define mt_struct_end(name, ...)                                            \
+public:                                                                     \
+    name(){mt_field_init(__VA_ARGS__)} name &operator=(const name &obj_val) \
+    {                                                                       \
+        mt_def_field_assign(__VA_ARGS__) return *this;                      \
+    }                                                                       \
+    bool operator==(const name &obj_val) const                              \
+    {                                                                       \
+        mt_def_field_equal(__VA_ARGS__) return true;                        \
+    }                                                                       \
+    virtual const std::map<std::string, std::string> &get_fields_mapping()  \
+        const                                                               \
+    {                                                                       \
+        return fields_mapping_;                                             \
+    };                                                                      \
+    bool encode(mt::json::allocator_t &alloc, rapidjson::Value &json_val)   \
+        const                                                               \
+    {                                                                       \
+        do                                                                  \
+        {                                                                   \
+            json_val.SetObject();                                           \
+            mt_def_field_encode(__VA_ARGS__) return true;                   \
+        } while (0);                                                        \
+        return false;                                                       \
+    }                                                                       \
+    bool decode(const rapidjson::Value &json_val)                           \
+    {                                                                       \
+        do                                                                  \
+        {                                                                   \
+            mt_def_field_decode(__VA_ARGS__) return true;                   \
+        } while (0);                                                        \
+        return false;                                                       \
+    }                                                                       \
+    }                                                                       \
+    ;                                                                       \
+    static bool encode(const name &           obj_val,                      \
+                       mt::json::allocator_t &alloc,                        \
+                       rapidjson::Value &     json_val)                     \
+    {                                                                       \
+        return obj_val.encode(alloc, json_val);                             \
+    }                                                                       \
+    static bool decode(const rapidjson::Value &json_val, name &obj_val)     \
+    {                                                                       \
+        return obj_val.decode(json_val);                                    \
     }
 
 #endif  // MT_JSON_TYPE_H__

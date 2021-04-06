@@ -1,12 +1,14 @@
 #include <gtest/gtest.h>
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv)
+{
     ::testing::InitGoogleTest(&argc, argv);
 
     return RUN_ALL_TESTS();
 }
 
-class WarnMeBefore {
+class WarnMeBefore
+{
 private:
     /* data */
     int _age;
@@ -22,12 +24,13 @@ WarnMeBefore::~WarnMeBefore() {}
 
 // 修改后：
 
-class WarnMeAfter {
+class WarnMeAfter
+{
 private:
     /* data */
     int age_ = 1;
 
 public:
     WarnMeAfter(/* args */) = default;
-    ~WarnMeAfter() = default;
+    ~WarnMeAfter()          = default;
 };
