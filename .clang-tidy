@@ -25,22 +25,20 @@ Checks: '
   -modernize-concat-nested-namespaces,
   performance-*,
   readability-*,
-  -readability-named-parameter'
+  -readability-named-parameter,
+  -surelogic-readability-using'
   
 CheckOptions:
-  - key: bugprone-argument-comment.StrictMode
-    value: 1
-  - key: bugprone-exception-escape.FunctionsThatShouldNotThrow
-    value: WinMain,SDL_main
-  - key: misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic
-    value: 1
-  - key: hicpp-special-member-functions.AllowSoleDefaultDtor
-    value: 1
-  - { key: readability-identifier-naming.ClassCase,     value: CamelCase  }
-  - { key: readability-identifier-naming.VariableCase,  value: lower_case }
-  - { key: readability-identifier-naming.FunctionCase,  value: lower_case }
-  - { key: readability-identifier-naming.MemberSuffix,  value: _         }
-  - { key: readability-identifier-naming.ParameterCase, value: lower_case }
+  - { key: bugprone-argument-comment.StrictMode,                  value: 1 }
+  - { key: bugprone-exception-escape.FunctionsThatShouldNotThrow, value: WinMain,SDL_main }
+  # https://clang.llvm.org/extra/clang-tidy/checks/misc-non-private-member-variables-in-classes.html
+  - { key: misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic, value: 1 }
+  - { key: hicpp-special-member-functions.AllowSoleDefaultDtor, value: 1 }
+  - { key: readability-identifier-naming.ClassCase,             value: CamelCase  }
+  - { key: readability-identifier-naming.VariableCase,          value: lower_case }
+  - { key: readability-identifier-naming.FunctionCase,          value: lower_case }
+  - { key: readability-identifier-naming.MemberSuffix,          value: _         }
+  - { key: readability-identifier-naming.ParameterCase,         value: lower_case }
 
 WarningsAsErrors:    ''
 HeaderFilterRegex:   ''
