@@ -72,6 +72,7 @@ struct MeTestSimplifyT
 {
     int32_t val = 0;
     mt_json_struct(MeTestSimplifyT, val)
+    // ... 这里已经不是类定义的scope，切入添加任何东西 ...
 };
 
 // MARK: - 测试map成员变量初始化

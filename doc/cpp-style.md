@@ -1,0 +1,1 @@
+https://zh-duitang-styleguide.readthedocs.io/zh_CN/latest/google-cpp-styleguide/naming.html#id5
