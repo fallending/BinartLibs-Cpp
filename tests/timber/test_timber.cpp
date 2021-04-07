@@ -11,9 +11,9 @@
 #include <gtest/gtest.h>
 #include <iostream>
 
-#define __MT_TAG__ "Timber Unit Test"
-#include "timber/mt_timber.h"
-#include "log/log.h"
+#define TAG_ "Timber Unit Test"
+#include <timber/mt_timber.h>
+#include <log/log.h>
 
 int main(int argc, char **argv)
 {
@@ -34,7 +34,7 @@ enum FruitType
     FruitTypeApple = 0,
 };
 
-const char *getFruitName() { return ""; };
+const char *GetFruitName() { return ""; };
 
 struct Fruit
 {
@@ -44,12 +44,12 @@ struct Fruit
 
 class FruitFactory
 {
-    void buildFruit();
+    void BuildFruit();
 };
 
 // MARK: - 测试tree
 
-void test_print(const std::string &message)
+void TestPrint(const std::string &message)
 {
     // if (&message != NULL) {
     //     std::cout << message << std::endl;
@@ -69,30 +69,32 @@ void test_print(const std::string &message)
 
 TEST(timber, all)
 {
+    cout << "TAG_ = " << TAG_ << endl;
+
     // 叶子
 
-    LeafPtr defaultLeaf = create_leaf(LogPriorityDebug,
+    LeafPtr default_leaf = CreateLeaf(LogPriorityDebug,
                                       "default-tag",
                                       __FILE__,
                                       __FUNCTION__,
                                       to_string(__LINE__));
 
-    cout << defaultLeaf.get()->toString() << endl;
+    cout << default_leaf.get()->ToString() << endl;
 
     TRACE_CMH_2("BASE: [%d]\n", 100);
 
     // 种树
     shared_ptr<DebugTree> tree = make_shared<DebugTree>();
-    logger.plant(tree);
+    logger.Plant(tree);
 
-    cout << green << "hello world" << reset << endl;
-    cout << white << "hello world" << reset << endl;
-    cout << yellow << "hello world" << reset << endl;
-    cout << red << "hello world" << reset << endl;
+    cout << Green << "hello world" << Reset << endl;
+    cout << White << "hello world" << Reset << endl;
+    cout << Yellow << "hello world" << Reset << endl;
+    cout << Red << "hello world" << Reset << endl;
 
     // 打印日志
-    const char *p = NULL;
-    // test_print(p);
+    const char *p = nullptr;
+    // TestPrint(p);
 
     logger.d("debug message");
     logger.i("info message");
@@ -112,6 +114,6 @@ TEST(timber, all)
 
     // 开线程测试
 
-    enum FruitType fruitType    = FruitTypeApple;
-    FruitFactory * fruitFactory = new FruitFactory();
+    // FruitType     fruit_type    = FruitTypeApple;
+    // FruitFactory *fruit_factory = new FruitFactory();
 }

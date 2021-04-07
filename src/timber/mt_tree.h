@@ -10,109 +10,129 @@
 #include "mt_type.h"
 #include "mt_leaf.h"
 
-#ifndef __MT_TREE_H__
-#define __MT_TREE_H__
+#ifndef MT_TREE_H_
+#define MT_TREE_H_
 
 namespace timber
 {
-    #define TIMBER_TREE_LOG_F( func, priority ) \
-            void func(const LeafPtr &leaf, const std::string &message, va_list args) { prepareLog(leaf, message, args); };
+#define TIMBER_TREE_LOG_F(func, priority)                                    \
+    void func(const LeafPtr &leaf, const std::string &message, va_list args) \
+    {                                                                        \
+        PrepareLog(leaf, message, args);                                     \
+    };
 
-    class Tree
+class Tree
+{
+public:
+    Tree(/* args */) = default;
+    ~Tree()          = default;
+
+    TIMBER_TREE_LOG_F(d, LogPriorityDebug)
+    TIMBER_TREE_LOG_F(i, LogPriorityInfo)
+    TIMBER_TREE_LOG_F(w, LogPriorityWarn)
+    TIMBER_TREE_LOG_F(e, LogPriorityError)
+
+    virtual bool IsLoggable(const std::string &tag, LogPriority priority)
     {
-    public:
-        Tree(/* args */) {};
-        ~Tree() {};
+        return true;
+    };
 
-    public:
-        TIMBER_TREE_LOG_F( d, LogPriorityDebug )
-        TIMBER_TREE_LOG_F( i, LogPriorityInfo )
-        TIMBER_TREE_LOG_F( w, LogPriorityWarn )
-        TIMBER_TREE_LOG_F( e, LogPriorityError )
+    virtual void Log(LogPriority        priority,
+                     const std::string &tag,
+                     const std::string &message) = 0;
 
-        /** Stubs */
-    public:
-        virtual bool isLoggable(const std::string &tag, LogPriority priority) { return true; };
-
-        virtual void log(LogPriority priority, const std::string &tag, const std::string &message) = 0;
-
-    private:
-        void prepareLog(const LeafPtr &leaf, const std::string &message, va_list args) {
-            if (!isLoggable(leaf.get()->tag, leaf.get()->p)) {
-                return;
-            }
-
-            if (message.length() == 0) { // swallow emppty message
-                return;
-            }
-
-            // TODO: getStackTraceString
-
-            // if (args != null && args.length > 0) {
-            //     message = formatMessage(message, args);
-            //     }
-            //     if (t != null) {
-            //     message += "\n" + getStackTraceString(t);
-            //     }
-            log(leaf.get()->p, leaf.get()->tag, formatMessage(getFormatString(message, args), leaf));
+private:
+    void PrepareLog(const LeafPtr &    leaf,
+                    const std::string &message,
+                    va_list            args)
+    {
+        if (!IsLoggable(leaf.get()->tag, leaf.get()->p))
+        {
+            return;
         }
 
-        const std::string getFormatString(const std::string &message, va_list args) {
-            char buf[4096];
-            memset(buf, 0, sizeof(buf));
-            vsprintf(buf, message.c_str(), args);
-
-            return buf;
+        if (message.length() == 0)
+        {  // swallow emppty message
+            return;
         }
 
-        /**
-         * @description: 日志格式化
-         * @param {const} std
-         * @param {constLeaf} &leaf
-         * @return {*}
-         * 
-         * @example 
-         *  [timestamp]               [threadid]   [priority] [tag]   [file:line]                                 [func] [msg]
-         *  [2016-09-11 15:05:30.510] [4246443808] [ERROR]    [login] [/home/Github/dlog/example/LogTest.cpp:11]  [main]  Hello everyone
-         */
-        const std::string formatMessage(const std::string &message, const LeafPtr &leaf) {
-            return leaf.get()->toLoggingPrefix()+message;
-        }
-    }; 
+        // TODO: getStackTraceString
 
-    typedef std::shared_ptr<Tree> TreePtr;
+        // if (args != null && args.length > 0) {
+        //     message = formatMessage(message, args);
+        //     }
+        //     if (t != null) {
+        //     message += "\n" + getStackTraceString(t);
+        //     }
+        Log(leaf.get()->p,
+            leaf.get()->tag,
+            FormatMessage(GetFormatString(message, args), leaf));
+    }
 
-    class DebugTree : public Tree {
-    public:
-        virtual bool isLoggable(const std::string &tag, LogPriority priority) {
-            return true;
-        }
+    static std::string GetFormatString(const std::string &message, va_list args)
+    {
+        char buf[4096];
+        memset(buf, 0, sizeof(buf));
+        vsprintf(buf, message.c_str(), args);
 
-        virtual void log(LogPriority priority, const std::string &tag, const std::string &message) {
-            switch (priority)
-            {
+        return buf;
+    }
+
+    /**
+     * @description: 日志格式化
+     * @param {const} std
+     * @param {constLeaf} &leaf
+     * @return {*}
+     *
+     * @example
+     *  [timestamp]               [threadid]   [priority] [tag]   [file:line]
+     * [func] [msg] [2016-09-11 15:05:30.510] [4246443808] [ERROR]    [login]
+     * [/home/Github/dlog/example/LogTest.cpp:11]  [main]  Hello everyone
+     */
+    static std::string FormatMessage(const std::string &message,
+                                     const LeafPtr &    leaf)
+    {
+        return leaf.get()->ToLoggingPrefix() + message;
+    }
+};
+
+using TreePtr = std::shared_ptr<Tree>;
+
+class DebugTree : public Tree
+{
+public:
+    bool IsLoggable(const std::string &tag, LogPriority priority) override
+    {
+        return true;
+    }
+
+    void Log(LogPriority        priority,
+             const std::string &tag,
+             const std::string &message) override
+    {
+        switch (priority)
+        {
             case LogPriorityDebug:
-                std::cout << green << message << reset << std::endl;
+                std::cout << Green << message << Reset << std::endl;
                 break;
 
             case LogPriorityInfo:
-                std::cout << white << message << reset << std::endl;
+                std::cout << White << message << Reset << std::endl;
                 break;
 
             case LogPriorityWarn:
-                std::cout << yellow << message << reset << std::endl;
+                std::cout << Yellow << message << Reset << std::endl;
                 break;
 
             case LogPriorityError:
-                std::cout << red << message << reset << std::endl;
+                std::cout << Red << message << Reset << std::endl;
                 break;
 
             default:
                 break;
-            }
         }
-    };
-} // namespace timber
+    }
+};
+}  // namespace timber
 
-
-#endif // __MT_TREE_H__
+#endif  // MT_TREE_H_

@@ -98,7 +98,7 @@ for (auto& byte : bb.get_bytes()) {
 
 ```cpp
 // [optional] 预定义标记
-#define __TAG__ "Timber Unit Test"
+#define TAG_ "Timber Unit Test"
 
 // 引入头文件
 #include "timber/mt_timber.h"

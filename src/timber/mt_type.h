@@ -15,26 +15,28 @@
 #include <thread>
 #include <vector>
 
-#ifndef __MT_TYPE_H__
-#define __MT_TYPE_H__
+#ifndef MT_TYPE_H_
+#define MT_TYPE_H_
 
-namespace timber {
+namespace timber
+{
 // MARK: - Log Priority
-
-typedef enum LogPriority {
+enum LogPriority
+{
     LogPriorityBegin = 0,
 
     // LogPriorityVerbose      = 1, // useless
     LogPriorityDebug = 2,
-    LogPriorityInfo = 3,
-    LogPriorityWarn = 4,
+    LogPriorityInfo  = 3,
+    LogPriorityWarn  = 4,
     LogPriorityError = 5,
     // LogPriorityAssert       = 6, // useless
 
     LogPriorityEnd
-} LogPriority;
+};
 
-#define IsLogPriorityValid(t) ((t < LogPriorityEnd) && (t > LogPriorityBegin))
+#define IS_LOG_PRIORITY_VALID(t) \
+    (((t) < LogPriorityEnd) && ((t) > LogPriorityBegin))
 
 // MARK: - Logger Color
 
@@ -46,47 +48,54 @@ typedef enum LogPriority {
 
 #include <iostream>
 
-inline std::ostream& blue(std::ostream& s) {
+inline std::ostream& blue(std::ostream& s)
+{
     HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(
         hStdout, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
     return s;
 }
 
-inline std::ostream& red(std::ostream& s) {
+inline std::ostream& red(std::ostream& s)
+{
     HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hStdout, FOREGROUND_RED | FOREGROUND_INTENSITY);
     return s;
 }
 
-inline std::ostream& green(std::ostream& s) {
+inline std::ostream& green(std::ostream& s)
+{
     HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hStdout, FOREGROUND_GREEN | FOREGROUND_INTENSITY);
     return s;
 }
 
-inline std::ostream& yellow(std::ostream& s) {
+inline std::ostream& yellow(std::ostream& s)
+{
     HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(
         hStdout, FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY);
     return s;
 }
 
-inline std::ostream& white(std::ostream& s) {
+inline std::ostream& white(std::ostream& s)
+{
     HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(
         hStdout, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
     return s;
 }
 
-struct color {
+struct color
+{
     color(WORD attribute) : m_color(attribute){};
     WORD m_color;
 };
 
 template <class _Elem, class _Traits>
 std::basic_ostream<_Elem, _Traits>& operator<<(
-    std::basic_ostream<_Elem, _Traits>& i, const color& c) {
+    std::basic_ostream<_Elem, _Traits>& i, const color& c)
+{
     HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleTextAttribute(hStdout, c.m_color);
     return i;
@@ -94,7 +103,7 @@ std::basic_ostream<_Elem, _Traits>& operator<<(
 
 #else
 
-const std::vector<std::string> TERMINAL_CONTROL = {
+const std::vector<std::string> terminal_control = {
     std::string("\033[0m"),    // 关闭属性
     std::string("\033[1m"),    // 设置高亮
     std::string("\033[3m"),    // 斜体
@@ -131,37 +140,43 @@ const std::vector<std::string> TERMINAL_CONTROL = {
     std::string("\033[?25h"),  // 显示光标
 };
 
-inline std::ostream& blue(std::ostream& s) {
+inline std::ostream& Blue(std::ostream& s)
+{
     //    s << "\033[0m\033[34m\033[1m"; // ok
     s << "\033[0;1;34m";
     return s;
 }
 
-inline std::ostream& red(std::ostream& s) {
+inline std::ostream& Red(std::ostream& s)
+{
     //    s << "\033[0m\033[31m\033[1m"; // ok
     s << "\033[0;1;31m";
     return s;
 }
 
-inline std::ostream& green(std::ostream& s) {
+inline std::ostream& Green(std::ostream& s)
+{
     //    s << "\033[0m\033[32m\033[1m"; // ok
     s << "\033[0;1;32m";
     return s;
 }
 
-inline std::ostream& yellow(std::ostream& s) {
+inline std::ostream& Yellow(std::ostream& s)
+{
     //    s << "\033[0m\033[33m\033[1m"; // ok
     s << "\033[0;1;33m";
     return s;
 }
 
-inline std::ostream& white(std::ostream& s) {
+inline std::ostream& White(std::ostream& s)
+{
     //    s << "\033[0m\033[37m\033[1m"; // ok
     s << "\033[0;1;37m";
     return s;
 }
 
-inline std::ostream& reset(std::ostream& s) {
+inline std::ostream& Reset(std::ostream& s)
+{
     s << "\033[0m";
     return s;
 }
@@ -170,4 +185,4 @@ inline std::ostream& reset(std::ostream& s) {
 
 }  // namespace timber
 
-#endif  // __MT_TYPE_H__
+#endif  // MT_TYPE_H_

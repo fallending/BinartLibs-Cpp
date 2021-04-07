@@ -9,6 +9,7 @@
 
 #include <gtest/gtest.h>
 #include <future>
+#define TAG_ "test timber async"
 #include "timber/mt_timber.h"
 
 // using ::testing::_;
@@ -53,14 +54,16 @@ protected:
         // before the destructor).
     }
 
-    // Objects declared here can be used by all tests in the test case for Project1.
+    // Objects declared here can be used by all tests in the test case for
+    // Project1.
 };
 
 // class AsyncIOHttpCallback {
 // public:
 //     virtual void onData(char *data, size_t datalen) {};
 
-//     virtual void onFinish(double content_length, long header_size, long httpcode, char *redirect_url) {};
+//     virtual void onFinish(double content_length, long header_size, long
+//     httpcode, char *redirect_url) {};
 
 //     virtual void onError(CURLcode curlErrorNo) {};
 
@@ -74,20 +77,23 @@ protected:
 //     MOCK_METHOD1(onError, void(CURLcode errCode));
 //     MOCK_METHOD0(onTimeout, void());
 //     MOCK_METHOD2(onData, void(char *data, size_t datalen));
-//     MOCK_METHOD4(onFinish, void(double content_length, long header_size, long httpcode, char *redirect_url));
+//     MOCK_METHOD4(onFinish, void(double content_length, long header_size, long
+//     httpcode, char *redirect_url));
 // };
 
 // Test case must be called the class above
-// Also note: use TEST_F instead of TEST to access the test fixture (from google test primer)
-// TEST_F(AsyncIOTests, DoSampleHTTPFetch) {
+// Also note: use TEST_F instead of TEST to access the test fixture (from google
+// test primer) TEST_F(AsyncIOTests, DoSampleHTTPFetch) {
 //     shared_ptr<AsyncIOHttpContext>  url1(new AsyncIOHttpContext);
 //     shared_ptr<MockCallback>    mcallback(new StrictMock<MockCallback>);
 
 //     shared_ptr<AsyncIORequestPolicy> policy(new AsyncIORequestPolicy);
 
-//     policy->finishHandler = [&mcallback](double  content_length, long header_size, long httpcode, char *redirect_url) {
+//     policy->finishHandler = [&mcallback](double  content_length, long
+//     header_size, long httpcode, char *redirect_url) {
 //         EXPECT_EQ(httpcode, 200);
-//         mcallback->onFinish(content_length, header_size, httpcode, redirect_url);
+//         mcallback->onFinish(content_length, header_size, httpcode,
+//         redirect_url);
 //     };
 //     std::string url = "http://www.baidu.com";
 //     url1->url = url;
@@ -115,19 +121,16 @@ template <class T>
 class Stack
 {
 private:
-    std::vector<T> elems; // 元素
-    mutable int id;
+    std::vector<T> elems;  // 元素
+    mutable int    id;
 
 public:
-    Stack()
-    {
-        id = 1;
-    };                      //只有声明
-    void push(T const &){}; // 入栈
-    void pop(){};           // 出栈
-    T top() const;          // 返回栈顶元素
+    Stack() { id = 1; };     //只有声明
+    void push(T const &){};  // 入栈
+    void pop(){};            // 出栈
+    T    top() const;        // 返回栈顶元素
     bool empty() const
-    { // 如果为空则返回真。
+    {  // 如果为空则返回真。
         return elems.empty();
     }
 
@@ -154,7 +157,8 @@ TEST(timber, async)
     //         started.set_value();
     //     }));
     // system_->start();
-    // EXPECT_EQ(std::future_status::ready, started.get_future().wait_for(std::chrono::seconds(3)));
+    // EXPECT_EQ(std::future_status::ready,
+    // started.get_future().wait_for(std::chrono::seconds(3)));
 
     logd("async debug message");
 
@@ -178,7 +182,8 @@ TEST(timber, async)
         //     //     // logd("use count = %d", pint.use_count());
         // });
 
-        // const Stack<int> stack; // 如果这里有const，下面的stack.count()会报错。。
+        // const Stack<int> stack; //
+        // 如果这里有const，下面的stack.count()会报错。。
         Stack<int> stack;
 
         std::async(std::launch::async, [=]() mutable {
@@ -191,7 +196,7 @@ TEST(timber, async)
         return 8;
     });
 
-    std::cout << f1.get() << std::endl; //output: 8
+    std::cout << f1.get() << std::endl;  // output: 8
 
     std::future<int> f2 = std::async(std::launch::async, []() {
         logd("async debug 4 message");
