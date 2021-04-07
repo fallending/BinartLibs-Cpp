@@ -12,35 +12,65 @@
 #include <iostream>
 #include <vector>
 
-// std::vector<int> &getIds() {
-std::vector<int> getIds() {
-  std::vector<int> v;
-  return v;
+// std::vector<int> &getIds() { // bad
+std::vector<int> GetIds()
+{  // good
+    std::vector<int> v;
+    return v;
 };
 
-// std::string &getNames() {
-std::string getNames() {
-  std::string s = "Faz";
-  s += "Far";
-  s += "Boo";
-  return s;
+// std::string &getNames() { // bad
+std::string GetNames()
+{  // good
+    std::string s = "Faz";
+    s += "Far";
+    s += "Boo";
+    return s;
 };
-
-using namespace std;
 
 TEST(reference, retval)  // 测试引用返回值
 {
-  // 测试容器引用返回
-  vector<int> ids = getIds();
+    using ::std::cout;
+    using ::std::endl;
+    using ::std::string;
+    using ::std::vector;
 
-  ids.emplace_back(4);
+    // 测试容器引用返回
+    vector<int> ids = GetIds();
 
-  std::cout << ids[0] << endl;
+    ids.emplace_back(4);
 
-  // 测试字符串引用返回
-  string names = getNames();
+    std::cout << ids[0] << endl;
 
-  std::cout << names << endl;
+    // 测试字符串引用返回
+    string names = GetNames();
+
+    std::cout << names << endl;
 }
 
-TEST(reference, somethingElse) {}
+class MtCopyable
+{
+private:
+    std::unique_ptr<std::string> strPtr_;
+
+public:
+    MtCopyable()  = default;
+    ~MtCopyable() = default;
+};
+
+// TEST(Reference, TryCopyable)
+// {
+//     using ::std::map;
+//     using ::std::vector;
+
+//     MtCopyable           copy_a;
+//     map<int, MtCopyable> copyables = {{1, copy_a}};
+
+//     MtCopyable copy_tmp;
+
+//     auto copy = copyables.find();
+//     if (copy != copyables.end())
+//     {
+//         copyable = copy.second;
+//     }
+// }

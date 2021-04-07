@@ -80,7 +80,7 @@ struct TestMapInitClass : public mt::json::MtStruct
 {
 private:
     /* data */
-    mt_fields_mapping = {{"string", "val"}, {"sec", "val"}, {"trd", "val"}};
+    MT_FIELDS_MAPPING = {{"string", "val"}, {"sec", "val"}, {"trd", "val"}};
 
 public:
     TestMapInitClass(/* args */) = default;
@@ -96,7 +96,7 @@ public:
 
 mt_struct_begin(metest_mapping_t);
 mt_field(int32_t, val);
-mt_fields_mapping = {{"val", "init_val"}};
+MT_FIELDS_MAPPING = {{"val", "init_val"}};
 mt_struct_end(metest_mapping_t, val);
 
 // MARK: - 测试用例
@@ -196,4 +196,90 @@ TEST(mtjson, all)
     encode<false, MeTestSimplifyT>(simplify_obj, simplified_json);
 
     cout << "[mtjson][all] simplifiedJson = " << simplified_json << endl;
+}
+
+// MARK: - mtjson对象的列表初始化
+
+// 普通结构体
+struct Student
+{
+    int         id;
+    int         age;
+    std::string name;
+};
+
+// 有默认构造的结构体
+struct Teacher
+{
+    int         id;
+    int         age;
+    std::string name;
+
+    Teacher()  = default;
+    ~Teacher() = default;
+};
+
+TEST(mtjson, init)
+{
+    const int         id   = 1;
+    const int         age  = 23;
+    const std::string name = "John";
+    Student           s1   = {id, age, "John"};
+    Student           s2   = {id : id, age : age, name : name};
+    Student           s3   = {.id = id, .age = age, .name = name};
+}
+
+// MARK: - mtjson对象模板化
+
+template <typename T>
+struct BaseModel
+{
+    int32_t     code;
+    std::string msg;
+    T           data;
+};
+
+// 特化
+
+struct TestBaseModel
+{
+    int32_t val = 0;
+    mt_json_struct(TestBaseModel, val)
+    // ... 这里已经不是类定义的scope，切入添加任何东西 ...
+};
+
+template <>
+struct BaseModel<TestBaseModel>
+{
+    int32_t       code;
+    std::string   msg;
+    TestBaseModel data;
+
+    mt_json_tpl_struct(BaseModel, BaseModel<TestBaseModel>, code, msg, data)
+}
+
+TEST(mtjson, template)
+{
+    using ::mt::json::decode;
+    using ::mt::json::encode;
+    using ::std::cout;
+    using ::std::endl;
+    using ::std::string;
+
+    const char *tpl_json =
+        "{\"code\":123, \"msg\":\"hello template json "
+        "model!\",\"data\":{\"val\":2}}";
+
+    BaseModel<TestBaseModel> tpl_obj;
+
+    decode(tpl_json, tpl_obj);
+
+    ASSERT_EQ(tpl_obj.data.val, 2);
+
+    cout << "[mtjson][all] tpl_obj.val = " << tpl_obj.data.val << endl;
+
+    string tpled_json;
+    encode<false, BaseModel<TestBaseModel>>(tpl_obj, tpled_json);
+
+    cout << "[mtjson][all] tpled_json = " << tpled_json << endl;
 }
