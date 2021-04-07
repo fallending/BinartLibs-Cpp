@@ -86,7 +86,7 @@ public:
     TestMapInitClass(/* args */) = default;
     ~TestMapInitClass()          = default;
 
-    const std::map<std::string, std::string> &get_mapping()
+    const std::map<std::string, std::string> &GetMapping()
     {
         return fields_mapping_;
     };
@@ -103,8 +103,8 @@ mt_struct_end(metest_mapping_t, val);
 
 TEST(mtjson, all)
 {
-    using ::mt::json::decode;
-    using ::mt::json::encode;
+    using ::mt::json::Decode;
+    using ::mt::json::Encode;
     using ::std::cout;
     using ::std::endl;
     using ::std::string;
@@ -112,7 +112,7 @@ TEST(mtjson, all)
     // 测试字段映射可行性
     TestMapInitClass test_map_init_obj;
     cout << "test mapping = "
-         << (test_map_init_obj.get_mapping()).count("string") << std::endl;
+         << (test_map_init_obj.GetMapping()).count("string") << std::endl;
 
     // 测试普通对象序列化
     const char *k_json_str =
@@ -127,7 +127,7 @@ TEST(mtjson, all)
     metest_object_t out_obj;
 
     // json string -> c++ struct
-    decode(in_str, out_obj);
+    Decode(in_str, out_obj);
 
     cout << "[mtjson][all] out.len = " << out_obj.len << endl;
 
@@ -135,7 +135,7 @@ TEST(mtjson, all)
 
     // c++ struct -> json string
     string out_str;
-    encode<false, metest_object_t>(out_obj, out_str);
+    Encode<false, metest_object_t>(out_obj, out_str);
 
     // ASSERT_EQ(outStr, inStr);
     cout << "[mtjson][all] outStr = " << out_str << endl;
@@ -145,7 +145,7 @@ TEST(mtjson, all)
 
     metest_parent_t parent_obj;
 
-    decode(parent_json, parent_obj);
+    Decode(parent_json, parent_obj);
 
     ASSERT_EQ(parent_obj.child.val, 3);
 
@@ -158,7 +158,7 @@ TEST(mtjson, all)
 
     metest_container_t container_obj;
 
-    decode(container_json, container_obj);
+    Decode(container_json, container_obj);
 
     ASSERT_EQ(container_obj.elements.size(), 2);
 
@@ -170,14 +170,14 @@ TEST(mtjson, all)
 
     metest_mapping_t mapping_obj;
 
-    decode(mapping_json, mapping_obj);
+    Decode(mapping_json, mapping_obj);
 
     ASSERT_EQ(mapping_obj.val, 2);
 
     cout << "[mtjson][all] mappingJson.val = " << mapping_obj.val << endl;
 
     std::string mapped_json;
-    encode<false, metest_mapping_t>(mapping_obj, mapped_json);
+    Encode<false, metest_mapping_t>(mapping_obj, mapped_json);
 
     cout << "[mtjson][all] mappedJson = " << mapped_json << endl;
 
@@ -186,14 +186,14 @@ TEST(mtjson, all)
 
     MeTestSimplifyT simplify_obj;
 
-    decode(simplify_json, simplify_obj);
+    Decode(simplify_json, simplify_obj);
 
     ASSERT_EQ(simplify_obj.val, 2);
 
     cout << "[mtjson][all] simplify_obj.val = " << simplify_obj.val << endl;
 
     string simplified_json;
-    encode<false, MeTestSimplifyT>(simplify_obj, simplified_json);
+    Encode<false, MeTestSimplifyT>(simplify_obj, simplified_json);
 
     cout << "[mtjson][all] simplifiedJson = " << simplified_json << endl;
 }
@@ -211,8 +211,8 @@ struct Student
 // 有默认构造的结构体
 struct Teacher
 {
-    int         id;
-    int         age;
+    int         id{0};
+    int         age{0};
     std::string name;
 
     Teacher()  = default;
@@ -234,7 +234,11 @@ TEST(mtjson, init)
 template <typename T>
 struct BaseModel
 {
-    int32_t     code;
+    // constructor does not initialize these fields:
+    // codeclang-tidy(["{}",5526,0])
+    // clang-tidy选项貌似关不掉这个警告，是个bug？看这里：https://bugs.llvm.org/show_bug.cgi?id=37902#c2
+    // 暂时先添加 {}
+    int32_t     code{0};
     std::string msg;
     T           data;
 };
@@ -251,7 +255,7 @@ struct TestBaseModel
 template <>
 struct BaseModel<TestBaseModel>
 {
-    int32_t       code;
+    int32_t       code{};
     std::string   msg;
     TestBaseModel data;
 
@@ -260,8 +264,8 @@ struct BaseModel<TestBaseModel>
 
 TEST(mtjson, template)
 {
-    using ::mt::json::decode;
-    using ::mt::json::encode;
+    using ::mt::json::Decode;
+    using ::mt::json::Encode;
     using ::std::cout;
     using ::std::endl;
     using ::std::string;
@@ -272,14 +276,14 @@ TEST(mtjson, template)
 
     BaseModel<TestBaseModel> tpl_obj;
 
-    decode(tpl_json, tpl_obj);
+    Decode(tpl_json, tpl_obj);
 
     ASSERT_EQ(tpl_obj.data.val, 2);
 
     cout << "[mtjson][all] tpl_obj.val = " << tpl_obj.data.val << endl;
 
     string tpled_json;
-    encode<false, BaseModel<TestBaseModel>>(tpl_obj, tpled_json);
+    Encode<false, BaseModel<TestBaseModel>>(tpl_obj, tpled_json);
 
     cout << "[mtjson][all] tpled_json = " << tpled_json << endl;
 }

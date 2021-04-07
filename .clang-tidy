@@ -4,11 +4,14 @@ Checks: '
   cert-,
   clang-analyzer-
   cppcoreguidelines-*,
+  cppcoreguidelines-init-variables-,
+  -cppcoreguidelines-pro-type-member-init,
   -cppcoreguidelines-macro-usage,
   -cppcoreguidelines-pro-type-reinterpret-cast,
   -cppcoreguidelines-pro-type-union-access,
   -cppcoreguidelines-pro-bounds-pointer-arithmetic,
   -cppcoreguidelines-pro-type-vararg,
+  -cppcoreguidelines-special-member-functions,
   llvm-,
   -llvm-include-order,
   google-build-using-namespace,
@@ -19,7 +22,9 @@ Checks: '
   google-runtime-operator,
   hicpp-*,
   -hicpp-vararg,
+  -hicpp-special-member-functions,
   misc-*,
+  -misc-unused-parameters,
   modernize-*,
   -modernize-use-trailing-return-type,
   -modernize-concat-nested-namespaces,
@@ -27,10 +32,19 @@ Checks: '
   readability-*,
   -readability-named-parameter,
   -surelogic-readability-using'
-  
+
+# 有需要变更的化，可以在这里查询：https://clang.llvm.org/extra/clang-tidy/checks/list.html
 CheckOptions:
   - { key: bugprone-argument-comment.StrictMode,                                                              value: 1 }
   - { key: bugprone-exception-escape.FunctionsThatShouldNotThrow,                                             value: 'WinMain,SDL_main' }
+
+
+  # ( int i = 0; ) -> ( int i{}; )
+  # - { key: cppcoreguidelines-pro-type-member-init,                                                            value: 0 }
+  - { key: cppcoreguidelines-prefer-member-initializer,                                                       value: 0 }
+  - { key: modernize-use-default-member-init,                                                                 value: 0 }
+  - { key: readability-redundant-member-init,                                                                 value: 0 }
+  - { key: cppcoreguidelines-init-variables,                                                                  value: 0 }
 
   # Allows to completely ignore classes if all the member variables in that class have public visibility.
   - { key: misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic,       value: 1 }
