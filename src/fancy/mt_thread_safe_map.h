@@ -1,88 +1,76 @@
-/*
- * @Author: your name
- * @Date: 2021-03-29 18:05:08
- * @LastEditTime: 2021-03-29 18:07:55
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: /mt-ccs/src/fancy/mt_thread_safe_map.h
- */
-
 #include <map>
 #include <memory>
 #include <mutex>
 
-#ifndef __MT_THREAD_SAFE_MAP_H__
-#define __MT_THREAD_SAFE_MAP_H__
+#ifndef MT_THREAD_SAFE_MAP_H_
+#define MT_THREAD_SAFE_MAP_H_
 
-namespace mt {
-    namespace threadsafe {
-        //thread safe map, need to free data youself
-        template<typename TKey, typename TValue>
-        class map
-        {
-        public:
-            map() 
-            {
-            }
+namespace mt
+{
+namespace threadsafe
+{
+// thread safe map, need to free data youself
+template <typename TKey, typename TValue>
+class Map
+{
+public:
+    Map() = default;
 
-            virtual ~map() 
-            { 
-                std::lock_guard<std::mutex> locker(m_mutexMap);
-                m_map.clear(); 
-            }
-
-            bool insert(const TKey &key, const TValue &value, bool cover = false)
-            {
-                std::lock_guard<std::mutex> locker(m_mutexMap);
-
-                auto find = m_map.find(key);
-                if (find != m_map.end() && cover)
-                {
-                    m_map.erase(find);
-                }
-
-                auto result = m_map.insert(std::pair<TKey, TValue>(key, value));
-                return result.second;
-            }
-
-            void remove(const TKey &key)
-            {
-                std::lock_guard<std::mutex> locker(m_mutexMap);
-
-                auto find = m_map.find(key);
-                if (find != m_map.end())
-                {
-                    m_map.erase(find);
-                }
-            }
-
-            bool lookup(const TKey &key, TValue &value)
-            {
-                std::lock_guard<std::mutex> locker(m_mutexMap);
-
-                auto find = m_map.find(key);
-                if (find != m_map.end())
-                {
-                    value = (*find).second;
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-
-            int size()
-            {
-                std::lock_guard<std::mutex> locker(m_mutexMap);
-                return m_map.size();
-            }
-
-        public:
-            std::mutex m_mutexMap;
-            std::map<TKey, TValue> m_map;
-        };
+    virtual ~Map()
+    {
+        std::lock_guard<std::mutex> locker(mutexMap_);
+        map_.clear();
     }
-} // namespace mt
 
-#endif // __MT_THREAD_SAFE_MAP_H__
+    bool Insert(const TKey &key, const TValue &value, bool cover = false)
+    {
+        std::lock_guard<std::mutex> locker(mutexMap_);
+
+        auto find = map_.find(key);
+        if (find != map_.end() && cover)
+        {
+            map_.erase(find);
+        }
+
+        auto result = map_.insert(std::pair<TKey, TValue>(key, value));
+        return result.second;
+    }
+
+    void Remove(const TKey &key)
+    {
+        std::lock_guard<std::mutex> locker(mutexMap_);
+
+        auto find = map_.find(key);
+        if (find != map_.end())
+        {
+            map_.erase(find);
+        }
+    }
+
+    bool Lookup(const TKey &key, TValue &value)
+    {
+        std::lock_guard<std::mutex> locker(mutexMap_);
+
+        auto find = map_.find(key);
+        if (find != map_.end())
+        {
+            value = (*find).second;
+            return true;
+        }
+        return false;
+    }
+
+    int Size()
+    {
+        std::lock_guard<std::mutex> locker(mutexMap_);
+        return map_.size();
+    }
+
+private:
+    std::mutex             mutexMap_;
+    std::map<TKey, TValue> map_;
+};
+}  // namespace threadsafe
+}  // namespace mt
+
+#endif  // MT_THREAD_SAFE_MAP_H_

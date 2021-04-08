@@ -28,27 +28,19 @@ protected:
 
     // AsyncIOService *aioService;
 
-    AsyncIOTests()
+    AsyncIOTests() = default;
 
-    {
-        // You can do set-up work for each test here.
-        // aioService = AsyncIOService::getInstance();
-    }
-
-    virtual ~AsyncIOTests()
-    {
-        // You can do clean-up work that doesn't throw exceptions here.
-    }
+    virtual ~AsyncIOTests() = default;
 
     // If the constructor and destructor are not enough for setting up
     // and cleaning up each test, you can define the following methods:
-    virtual void SetUp()
+    void SetUp() override
     {
         // Code here will be called immediately after the constructor (right
         // before each test).
     }
 
-    virtual void TearDown()
+    void TearDown() override
     {
         // Code here will be called immediately after each test (right
         // before the destructor).
@@ -209,7 +201,8 @@ TEST(timber, async)
         return 1;
     });
 
-    std::chrono::milliseconds span(2000);
+    const int32_t             delay_ms = 2000;
+    std::chrono::milliseconds span(delay_ms);
     if (f2.wait_for(span) == std::future_status::timeout)
     {
         loge("timeout here");
