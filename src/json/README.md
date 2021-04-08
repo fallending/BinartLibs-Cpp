@@ -3,14 +3,18 @@
 > 从 slothjson 改造而成，移除中间文件的维护，用最简洁的代码维护DTO
 
 TODO:
-1. [支持] 更丰富的类型支持
+1. [支持] 丰富的类型支持
 2. [支持] 模型嵌套
 3. [支持] 字段映射
 4. [准备支持] 字段黑名单
-5. [准备支持] 模型容器直接解析 std::vector<MtLoginDTO>
-6. [准备支持] 默认值？？？？？比如json中有几个字段没有，如何告知外部？现在用的 has_<field_name>，比如 `has_isStarted()`
-7. [准备支持] 对象方法 string serialize(); 类方法 struct deserialize(string json);
+5. [支持] 模型容器直接解析 std::vector<MtLoginDTO>
+6. [支持] decode字段有无判断：has_<field_name>，比如 `has_isStarted()`
+7. [准备支持] 对象实例方法 string serialize(); 类方法 struct deserialize(string json);
 8. [准备支持] 结构体 列表初始化： Student s = {name:"John", id:1, age: 23};
+9. [准备支持] 字段异常处理：encode失败，如何处理？decode失败，如何处理？字段合法性如何保证？
+10. [准备支持] 支持动态类型，1. 支持用户无限扩展类型（不限于 int32_t ，甚至可以是用户自定义的枚举）2. 支持decode类型判断，"" -> int 如何做？
+11. [准备支持] 支持用户自定义枚举。。。。
+12. [准备支持] 结构体嵌套初始化
 
 ## mtjson怎么用？ ##
 

@@ -18,8 +18,12 @@ if (WIN32)
 elseif (APPLE)
   message(STATUS "Now is Apple systems.")
 
-  set (CMAKE_C_COMPILER /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc)
-  set (CMAKE_CXX_COMPILER /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++)
+  # 警告：下面几句同时生效，则在某些机器上出现vcpkg作用下find_package异常
+  # --toolchain xcode --config Debug --install
+  # xcode-select -p 
+  # /Applications/Xcode.app/Contents/Developer
+  # set (CMAKE_C_COMPILER /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc)
+  # set (CMAKE_CXX_COMPILER /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++)
 
   set (CMAKE_CXX_FLAGS -std=c++14)
 elseif (UNIX)

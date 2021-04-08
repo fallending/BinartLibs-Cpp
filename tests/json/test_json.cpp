@@ -1,17 +1,5 @@
-/*
- * @Author: your name
- * @Date: 2021-03-17 11:29:36
- * @LastEditTime: 2021-03-23 21:42:05
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit
- * @FilePath: /mt-ccs/test/json/test_json.cpp
- */
-
-// MARK: - UT 入口
-
 #include <gtest/gtest.h>
 #include <json/json.h>
-
 #include <iostream>
 
 int main(int argc, char **argv)
@@ -86,7 +74,7 @@ public:
     TestMapInitClass(/* args */) = default;
     ~TestMapInitClass()          = default;
 
-    const std::map<std::string, std::string> &GetMapping()
+    const std::map<std::string, std::string> &GetMapping() const
     {
         return fields_mapping_;
     };
