@@ -3,40 +3,37 @@
 #include "mt_type.h"
 #include "mt_tree.h"
 
+#ifndef TAG_
+#define TAG_ ""
+#endif  // TAG_
+
 #ifndef MT_TIMBER_H_
 #define MT_TIMBER_H_
 
 namespace timber
 {
-#define TIMBER_LOG_FUNC_DEF(func)                                            \
-    void func(const LeafPtr &leaf, const char *message, ...) const           \
-    {                                                                        \
-        va_list args;                                                        \
-        va_start(args, message);                                             \
-        for (std::vector<std::shared_ptr<Tree> >::iterator it =              \
-                 Timber::shared().trees_.begin();                            \
-             it != Timber::shared().trees_.end();                            \
-             ++it)                                                           \
-        {                                                                    \
-            if (message)                                                     \
-                it->get()->func(leaf, message, args);                        \
-        }                                                                    \
-        va_end(args);                                                        \
-    }                                                                        \
-    void func(const char *message, ...) const                                \
-    {                                                                        \
-        va_list args;                                                        \
-        va_start(args, message);                                             \
-        for (std::vector<std::shared_ptr<Tree> >::iterator it =              \
-                 Timber::shared().trees_.begin();                            \
-             it != Timber::shared().trees_.end();                            \
-             ++it)                                                           \
-        {                                                                    \
-            if (message)                                                     \
-                it->get()->func(                                             \
-                    CreateLeaf(LogPriorityFromShort(#func)), message, args); \
-        }                                                                    \
-        va_end(args);                                                        \
+#define TIMBER_LOG_FUNC_DEF(func)                                                       \
+    void func(const LeafPtr &leaf, const char *message, ...) const                      \
+    {                                                                                   \
+        va_list args;                                                                   \
+        va_start(args, message);                                                        \
+        for (auto it : Timber::shared().trees_)                                         \
+        {                                                                               \
+            if (message)                                                                \
+                it->func(leaf, tag_, message, args);                                    \
+        }                                                                               \
+        va_end(args);                                                                   \
+    }                                                                                   \
+    void func(const char *message, ...) const                                           \
+    {                                                                                   \
+        va_list args;                                                                   \
+        va_start(args, message);                                                        \
+        for (auto it : Timber::shared().trees_)                                         \
+        {                                                                               \
+            if (message)                                                                \
+                it->func(CreateLeaf(LogPriorityFromShort(#func)), tag_, message, args); \
+        }                                                                               \
+        va_end(args);                                                                   \
     }
 
 class Timber
@@ -57,7 +54,7 @@ public:
 
     static Timber Tagged(const std::string &tag)
     {
-        std::cout << "inside Timber, TAG_ = " << tag << std::endl;
+        // std::cout << "inside Timber, TAG_ = " << tag << std::endl;
         return Timber(tag);
     }
 
@@ -71,15 +68,15 @@ public:
         lock.unlock();
     };
 
+    // @warning do not implicitly decay an array into a pointer; consider using gsl::array_view or an explicit cast
+    // instead
+    // @document https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md#Pro-bounds-decay
+    // @check -hicpp-no-array-decay,
     TIMBER_LOG_FUNC_DEF(d)
     TIMBER_LOG_FUNC_DEF(i)
     TIMBER_LOG_FUNC_DEF(w)
     TIMBER_LOG_FUNC_DEF(e)
 };
-
-#ifndef TAG_
-#define TAG_ ""
-#endif  // TAG_
 
 static const Timber logger = Timber::Tagged(TAG_);  // 每个引用的源文件，都会有它
 

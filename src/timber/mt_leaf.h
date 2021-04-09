@@ -1,8 +1,15 @@
 /* #Copyright (c) 2021 Sevenli. All rights reserved. */
 #include <pthread.h>
 #include <unistd.h>
+#include <array>
 
 #include "mt_type.h"
+
+// 预编译宏
+
+#ifndef MT_TIMBER_PID_
+#define MT_TIMBER_PID_ 0
+#endif
 
 #ifndef MT_LEAF_H_
 #define MT_LEAF_H_
@@ -24,10 +31,7 @@ struct Leaf
     std::string file;  // 文件名
     std::string func;  // 函数名
     std::string line;  // 文件行数
-
-#ifndef __MT_TIMBER_PID__
-    std::string pid;  // 进程ID
-#endif                // __MT_TIMBER_PID__
+    std::string pid;   // 进程ID
 
     std::string tid;  // 线程ID
 
@@ -38,9 +42,9 @@ struct Leaf
 
         ts  = GetCurTime();
         tid = GetThreadID();
-#ifdef __MT_TIMBER_PID__
+#if MT_TIMBER_PID_
         pid = getProcessID();
-#endif  // __MT_TIMBER_PID__
+#endif  // MT_TIMBER_PID_
     };
     Leaf(LogPriority        p,
          const std::string &tag,
@@ -56,7 +60,7 @@ struct Leaf
 
         ts  = GetCurTime();
         tid = GetThreadID();
-#ifdef __MT_TIMBER_PID__
+#if MT_TIMBER_PID_
         pid = getProcessID();
 #endif  // __MT_TIMBER_PID__
     };
@@ -66,8 +70,8 @@ struct Leaf
     {
         std::stringstream ss;
         ss << "Leaf(";
-        ss << "tag=" << tag << ",ts=" << ts << ",file=" << file
-           << ",func=" << func << ",line=" << line << ",tid=" << tid;
+        ss << "tag=" << tag << ",ts=" << ts << ",file=" << file << ",func=" << func << ",line=" << line
+           << ",tid=" << tid;
         ss << ")";
 
         return ss.str();
@@ -113,10 +117,14 @@ private:
     {
         time_t    now     = time(nullptr);
         struct tm tstruct = *localtime(&now);
-        char      buf[80];
-        strftime(buf, sizeof(buf), "%Y-%m-%d %X", &tstruct);
 
-        return buf;
+        const size_t               buf_size = 80;
+        std::array<char, buf_size> buf{};
+
+        // @document https://en.cppreference.com/w/cpp/chrono/c/strftime
+        std::strftime(buf.data(), buf.size(), "%Y-%m-%d %X", &tstruct);
+
+        return std::string(std::begin(buf), std::end(buf));
     }
 
     static std::string GetProcessID()
@@ -195,24 +203,23 @@ private:
 
 using LeafPtr = std::shared_ptr<Leaf>;
 
-inline LogPriority LogPriorityFromShort(const char *ps)
+inline LogPriority LogPriorityFromShort(const std::string &ps)
 {
-    const std::string pss = ps;
-    LogPriority       p   = LogPriorityDebug;
+    LogPriority p = LogPriorityDebug;
 
-    if (pss == "d")
+    if (ps == "d")
     {
         p = LogPriorityDebug;
     }
-    else if (pss == "i")
+    else if (ps == "i")
     {
         p = LogPriorityInfo;
     }
-    else if (pss == "w")
+    else if (ps == "w")
     {
         p = LogPriorityWarn;
     }
-    else if (pss == "e")
+    else if (ps == "e")
     {
         p = LogPriorityError;
     }
@@ -231,11 +238,8 @@ inline std::string FileNameFromPath(const char *cpath)
 
     return cpath;
 }
-inline LeafPtr CreateLeaf(LogPriority        p,
-                          const std::string &tag,
-                          const std::string &file,
-                          const std::string &func,
-                          const std::string &line)
+inline LeafPtr CreateLeaf(
+    LogPriority p, const std::string &tag, const std::string &file, const std::string &func, const std::string &line)
 {
     return std::make_shared<Leaf>(p, tag, file, func, line);
 };

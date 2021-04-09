@@ -10,8 +10,13 @@ https://zhuanlan.zhihu.com/p/102248131
 https://clang.llvm.org/extra/clang-tidy/checks/readability-identifier-naming.html
 
 
+## 相关文档
+
+https://opensource.apple.com/source/clang/clang-703.0.31/src/tools/clang/tools/extra/test/clang-tidy/cppcoreguidelines-pro-bounds-array-to-pointer-decay.cpp.auto.html
 
 # https://clang.llvm.org/extra/clang-tidy/checks/misc-non-private-member-variables-in-classes.html
+
+
 
 
 ## 接入备份
@@ -31,3 +36,4 @@ target_precompile_headers(lim
 像上面这样的配置，会导致这个错误。
 
 #### 错误：
+
