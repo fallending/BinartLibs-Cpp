@@ -346,48 +346,6 @@ bool Decode(const std::string &json_val, T &obj_val)
     return Decode(json_val.c_str(), obj_val);
 }
 
-// template <bool pretty, typename T>
-// bool Dump(const T &obj_val, const char *path)
-// {
-//     std::string json_val;
-//     if (!Encode<pretty, T>(obj_val, json_val))
-//     {
-//         return false;
-//     }
-//     std::ofstream os;
-//     try
-//     {
-//         os.open(path, std::ios::binary);
-//     }
-//     catch (...)
-//     {
-//         return false;
-//     }
-//     os << json_val;
-//     os.close();
-//     return true;
-// }
-
-// struct JsonLoader
-// {
-//     JsonLoader(const char *path);
-//     ~JsonLoader();
-//     const char *c_str();
-
-// private:
-//     char *data_;
-// };
-
-// template <typename T>
-// bool load(const char *path, T &obj_val)
-// {
-//     JsonLoader loader(path);
-//     if (!loader.c_str())
-//     {
-//         return false;
-//     }
-//     return decode(loader.c_str(), obj_val);
-// }
 };  // namespace json
 
 };  // namespace mt

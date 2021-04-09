@@ -364,38 +364,6 @@ bool DecodeDocument(rapidjson::Document &src, rapidjson::Value &dst)
     return Convert(src, dst);
 }
 
-// char *Load(const char *path)
-// {
-//     if (path == nullptr)
-//     {
-//         return nullptr;
-//     }
-//     FILE *f = fopen(path, "rb");
-//     if (f == nullptr)
-//     {
-//         return nullptr;
-//     }
-//     fseek(f, 0, SEEK_END);
-//     int64_t len = ftell(f);
-//     fseek(f, 0, SEEK_SET);
-//     char *data = (char *)malloc(len + 1);
-//     fread(data, 1, len, f);
-//     data[len] = '\0';
-//     fclose(f);
-//     return data;
-// }
-
-// JsonLoader::JsonLoader(const char *path) { data_ = Load(path); }
-// JsonLoader::~JsonLoader()
-// {
-//     if (data_ != nullptr)
-//     {
-//         free(data_);
-//         data_ = nullptr;
-//     }
-// }
-// const char *JsonLoader::c_str() { return data_; }
-
 }  // namespace json
 
 }  // namespace mt
