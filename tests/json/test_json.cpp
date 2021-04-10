@@ -22,16 +22,7 @@ mt_field(double_t, amount);
 mt_field(MtString, str_val);
 mt_field(MtArray<int32_t>, vec);
 mt_field(MtMap, dict);
-mt_struct_end(metest_object_t,
-              isStarted,
-              mak,
-              th,
-              len,
-              length,
-              amount,
-              str_val,
-              vec,
-              dict);
+mt_struct_end(metest_object_t, isStarted, mak, th, len, length, amount, str_val, vec, dict);
 
 // MARK: - 嵌套示例
 mt_struct_begin(metest_child_t);
@@ -74,10 +65,7 @@ public:
     TestMapInitClass(/* args */) = default;
     ~TestMapInitClass()          = default;
 
-    const std::map<std::string, std::string> &GetMapping() const
-    {
-        return fields_mapping_;
-    };
+    const std::map<std::string, std::string> &GetMapping() const { return fields_mapping_; };
 };
 
 // MARK: - 序列化字段映射
@@ -99,8 +87,7 @@ TEST(mtjson, all)
 
     // 测试字段映射可行性
     TestMapInitClass test_map_init_obj;
-    cout << "test mapping = "
-         << (test_map_init_obj.GetMapping()).count("string") << std::endl;
+    cout << "test mapping = " << (test_map_init_obj.GetMapping()).count("string") << std::endl;
 
     // 测试普通对象序列化
     const char *k_json_str =
@@ -137,12 +124,10 @@ TEST(mtjson, all)
 
     ASSERT_EQ(parent_obj.child.val, 3);
 
-    cout << "[mtjson][all] parent_obj.child.val = " << parent_obj.child.val
-         << endl;
+    cout << "[mtjson][all] parent_obj.child.val = " << parent_obj.child.val << endl;
 
     // 容器
-    const char *container_json =
-        R"({"val":2,"elements":[{"val":3},{"val":3}]})";
+    const char *container_json = R"({"val":2,"elements":[{"val":3},{"val":3}]})";
 
     metest_container_t container_obj;
 
@@ -150,8 +135,7 @@ TEST(mtjson, all)
 
     ASSERT_EQ(container_obj.elements.size(), 2);
 
-    cout << "[mtjson][all] containerObj.elements.size() = "
-         << container_obj.elements.size() << endl;
+    cout << "[mtjson][all] containerObj.elements.size() = " << container_obj.elements.size() << endl;
 
     // 字段映射
     const char *mapping_json = "{\"init_val\":2}";
