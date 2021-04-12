@@ -4,6 +4,7 @@
 
 // MARK: - fundation
 #include "foundation/mt_pair.h"
+#include "foundation/mt_container_operator.h"
 
 // MARK: - core
 

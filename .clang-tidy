@@ -13,6 +13,7 @@ Checks: '
   -cppcoreguidelines-pro-type-vararg,
   -cppcoreguidelines-special-member-functions,
   -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+  -cppcoreguidelines-avoid-magic-numbers,
   llvm-,
   -llvm-include-order,
   google-build-using-namespace,
