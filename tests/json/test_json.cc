@@ -264,3 +264,38 @@ TEST(mtjson, template)
 
     cout << "[mtjson][all] tpled_json = " << tpled_json << endl;
 }
+
+// 字段兼容
+struct FieldCompatModel : public mt::json::MtStruct
+{
+    int32_t channel_id{};
+    int32_t game_id{};
+    // std::string extra;
+
+    MT_FIELDS_MAPPING = {{"channel_id", "channelId"}, {"game_id", "gameId"}};
+    mt_json_struct(FieldCompatModel, channel_id, game_id)
+}
+
+TEST(mtjson, FieldCompat)
+{
+    using ::mt::json::Decode;
+    using ::mt::json::Encode;
+    using ::std::cout;
+    using ::std::endl;
+    using ::std::string;
+
+    const char *compat_json = "{\"channelId\":123, \"gameId\":124,\"extra\":{\"val\":2}}";
+
+    FieldCompatModel compat_obj;
+
+    Decode(compat_json, compat_obj);
+
+    ASSERT_EQ(compat_obj.channel_id, 123);
+
+    cout << "[mtjson][all] compat_obj.game_id = " << compat_obj.game_id << endl;
+
+    string compated_json;
+    Encode<false, FieldCompatModel>(compat_obj, compated_json);
+
+    cout << "[mtjson][all] compated_json = " << compated_json << endl;
+}
