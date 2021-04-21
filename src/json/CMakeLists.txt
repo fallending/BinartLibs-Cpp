@@ -1,6 +1,6 @@
 
 file(GLOB HDRS "./*.h")
-file(GLOB SRCS "./mtjson/*.cpp")
+file(GLOB SRCS "./mtjson/*.cc")
 
 add_library(json STATIC ${SRCS})
 

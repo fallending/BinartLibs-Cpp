@@ -3,10 +3,11 @@ cmake_minimum_required(VERSION 3.17)
 
 set(CMAKE_CXX_STANDARD 14)
 
+add_compile_definitions(CPPHTTPLIB_OPENSSL_SUPPORT=1)
+
 add_library(http-objs
   OBJECT
-    http.hpp
-    http.cpp
+    http.cc
   )
 
 add_library(http-shared # shared library
@@ -20,6 +21,11 @@ set_target_properties(http-shared
     CLEAN_DIRECT_OUTPUT 1
 )
 
+target_link_libraries(http-shared
+  PUBLIC
+  OpenSSL::SSL OpenSSL::Crypto
+  )
+
 add_library(http-static # static library
   STATIC
     $<TARGET_OBJECTS:http-objs>
@@ -31,11 +37,15 @@ set_target_properties(http-static
     CLEAN_DIRECT_OUTPUT 1
   )
 
+target_link_libraries(http-static
+  PUBLIC
+  OpenSSL::SSL OpenSSL::Crypto
+  )
+
 # install(TARGETS http-shared http-static 
 #   LIBRARY DESTINATION http
 #   ARCHIVE DESTINATION http)  # 静态库用archive关键字
 # install(FILES http.hpp DESTINATION http)
-
 
   ############################### @seven 以下需要消化
 # target_sources(

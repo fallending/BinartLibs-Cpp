@@ -1,9 +1,18 @@
-target 'xval'
-    set_kind 'shared'
+set_languages("c++14")
 
-    if os.host() ~= 'windows' then
-        add_cxxflags '-std=c++11'
-    end
-    add_defines 'DLL_EXPORT'
-    add_headers 'xval*.h'
-    add_files 'xval_*.cpp'
+add_requires("gtest")
+
+target("tests")
+    set_kind('binary')
+
+    add_deps("json-static", "http-static")
+
+    add_packages("gtest")
+
+    add_files('json/*.cc')
+
+    -- find_packages("vcpkg::zlib", "vcpkg::openssl")
+
+    -- on_load(function (target)
+    --     target:add(find_packages("vcpkg::zlib", "vcpkg::openssl", "vcpkg::gtest"))
+    -- end)

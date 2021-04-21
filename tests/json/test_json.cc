@@ -1,10 +1,15 @@
 #include <gtest/gtest.h>
 #include <json/json.h>
 #include <iostream>
+#include <http/http.h>
 
 int main(int argc, char **argv)
 {
     ::testing::InitGoogleTest(&argc, argv);
+
+    // test http
+    const std::string host = "https://www.baidu.com";
+    httplib::Client   cli{host.c_str()};
 
     return RUN_ALL_TESTS();
 }

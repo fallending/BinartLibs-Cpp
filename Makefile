@@ -838,3 +838,48 @@ gen-gradle:
 # 1. 生成 gradle 可以直接集成的库
 # 2. 生成 cocoapod 可以直接集成的库
 # 3. 生成 vs 可以直接集成的库
+
+######################################################################
+# xmake
+######################################################################
+
+xmake:
+	xmake
+
+xmingw: # mingw
+	xmake f -p mingw --sdk=/home/mingwsdk
+	xmake
+
+# 配置签名
+# https://xmake.io/#/zh-cn/guide/project_examples?id=%e9%85%8d%e7%bd%ae%e7%ad%be%e5%90%8d
+# xmake m package -f iphoneos 可以一次性打所有 arch ，见 https://xmake.io/#/zh-cn/plugin/builtin_plugins?id=%e5%86%85%e7%bd%ae%e7%9a%84%e5%ae%8f%e8%84%9a%e6%9c%ac
+xios:
+	xmake f -p iphoneos -a armv7 -o _xbuilds --vcpkg=~/.cmake_modules/vcpkg/ -y
+	xmake
+	xmake f -p iphoneos -a armv7s -o _xbuilds --vcpkg=~/.cmake_modules/vcpkg/ -y
+	xmake
+	xmake f -p iphoneos -a arm64 -o _xbuilds --vcpkg=~/.cmake_modules/vcpkg/ -y
+	xmake
+	xmake f -p iphoneos -a x86_64 -o _xbuilds --vcpkg=~/.cmake_modules/vcpkg/ -y
+	xmake
+	rm -rf build/iphoneos/release
+	mkdir build/iphoneos/release
+	lipo -create build/iphoneos/armv7/release/libhttp.a build/iphoneos/arm64/release/libhttp.a build/iphoneos/armv7s/release/libhttp.a build/iphoneos/x86_64/release/libhttp.a -output build/iphoneos/release/libhttp.a
+
+xandroid:
+	xmake f -p android --ndk=~/Library/Android/sdk/ndk/21.1.6352462
+	xmake
+
+xlinux:
+	xmake f -p linux --sdk=/home/sdk
+	xmake
+
+xwindows:
+	xmake f -p windows
+	xmake
+
+xvs: # export vs project
+	xmake project -k vsxmake2019 -m "debug;release"
+
+xxcode: # export xcode project
+	xmake project -k xcode

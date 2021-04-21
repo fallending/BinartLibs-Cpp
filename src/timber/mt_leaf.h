@@ -164,7 +164,11 @@ private:
             pthread_threadid_np(NULL, &tid64);
             tid = (pid_t)tid64;
 #else
+#ifdef SYS_gettid
             tid = syscall(SYS_gettid);
+#elif defined(SYS_thread_selfid)
+            tid = syscall(SYS_thread_selfid);
+#endif
 #endif
         }
 
